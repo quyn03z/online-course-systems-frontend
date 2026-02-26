@@ -1,0 +1,344 @@
+/* ==============================
+   Hero Section
+   ============================== */
+.hero {
+    width: 100%;
+    min-height: 50vh;
+    position: relative;
+    padding: 120px 0 60px 0;
+    display: flex;
+    align-items: center;
+}
+
+.hero img {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+}
+
+.hero::before {
+    content: "";
+    background: rgba(18, 66, 101, 0.8);
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+}
+
+.hero .container {
+    position: relative;
+    z-index: 3;
+}
+
+.hero h2 {
+    margin: 0;
+    font-size: 48px;
+    font-weight: 700;
+    color: #fff;
+}
+
+.hero p {
+    color: rgba(255, 255, 255, 0.8);
+    margin: 10px 0 0 0;
+    font-size: 18px;
+}
+
+.hero .btn-get-started {
+    font-weight: 500;
+    font-size: 16px;
+    letter-spacing: 1px;
+    display: inline-block;
+    padding: 12px 40px;
+    border-radius: 50px;
+    background: #5777ba;
+    color: #fff;
+    transition: 0.3s;
+    text-decoration: none;
+}
+
+.hero .btn-get-started:hover {
+    background: rgba(87, 119, 186, 0.85);
+}
+
+/* ==============================
+   About Section
+   ============================== */
+.about .content h3 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #124265;
+}
+
+.about .content ul {
+    list-style: none;
+    padding: 0;
+}
+
+.about .content ul li {
+    padding: 10px 0 0 28px;
+    position: relative;
+}
+
+.about .content ul i {
+    position: absolute;
+    font-size: 16px;
+    left: 0;
+    top: 12px;
+    color: #5777ba;
+}
+
+.about .read-more {
+    display: inline-flex;
+    align-items: center;
+    font-weight: 600;
+    font-size: 15px;
+    color: #5777ba;
+    text-decoration: none;
+    margin-top: 15px;
+}
+
+.about .read-more i {
+    margin-left: 5px;
+    font-size: 18px;
+}
+
+/* ==============================
+   Counts Section
+   ============================== */
+.counts .stats-item {
+    padding: 30px;
+}
+
+.counts .stats-item span {
+    font-size: 48px;
+    display: block;
+    font-weight: 700;
+    color: #124265;
+}
+
+.counts .stats-item p {
+    font-size: 16px;
+    color: #4e6e8e;
+    margin: 0;
+}
+
+.light-background {
+    background-color: #f9f9f9;
+}
+
+/* ==============================
+   Why Us Section
+   ============================== */
+.why-box {
+    padding: 30px;
+    background: #5777ba;
+    border-radius: 4px;
+    color: #fff;
+}
+
+.why-box h3 {
+    color: #fff;
+    font-weight: 700;
+    font-size: 22px;
+    margin-bottom: 15px;
+}
+
+.why-box .more-btn {
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 8px 25px;
+    border-radius: 50px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    display: inline-flex;
+    align-items: center;
+    transition: 0.3s;
+    text-decoration: none;
+}
+
+.why-box .more-btn:hover {
+    border-color: #fff;
+}
+
+.why-box .more-btn i {
+    margin-left: 5px;
+}
+
+.icon-box {
+    padding: 30px;
+    background: #fff;
+    border-radius: 4px;
+    box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    height: 100%;
+}
+
+.icon-box i {
+    font-size: 40px;
+    color: #5777ba;
+    margin-bottom: 15px;
+}
+
+.icon-box h4 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: #124265;
+}
+
+/* ==============================
+   Features Section
+   ============================== */
+.features-item {
+    text-align: center;
+    padding: 20px;
+}
+
+.features-item i {
+    font-size: 40px;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.features-item h3 {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.features-item h3 a {
+    color: #124265;
+    text-decoration: none;
+}
+
+/* ==============================
+   Courses Section
+   ============================== */
+.course-item {
+    background: #fff;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.1);
+    width: 100%;
+}
+
+.course-item img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.course-content {
+    padding: 15px;
+}
+
+.course-content .category {
+    font-size: 13px;
+    font-weight: 700;
+    color: #5777ba;
+    background: #e7f1fd;
+    padding: 3px 15px;
+    border-radius: 50px;
+    margin: 0;
+}
+
+.course-content .price {
+    font-size: 18px;
+    font-weight: 700;
+    color: #124265;
+    margin: 0;
+}
+
+.course-content h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 10px 0;
+}
+
+.course-content h3 a {
+    color: #124265;
+    text-decoration: none;
+}
+
+.course-content .description {
+    font-size: 14px;
+    color: #777;
+}
+
+.course-content .trainer img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.course-content .trainer-link {
+    font-size: 14px;
+    font-weight: 600;
+    color: #4e6e8e;
+    margin-left: 10px;
+    text-decoration: none;
+}
+
+/* ==============================
+   Trainers Section
+   ============================== */
+.member {
+    background: #fff;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.1);
+    width: 100%;
+}
+
+.member img {
+    width: 100%;
+    height: 260px;
+    object-fit: cover;
+}
+
+.member-content {
+    padding: 20px;
+    text-align: center;
+}
+
+.member-content h4 {
+    font-weight: 700;
+    margin-bottom: 2px;
+    font-size: 18px;
+    color: #124265;
+}
+
+.member-content span {
+    font-size: 13px;
+    font-weight: 400;
+    color: #aaaaaa;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.member-content p {
+    font-size: 14px;
+    color: #777;
+}
+
+.member-content .social a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #f1f5ff;
+    color: #5777ba;
+    transition: 0.3s;
+    margin: 0 4px;
+    text-decoration: none;
+}
+
+.member-content .social a:hover {
+    background: #5777ba;
+    color: #fff;
+}

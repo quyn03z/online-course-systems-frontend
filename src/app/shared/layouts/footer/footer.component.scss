@@ -1,0 +1,120 @@
+.footer {
+    --heading-color: #124265;
+    --nav-color: #4e6e8e;
+
+    font-size: 14px;
+    padding-top: 50px;
+    color: var(--nav-color);
+}
+
+.footer .footer-top {
+    padding-bottom: 40px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.footer .sitename {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--heading-color);
+    text-decoration: none;
+}
+
+.footer .footer-contact p {
+    margin-bottom: 5px;
+}
+
+.footer .social-links a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    font-size: 16px;
+    color: var(--nav-color);
+    margin-right: 10px;
+    transition: 0.3s;
+    text-decoration: none;
+}
+
+.footer .social-links a:hover {
+    color: #5777ba;
+    border-color: #5777ba;
+}
+
+.footer h4 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--heading-color);
+    margin-bottom: 20px;
+}
+
+.footer .footer-links ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer .footer-links ul li {
+    padding: 10px 0;
+    display: flex;
+    align-items: center;
+}
+
+.footer .footer-links ul li:first-child {
+    padding-top: 0;
+}
+
+.footer .footer-links ul a {
+    color: var(--nav-color);
+    text-decoration: none;
+    transition: 0.3s;
+    display: inline-block;
+    line-height: 1;
+}
+
+.footer .footer-links ul a:hover {
+    color: #5777ba;
+}
+
+.footer .footer-newsletter .newsletter-form {
+    display: flex;
+    margin-top: 15px;
+}
+
+.footer .footer-newsletter .newsletter-form input[type="email"] {
+    flex: 1;
+    padding: 8px 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px 0 0 4px;
+    outline: none;
+}
+
+.footer .footer-newsletter .newsletter-form input[type="submit"] {
+    padding: 8px 20px;
+    background: #5777ba;
+    color: #fff;
+    border: none;
+    border-radius: 0 4px 4px 0;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.footer .footer-newsletter .newsletter-form input[type="submit"]:hover {
+    background: rgba(87, 119, 186, 0.85);
+}
+
+.footer .copyright {
+    padding: 25px 0;
+    font-size: 14px;
+}
+
+.footer .copyright a {
+    color: #5777ba;
+    text-decoration: none;
+}
+
+.light-background {
+    background-color: #f9f9f9;
+}

@@ -1,0 +1,23 @@
+<header id="header" class="header d-flex align-items-center sticky-top">
+    <div class="container-fluid container-xl position-relative d-flex align-items-center">
+
+        <a routerLink="/" class="logo d-flex align-items-center me-auto">
+            <h1 class="sitename">Online Course Learning</h1>
+        </a>
+
+        <nav id="navmenu" class="navmenu">
+            <ul>
+                <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a></li>
+                <li><a routerLink="/about" routerLinkActive="active">About</a></li>
+                <li><a routerLink="/courses" routerLinkActive="active">Courses</a></li>
+                <li><a routerLink="/trainers" routerLinkActive="active">Trainers</a></li>
+                <li><a routerLink="/events" routerLinkActive="active">Events</a></li>
+                <li><a routerLink="/contact" routerLinkActive="active">Contact</a></li>
+            </ul>
+            <i class="mobile-nav-toggle d-xl-none bi bi-list" (click)="toggleMobileNav()"></i>
+        </nav>
+
+        <a class="btn-getstarted" [routerLink]="['/login']">Get Started</a>
+
+    </div>
+</header>

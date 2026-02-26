@@ -1,1 +1,101 @@
-/* You can add global styles to this file, and also import other style files */
+/* ==========================================================================
+   Global Styles - Mentor Bootstrap Template adapted for Angular
+   ========================================================================== */
+
+/* General */
+:root {
+    --default-font: "Open Sans", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif;
+    --heading-font: "Poppins", sans-serif;
+    --nav-font: "Poppins", sans-serif;
+}
+
+body {
+    font-family: var(--default-font);
+    color: #444444;
+    overflow-x: hidden;
+}
+
+a {
+    color: #5777ba;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+a:hover {
+    color: #7b96cc;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: #124265;
+    font-family: var(--heading-font);
+}
+
+/* Scroll Top Button */
+.scroll-top {
+    position: fixed;
+    visibility: hidden;
+    opacity: 0;
+    right: 15px;
+    bottom: 15px;
+    z-index: 99999;
+    background-color: #5777ba;
+    width: 44px;
+    height: 44px;
+    border-radius: 50px;
+    transition: all 0.4s;
+    color: #fff;
+    font-size: 24px;
+    text-decoration: none;
+}
+
+.scroll-top:hover {
+    background-color: rgba(87, 119, 186, 0.85);
+    color: #fff;
+}
+
+.scroll-top.active {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* Section Styles */
+section {
+    padding: 60px 0;
+    overflow: clip;
+}
+
+.section-title {
+    text-align: center;
+    padding-bottom: 30px;
+}
+
+.section-title h2 {
+    font-size: 13px;
+    letter-spacing: 1px;
+    font-weight: 700;
+    padding: 8px 20px;
+    margin: 0;
+    background: #e7f1fd;
+    color: #5777ba;
+    display: inline-block;
+    text-transform: uppercase;
+    border-radius: 50px;
+}
+
+.section-title p {
+    margin: 10px 0 0 0;
+    font-size: 32px;
+    font-weight: 700;
+    color: #124265;
+    font-family: var(--heading-font);
+}
+
+/* Main content min-height */
+.main {
+    min-height: 60vh;
+}
