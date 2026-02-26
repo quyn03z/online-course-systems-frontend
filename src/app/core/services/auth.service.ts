@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, filter, switchMap, take, tap } from 'rxjs/operators';
@@ -15,6 +15,7 @@ export interface LoginResult {
     token: string;
     refreshToken: string;
     role: string;
+    avatar?: string;
 }
 
 export interface LoginResponse {
@@ -37,6 +38,13 @@ export class AuthService {
 
     private readonly TOKEN_KEY = 'access_token';
     private readonly REFRESH_TOKEN_KEY = 'refresh_token';
+    private readonly USER_KEY = 'current_user';
+
+    // Signal reactive — template tự re-render khi login/logout
+    readonly isLoggedIn = signal<boolean>(!!localStorage.getItem(this.TOKEN_KEY));
+    readonly currentUser = signal<{ username: string; avatar: string } | null>(
+        JSON.parse(localStorage.getItem(this.USER_KEY) ?? 'null')
+    );
 
     // Dùng để queue các request đang chờ khi đang refresh token
     private isRefreshing = false;
@@ -44,23 +52,26 @@ export class AuthService {
 
     constructor() { }
 
-    // ── Login ──────────────────────────────────────────────────────────────────
-
     login(credentials: LoginRequest): Observable<LoginResponse> {
         return this.apiService.post<LoginResponse>('Auth/login', credentials).pipe(
             tap(response => {
-                if (response?.result) {
-                    this.saveTokens(response.result.token, response.result.refreshToken);
+                const result = response?.result ?? (response as any)?.Result;
+                if (result?.token) {
+                    this.saveTokens(result.token, result.refreshToken ?? '', result);
                 }
             })
         );
     }
 
-    // ── Token Storage ──────────────────────────────────────────────────────────
-
-    saveTokens(accessToken: string, refreshToken: string): void {
+    saveTokens(accessToken: string, refreshToken: string, result?: LoginResult): void {
         localStorage.setItem(this.TOKEN_KEY, accessToken);
         localStorage.setItem(this.REFRESH_TOKEN_KEY, refreshToken);
+        if (result) {
+            const userInfo = { username: result.username, avatar: result.avatar ?? '' };
+            localStorage.setItem(this.USER_KEY, JSON.stringify(userInfo));
+            this.currentUser.set(userInfo);
+        }
+        this.isLoggedIn.set(true);
     }
 
     getToken(): string | null {
@@ -71,15 +82,14 @@ export class AuthService {
         return localStorage.getItem(this.REFRESH_TOKEN_KEY);
     }
 
-    // ── Logout ─────────────────────────────────────────────────────────────────
-
     logout(): void {
         localStorage.removeItem(this.TOKEN_KEY);
         localStorage.removeItem(this.REFRESH_TOKEN_KEY);
+        localStorage.removeItem(this.USER_KEY);
+        this.isLoggedIn.set(false);
+        this.currentUser.set(null);
         this.router.navigate(['/login']);
     }
-
-    // ── Refresh Token ──────────────────────────────────────────────────────────
 
     /**
      * Gọi API refresh-token và lưu token mới vào localStorage.
@@ -137,9 +147,4 @@ export class AuthService {
         );
     }
 
-    // ── Utilities ──────────────────────────────────────────────────────────────
-
-    isLoggedIn(): boolean {
-        return !!this.getToken();
-    }
 }

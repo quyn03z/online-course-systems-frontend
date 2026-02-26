@@ -5,7 +5,8 @@
         <h2 data-aos="fade-up" data-aos-delay="100">Learning Today,<br>Leading Tomorrow</h2>
         <p data-aos="fade-up" data-aos-delay="200">We are team of talented designers making websites with Bootstrap</p>
         <div class="d-flex mt-4" data-aos="fade-up" data-aos-delay="300">
-            <a [routerLink]="['/login']" class="btn-get-started">Get Started</a>
+            <a *ngIf="!authService.isLoggedIn()" [routerLink]="['/login']" class="btn-get-started">Get Started</a>
+            <a *ngIf="authService.isLoggedIn()" class="btn-get-started" style="cursor:pointer;">Learning</a>
         </div>
     </div>
 </section>

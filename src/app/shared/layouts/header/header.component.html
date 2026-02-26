@@ -17,7 +17,32 @@
             <i class="mobile-nav-toggle d-xl-none bi bi-list" (click)="toggleMobileNav()"></i>
         </nav>
 
-        <a class="btn-getstarted" [routerLink]="['/login']">Get Started</a>
+        <!-- Chưa đăng nhập -->
+        <a *ngIf="!authService.isLoggedIn()" class="btn-getstarted" [routerLink]="['/login']">Get Started</a>
+
+        <!-- Đã đăng nhập: Avatar + Dropdown -->
+        <div *ngIf="authService.isLoggedIn()" class="user-avatar-wrapper" (click)="toggleDropdown()">
+            <div class="user-avatar">
+                <img *ngIf="authService.currentUser()?.avatar" [src]="authService.currentUser()!.avatar"
+                    [alt]="authService.currentUser()!.username" class="avatar-img" />
+                <div *ngIf="!authService.currentUser()?.avatar" class="avatar-initials">
+                    {{ (authService.currentUser()?.username || 'U')[0].toUpperCase() }}
+                </div>
+            </div>
+            <span class="user-name">{{ authService.currentUser()?.username }}</span>
+            <i class="bi" [class.bi-chevron-down]="!dropdownOpen" [class.bi-chevron-up]="dropdownOpen"></i>
+
+            <!-- Dropdown menu -->
+            <div class="user-dropdown" [class.open]="dropdownOpen">
+                <a [routerLink]="['/profile']" class="dropdown-item">
+                    <i class="bi bi-person-circle"></i> View Profile
+                </a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item text-danger" (click)="authService.logout(); $event.stopPropagation()">
+                    <i class="bi bi-box-arrow-right"></i> Logout
+                </a>
+            </div>
+        </div>
 
     </div>
 </header>
