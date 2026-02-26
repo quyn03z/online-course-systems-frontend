@@ -96,7 +96,7 @@ export class AuthService {
             tap(response => {
                 if (response?.result) {
                     this.saveTokens(response.result.token, response.result.refreshToken);
-                    this.refreshTokenSubject.next(response.result.token); a
+                    this.refreshTokenSubject.next(response.result.token);
                 }
             }),
             catchError(err => {
