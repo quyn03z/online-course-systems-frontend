@@ -1,6 +1,6 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { catchError, filter, switchMap, take, tap } from 'rxjs/operators';
 import { ApiService } from './api.service';
 
@@ -141,15 +141,20 @@ export class AuthService {
     }
 
     logout(): void {
-        // Gọi API backend để revoke refresh token trong database
-        this.apiService.post<any>('Auth/logout', {}).pipe(
-            catchError(() => {
-                // Kể cả khi API lỗi, vẫn tiếp tục xóa local state
-                return [];
-            })
-        ).subscribe(() => {
-            this._clearLocalSession();
-        });
+        // Lưu token TRƯỚC khi xóa session
+        const token = this.getToken();
+
+        // Xóa session local ngay lập tức
+        this._clearLocalSession();
+
+        // Gọi API revoke refresh token — đính token thủ công vì interceptor sẽ không còn token
+        if (token) {
+            this.apiService.post<any>('Auth/logout', {}, {
+                Authorization: `Bearer ${token}`
+            }).pipe(
+                catchError(() => of(null))
+            ).subscribe();
+        }
     }
 
     private _clearLocalSession(): void {
