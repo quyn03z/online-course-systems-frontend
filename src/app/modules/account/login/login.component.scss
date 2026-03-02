@@ -232,7 +232,14 @@ input {
     color: #ff4b2b;
     font-size: 12px;
     margin: 8px 0;
-    font-weight: 500;
+    font-weight: bold;
+}
+
+.success-message {
+    color: green;
+    font-size: 12px;
+    margin: 8px 0;
+    font-weight: bold;
 }
 
 button:disabled {

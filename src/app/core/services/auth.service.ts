@@ -9,6 +9,13 @@ export interface LoginRequest {
     password: string;
 }
 
+export interface SignUpRequest {
+    username: string;
+    email: string;
+    password: string;
+    confirmPassword: string;
+}
+
 export interface LoginResult {
     username: string;
     email: string;
@@ -16,6 +23,15 @@ export interface LoginResult {
     refreshToken: string;
     role: string;
     avatar?: string;
+}
+
+export interface SignUpResult {
+    id: string;
+}
+export interface SignUpResponse {
+    succeeded: boolean;
+    result: SignUpResult;
+    errors: string[];
 }
 
 export interface LoginResponse {
@@ -63,14 +79,56 @@ export class AuthService {
         );
     }
 
+    signUp(credentials: SignUpRequest): Observable<SignUpResponse> {
+        return this.apiService.post<SignUpResponse>('Auth/register', credentials).pipe(
+            tap(response => {
+                const result = response?.result ?? (response as any)?.Result;
+                if (result?.id) {
+                    console.log(result.id);
+                }
+            })
+        );
+    }
+
+    forgotPassword(email: string): Observable<any> {
+        return this.apiService.post<any>('Auth/forgot-password', { email });
+    }
+
+    resetPassword(password: string, confirmPassword: string, token: string): Observable<any> {
+        return this.apiService.post<any>(`Auth/reset-password`, { password, confirmPassword, token });
+    }
+
+    /**
+     * Decode JWT token và trả về payload dưới dạng object.
+     * Không cần thư viện ngoài, dùng atob() built-in của browser.
+     */
+    decodeToken(token: string): { [key: string]: any } | null {
+        try {
+            const payload = token.split('.')[1];
+            const decoded = atob(payload.replace(/-/g, '+').replace(/_/g, '/'));
+            return JSON.parse(decoded);
+        } catch {
+            return null;
+        }
+    }
+
     saveTokens(accessToken: string, refreshToken: string, result?: LoginResult): void {
         localStorage.setItem(this.TOKEN_KEY, accessToken);
         localStorage.setItem(this.REFRESH_TOKEN_KEY, refreshToken);
-        if (result) {
-            const userInfo = { username: result.username, avatar: result.avatar ?? '' };
-            localStorage.setItem(this.USER_KEY, JSON.stringify(userInfo));
-            this.currentUser.set(userInfo);
-        }
+
+        // Decode token để lấy username và avatar
+        const decoded = this.decodeToken(accessToken);
+        const DEFAULT_AVATAR = 'https://static.vecteezy.com/system/resources/thumbnails/024/983/914/small/simple-user-default-icon-free-png.png';
+
+        const username = decoded?.['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name']
+            ?? decoded?.['unique_name'];
+
+        const avatar = decoded?.['Avatar']
+            ?? DEFAULT_AVATAR;
+
+        const userInfo = { username, avatar };
+        localStorage.setItem(this.USER_KEY, JSON.stringify(userInfo));
+        this.currentUser.set(userInfo);
         this.isLoggedIn.set(true);
     }
 

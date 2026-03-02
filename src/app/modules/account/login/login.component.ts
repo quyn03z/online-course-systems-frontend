@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink, RouterLinkActive],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
@@ -18,9 +18,17 @@ export class LoginComponent {
   username = '';
   password = '';
 
+  // Sign Up fields
+  signUpUsername = '';
+  signUpEmail = '';
+  signUpPassword = '';
+  signUpConfirmPassword = '';
+
   // UI state
   isLoading = false;
-  errorMessage = '';
+  errorMessageLogin = '';
+  errorMessageSignUp = '';
+  successMessageSignUp = '';
 
   constructor(
     private authService: AuthService,
@@ -29,22 +37,51 @@ export class LoginComponent {
 
   onSignIn(): void {
     if (!this.username || !this.password) {
-      this.errorMessage = 'Vui lòng nhập username và password.';
+      this.errorMessageLogin = 'Vui lòng nhập username và password.';
       return;
     }
 
     this.isLoading = true;
-    this.errorMessage = '';
+    this.errorMessageLogin = '';
 
     this.authService.login({ username: this.username, password: this.password }).subscribe({
-      next: () => {
+      next: (res) => {
+        console.log('Dữ liệu API trả về:', res);
         this.isLoading = false;
-        this.router.navigate(['/']);
+        this.router.navigate(['/home']);
       },
       error: (err) => {
         this.isLoading = false;
-        this.errorMessage = err.error?.message || 'Đăng nhập thất bại. Vui lòng thử lại.';
+        this.errorMessageLogin = err.error?.message || 'Đăng nhập thất bại. Vui lòng thử lại.';
       }
     });
   }
+
+  onSignUp(): void {
+    if (!this.signUpUsername || !this.signUpEmail || !this.signUpPassword) {
+      this.errorMessageSignUp = 'Vui lòng nhập username, email và password.';
+      return;
+    }
+    this.isLoading = true;
+    this.errorMessageSignUp = '';
+    this.successMessageSignUp = '';
+
+    this.authService.signUp({ username: this.signUpUsername, email: this.signUpEmail, password: this.signUpPassword, confirmPassword: this.signUpConfirmPassword }).subscribe({
+      next: (res) => {
+        console.log('Dữ liệu API trả về:', res);
+        this.successMessageSignUp = 'Bạn đã đăng ký thành công!';
+        this.isLoading = false;
+      },
+      error: (err) => {
+        this.isLoading = false;
+        this.errorMessageSignUp = err.error?.message || 'Đăng ký thất bại. Vui lòng thử lại.';
+      }
+    })
+
+
+  }
+
+
+
+
 }
