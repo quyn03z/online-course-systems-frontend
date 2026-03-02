@@ -141,6 +141,18 @@ export class AuthService {
     }
 
     logout(): void {
+        // Gọi API backend để revoke refresh token trong database
+        this.apiService.post<any>('Auth/logout', {}).pipe(
+            catchError(() => {
+                // Kể cả khi API lỗi, vẫn tiếp tục xóa local state
+                return [];
+            })
+        ).subscribe(() => {
+            this._clearLocalSession();
+        });
+    }
+
+    private _clearLocalSession(): void {
         localStorage.removeItem(this.TOKEN_KEY);
         localStorage.removeItem(this.REFRESH_TOKEN_KEY);
         localStorage.removeItem(this.USER_KEY);
