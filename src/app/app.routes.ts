@@ -6,6 +6,7 @@ import { authGuard } from './core/guards/auth.guard';
 import { ForgotPasswordComponent } from './modules/account/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './modules/account/reset-password/reset-password.component';
 import { CourseComponent } from './pages/course/course.component';
+import { CourseDetailsComponent } from './pages/course-details/course-details.component';
 
 export const routes: Routes = [
     // Trang login - KHÔNG có header/footer
@@ -20,6 +21,7 @@ export const routes: Routes = [
         children: [
             { path: 'home', component: HomeComponent },
             { path: 'course', component: CourseComponent },
+            { path: 'course-details/:courseId', component: CourseDetailsComponent },
             // Thêm các route khác ở đây, ví dụ:
             // { path: 'courses', component: CoursesComponent, canActivate: [authGuard] },
         ]

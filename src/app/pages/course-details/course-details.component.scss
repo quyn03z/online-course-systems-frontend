@@ -1,0 +1,143 @@
+.section {
+    padding: 60px 0;
+    overflow: hidden;
+}
+
+.courses-course-details h3 {
+    font-size: 26px;
+    font-weight: 600;
+    margin-top: 20px;
+    margin-bottom: 15px;
+    color: #37423b;
+}
+
+.courses-course-details img {
+    border-radius: 8px;
+    /* Bo góc ảnh cho mềm mại */
+    margin-bottom: 20px;
+}
+
+/* Box thông tin khóa học bên phải */
+.course-info {
+    background: #f8f9fa;
+    padding: 15px 20px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    border-left: 4px solid #5fcf80;
+    /* Viền trái tạo điểm nhấn */
+}
+
+.course-info h5 {
+    font-weight: 400;
+    font-size: 16px;
+    margin: 0;
+    color: #6c757d;
+}
+
+.course-info p {
+    margin: 0;
+    font-weight: 600;
+    font-size: 16px;
+    color: #37423b;
+}
+
+.course-info p a {
+    color: #37423b;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.course-info p a:hover {
+    color: #5fcf80;
+}
+
+.tabs .nav-tabs {
+    border: 0;
+}
+
+.tabs .nav-link {
+    border: 0;
+    padding: 15px 20px;
+    color: #37423b;
+    border-radius: 0;
+    border-left: 5px solid transparent;
+    /* Chuẩn bị cho hover/active */
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    background-color: #f8f9fa;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.tabs .nav-link:hover {
+    color: #5fcf80;
+    background-color: #eef0f2;
+}
+
+.tabs .nav-link.active {
+    color: #5fcf80;
+    background-color: #eef0f2;
+    border-left-color: #5fcf80;
+    /* Hiện viền trái khi active */
+}
+
+/* Hiệu ứng mờ dần khi chuyển Tab */
+.tabs .tab-pane {
+    display: none;
+}
+
+.tabs .tab-pane.active {
+    display: block;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.tabs .details h3 {
+    font-size: 26px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #37423b;
+}
+
+.tabs .details p.fst-italic {
+    color: #6c757d;
+}
+
+.tabs img {
+    border-radius: 8px;
+}
+
+.btn-register-course {
+    display: block;
+    width: 100%;
+    background: linear-gradient(to right, #042565, #00a4e4);
+    color: #ffffff;
+    text-align: center;
+    padding: 14px 0;
+    font-size: 18px;
+    font-weight: 700;
+    border-radius: 8px;
+    border: none;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-register-course:hover {
+    background: linear-gradient(to right, #031b4e, #008cc2);
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Animation mượt mà cho tab */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
