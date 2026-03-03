@@ -15,8 +15,9 @@ export class ApiService {
         return this.http.get<T>(`${this.baseUrl}/${endpoint}`, { params });
     }
 
-    post<T>(endpoint: string, body: any): Observable<T> {
-        return this.http.post<T>(`${this.baseUrl}/${endpoint}`, body);
+    post<T>(endpoint: string, body: any, headers?: { [key: string]: string }): Observable<T> {
+        const httpHeaders = headers ? new HttpHeaders(headers) : undefined;
+        return this.http.post<T>(`${this.baseUrl}/${endpoint}`, body, { headers: httpHeaders });
     }
 
     put<T>(endpoint: string, body: any): Observable<T> {

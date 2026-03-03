@@ -18,6 +18,7 @@
 h1 {
     font-weight: bold;
     margin: 0;
+    color: #0dc5af;
 }
 
 h2 {
@@ -41,19 +42,28 @@ a {
     font-size: 14px;
     text-decoration: none;
     margin: 15px 0;
+    transition: color 0.3s ease;
+    /* Thêm hiệu ứng mượt mà khi hover */
+}
+
+a:hover {
+    color: #00a4e4;
+    /* Màu xanh lam khi di chuột vào link */
 }
 
 button {
     border-radius: 20px;
-    border: 1px solid #FF4B2B;
-    background-color: #FF4B2B;
+    border: none;
+    /* Bỏ border cứng vì dùng gradient */
+    background: linear-gradient(to right, #042565, #00a4e4);
+    /* Nền xanh gradient chủ đạo */
     color: #FFFFFF;
     font-size: 12px;
     font-weight: bold;
     padding: 12px 45px;
     letter-spacing: 1px;
     text-transform: uppercase;
-    transition: transform 80ms ease-in;
+    transition: transform 80ms ease-in, box-shadow 0.3s ease;
 }
 
 button:active {
@@ -64,9 +74,16 @@ button:focus {
     outline: none;
 }
 
+button:hover {
+    box-shadow: 0 4px 10px rgba(0, 164, 228, 0.4);
+    /* Thêm bóng đổ màu xanh khi hover */
+}
+
 button.ghost {
-    background-color: transparent;
-    border-color: #FFFFFF;
+    background: transparent;
+    border: 1px solid #FFFFFF;
+    /* Giữ lại viền trắng cho nút trên nền overlay */
+    box-shadow: none;
 }
 
 form {
@@ -86,6 +103,14 @@ input {
     padding: 12px 15px;
     margin: 8px 0;
     width: 100%;
+    border-radius: 4px;
+    /* Bo góc nhẹ cho input mượt hơn */
+}
+
+input:focus {
+    outline: none;
+    border: 1px solid #00a4e4;
+    /* Đổi màu viền input khi click vào */
 }
 
 .container {
@@ -162,9 +187,10 @@ input {
 }
 
 .overlay {
-    background: #FF416C;
-    background: -webkit-linear-gradient(to right, #FF4B2B, #FF416C);
-    background: linear-gradient(to right, #FF4B2B, #FF416C);
+    background: #042565;
+    background: -webkit-linear-gradient(to right, #042565, #00a4e4);
+    /* Áp dụng Gradient xanh cho Overlay */
+    background: linear-gradient(to right, #042565, #00a4e4);
     background-repeat: no-repeat;
     background-size: cover;
     background-position: 0 0;
@@ -226,17 +252,27 @@ input {
     margin: 0 5px;
     height: 40px;
     width: 40px;
+    color: #042565;
+    /* Đổi màu icon mạng xã hội thành xanh sẫm */
+}
+
+.social-container a:hover {
+    background-color: #eef0f2;
+    border-color: #00a4e4;
+    color: #00a4e4;
 }
 
 .error-message {
-    color: #ff4b2b;
+    color: #dc3545;
+    /* Chuyển màu lỗi thành đỏ chuẩn (danger) để không bị nhầm với màu theme cũ */
     font-size: 12px;
     margin: 8px 0;
     font-weight: bold;
 }
 
 .success-message {
-    color: green;
+    color: #28a745;
+    /* Xanh lá chuẩn báo thành công */
     font-size: 12px;
     margin: 8px 0;
     font-weight: bold;

@@ -9,14 +9,15 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
     // Đính kèm access token vào header (trừ request refresh-token để tránh vòng lặp)
     const isRefreshRequest = req.url.includes('Auth/refresh-token');
+    const isLogoutRequest = req.url.includes('Auth/logout');
     const clonedReq = token && !isRefreshRequest
         ? req.clone({ setHeaders: { Authorization: `Bearer ${token}` } })
         : req;
 
     return next(clonedReq).pipe(
         catchError((error: HttpErrorResponse) => {
-            // Nếu 401 và không phải chính request refresh-token → thử refresh
-            if (error.status === 401 && !isRefreshRequest && authService.getRefreshToken()) {
+            // Nếu 401 và không phải chính request refresh-token hoặc logout → thử refresh
+            if (error.status === 401 && !isRefreshRequest && !isLogoutRequest && authService.getRefreshToken()) {
                 return authService.handleRefreshToken().pipe(
                     switchMap(newToken => {
                         // Retry request gốc với token mới
