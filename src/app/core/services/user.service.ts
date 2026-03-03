@@ -1,0 +1,30 @@
+import { inject, Injectable } from '@angular/core';
+import { ApiService } from './api.service';
+import { Observable } from 'rxjs';
+
+
+export interface ChangePasswordModel {
+  oldPassword: string;
+  newPassword: string;
+  confirmNewPassword: string;
+}
+
+
+@Injectable({
+  providedIn: 'root'
+})
+
+
+export class UserService {
+
+  private apiService = inject(ApiService);
+
+  changePassword(model: ChangePasswordModel): Observable<any> {
+    return this.apiService.post<any>(`User/change-password`, model);
+  }
+
+  getUserById(): Observable<any> {
+    return this.apiService.get<any>(`User/user-profile`);
+  }
+
+}
