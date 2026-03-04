@@ -1,0 +1,104 @@
+.btn-custom-add {
+    background: linear-gradient(135deg, #0d8fe0 0%, #056294 100%);
+    color: white;
+    border: none;
+    box-shadow: 0 4px 6px rgba(56, 239, 125, 0.2);
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-custom-add:hover {
+    background: linear-gradient(135deg, #0d8fe0 0%, #056294 100%);
+    color: white;
+    transform: translateY(-2px);
+    /* Hiệu ứng nẩy lên */
+    box-shadow: 0 6px 12px rgba(56, 215, 239, 0.3);
+}
+
+.btn-custom-add:active {
+    transform: translateY(0);
+}
+
+// Modal
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1050;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.2s ease;
+}
+
+.modal-box {
+    background: #fff;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 600px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    animation: slideUp 0.2s ease;
+    overflow: hidden;
+}
+
+.modal-header-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.5rem;
+    background: linear-gradient(135deg, #0d8fe0 0%, #056294 100%);
+    color: white;
+}
+
+.modal-title-box {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.btn-close-box {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.1rem;
+    cursor: pointer;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+
+    &:hover {
+        opacity: 1;
+    }
+}
+
+.modal-body-box {
+    padding: 1.5rem;
+}
+
+.modal-footer-box {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid #e9ecef;
+    display: flex;
+    justify-content: flex-end;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(30px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}

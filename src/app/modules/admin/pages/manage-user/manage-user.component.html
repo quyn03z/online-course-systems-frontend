@@ -1,0 +1,141 @@
+<div class="container-fluid px-4">
+    <h1 class="mt-4">Quản lý người dùng</h1>
+
+
+    <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <span><i class="fas fa-users me-1"></i> Danh sách người dùng</span>
+        </div>
+        <div class="card-body">
+            <!-- Controls -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="d-flex align-items-center gap-2">
+                    <select class="form-select form-select-sm" style="width:80px;" [(ngModel)]="pageSize"
+                        [ngModelOptions]="{standalone: true}">
+                        <option [ngValue]="5">5</option>
+                        <option [ngValue]="10">10</option>
+                        <option [ngValue]="25">25</option>
+                    </select>
+                    <span class="text-muted">dòng mỗi trang</span>
+                </div>
+
+                <div class="d-flex align-items-center gap-2">
+                    <input class="form-control form-control-sm" style="width:200px;" type="text"
+                        placeholder="Tìm kiếm..." [(ngModel)]="searchTerm" [ngModelOptions]="{standalone: true}"
+                        (input)="currentPage=1" />
+
+                    <button class="btn btn-sm btn-custom-add">
+                        <i class="fas fa-user-plus me-1"></i> Thêm Người Dùng
+                    </button>
+                </div>
+            </div>
+
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>Tên đăng nhập</th>
+                        <th>Họ</th>
+                        <th>Tên</th>
+                        <th>Email</th>
+                        <th>Vai Trò</th>
+                        <th>Trạng Thái</th>
+                        <th>Thao Tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let user of pagedUsers">
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.lastname }}</td>
+                        <td>{{ user.firstname }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.roleName }}</td>
+                        <td>
+                            <span class="badge" [ngClass]="user.isLocked ? 'text-bg-danger' : 'text-bg-success'">
+                                {{ user.isLocked ? 'Khóa' : 'Hoạt Động' }}
+                            </span>
+                        </td>
+                        <td class="text-center">
+                            <button type="button" class="btn btn-sm btn-primary me-2" title="Chỉnh sửa"
+                                (click)="onEditUser(user)">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr *ngIf="filteredUsers.length === 0">
+                        <td colspan="7" class="text-center text-muted">Không tìm thấy kết quả.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="d-flex justify-content-between align-items-center">
+                <span class="text-muted small">
+                    Showing {{ (currentPage - 1) * pageSize + 1 }} to
+                    {{ minVal(currentPage * pageSize, filteredUsers.length) }}
+                    of {{ filteredUsers.length }} entries
+                </span>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-sm btn-outline-secondary" [disabled]="currentPage === 1"
+                        (click)="currentPage = currentPage - 1">Previous</button>
+                    <button class="btn btn-sm btn-outline-secondary"
+                        [disabled]="currentPage * pageSize >= filteredUsers.length"
+                        (click)="currentPage = currentPage + 1">Next</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit User Modal -->
+<div *ngIf="showModal" class="modal-overlay" (click)="closeModal()">
+    <div class="modal-box" (click)="$event.stopPropagation()">
+        <div class="modal-header-box">
+            <h5 class="modal-title-box"><i class="fas fa-user-edit me-2"></i>Chỉnh sửa người dùng</h5>
+            <button type="button" class="btn-close-box" (click)="closeModal()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body-box">
+            <form class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Tên đăng nhập</label>
+                    <input type="text" class="form-control" [(ngModel)]="selectedUser.username" name="username" readonly
+                        style="background:#f8f9fa; cursor:not-allowed;" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Email</label>
+                    <input type="email" class="form-control" [(ngModel)]="selectedUser.email" name="email" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Tên</label>
+                    <input type="text" class="form-control" [(ngModel)]="selectedUser.firstname" name="firstname" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Họ</label>
+                    <input type="text" class="form-control" [(ngModel)]="selectedUser.lastname" name="lastname" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Vai trò</label>
+                    <select class="form-select" [(ngModel)]="selectedUser.roleId" name="roleId">
+                        <option value="" disabled>-- Chọn vai trò --</option>
+                        <option [value]="1">Admin</option>
+                        <option [value]="2">Teacher</option>
+                        <option [value]="3">Student</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Trạng thái</label>
+                    <select class="form-select" [(ngModel)]="selectedUser.isLocked" name="isLocked">
+                        <option [ngValue]="false">Hoạt động</option>
+                        <option [ngValue]="true">Khoá</option>
+                    </select>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer-box">
+            <button type="button" class="btn btn-secondary me-2" (click)="closeModal()">Huỷ</button>
+            <button type="button" class="btn btn-primary" (click)="onSaveUser()">
+                <i class="fas fa-save me-1"></i> Lưu thay đổi
+            </button>
+        </div>
+    </div>
+</div>
