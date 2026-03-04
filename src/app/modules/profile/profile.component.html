@@ -7,22 +7,16 @@
                     <div class="card-body text-center d-flex flex-column align-items-center">
 
                         <div class="avatar-wrapper mb-3 position-relative">
-                            <img src="https://ui-avatars.com/api/?name=Quyen&background=042565&color=fff&size=120"
-                                alt="User Avatar" class="img-fluid rounded-circle shadow-sm"
+                            <img [src]="user?.avatar" alt="User Avatar" class="img-fluid rounded-circle shadow-sm"
                                 style="width: 100%; height: 100%; object-fit: cover;">
-
-                            <input type="file" id="avatarUpload" class="d-none" accept="image/*">
-
                             <label for="avatarUpload"
-                                class="btn btn-sm btn-light position-absolute bottom-0 end-0 rounded-circle shadow d-flex align-items-center justify-content-center"
-                                style="width: 32px; height: 32px; padding: 0; cursor: pointer; margin-bottom: 0;">
-                                <i class="bi bi-camera-fill text-primary"></i>
-                            </label>
+                                class="d-none btn btn-sm btn-light position-absolute bottom-0 end-0 rounded-circle shadow d-flex align-items-center justify-content-center"
+                                style="width: 32px; height: 32px; padding: 0; cursor: pointer; margin-bottom: 0;"></label>
                         </div>
 
-                        <h3 class="mb-1 fw-bold text-dark">Quyen</h3>
-                        <p class="text-muted mb-3">quyen.devexample.com</p>
-                        <span class="badge bg-primary-gradient px-3 py-2">Student</span>
+                        <h5 class="mb-1 fw-bold text-dark">{{firstName}} {{lastName}}</h5>
+                        <p class="text-muted mb-3">{{user.email}}</p>
+                        <span class="badge bg-primary-gradient px-3 py-2">{{user.roleName}}</span>
                     </div>
                 </div>
             </div>
@@ -38,19 +32,19 @@
                             <div class="col-md-6">
                                 <div class="info-item">
                                     <span class="label">Tên đăng nhập</span>
-                                    <span class="value">quyendz03</span>
+                                    <span class="value">{{user.username}}</span>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="info-item">
                                     <span class="label">Email</span>
-                                    <span class="value">quyen.devexample.com</span>
+                                    <span class="value">{{user.email}}</span>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="info-item">
                                     <span class="label">Vai trò</span>
-                                    <span class="value fw-bold text-primary">Student</span>
+                                    <span class="value fw-bold text-primary">{{user.roleName}}</span>
                                 </div>
                             </div>
                         </div>
@@ -63,27 +57,23 @@
                             <h5 class="card-title mb-1 fw-bold text-dark">Cập nhật thông tin cá nhân</h5>
                             <p class="card-subtitle text-muted mb-0">Chỉnh sửa tên hiển thị của bạn</p>
                         </div>
-                        <button class="btn btn-outline-secondary btn-sm" type="button">
-                            <i class="bi bi-arrow-counterclockwise me-1"></i> Reset
-                        </button>
                     </div>
                     <div class="card-body">
-                        <form class="row g-3">
+                        <form class="row g-3" (ngSubmit)="onUpdateProfile()">
                             <div class="col-md-6">
                                 <label for="firstName" class="form-label">Tên</label>
-                                <input id="firstName" type="text" class="form-control" name="firstName"
-                                    placeholder="Nhập tên của bạn" maxlength="10" value="Quyen" />
-                                <div class="form-text">Tối đa 10 ký tự</div>
+                                <input [(ngModel)]="firstName" type="text" class="form-control" name="firstName"
+                                    placeholder="Nhập tên của bạn" />
                             </div>
                             <div class="col-md-6">
                                 <label for="lastName" class="form-label">Họ</label>
-                                <input id="lastName" type="text" class="form-control" name="lastName"
-                                    placeholder="Nhập họ của bạn" maxlength="10" value="Nguyễn" />
-                                <div class="form-text">Tối đa 10 ký tự</div>
+                                <input [(ngModel)]="lastName" type="text" class="form-control" name="lastName"
+                                    placeholder="Nhập họ của bạn" />
                             </div>
-
-                            <div class="col-12">
-                                <div class="alert alert-success d-none" role="alert">Cập nhật hồ sơ thành công!</div>
+                            <div class="col-md-12">
+                                <label for="avatar" class="form-label">Ảnh đại diện (URL)</label>
+                                <input [(ngModel)]="avatar" type="text" class="form-control" name="avatar"
+                                    placeholder="Nhập URL ảnh đại diện" />
                             </div>
 
                             <div class="col-12 d-flex justify-content-end">
@@ -99,32 +89,35 @@
                         <p class="card-subtitle text-muted mb-0">Bảo mật tài khoản của bạn</p>
                     </div>
                     <div class="card-body">
-                        <form class="row g-3">
+
+                        <form class="row g-3" (ngSubmit)="onChangePassword()">
                             <div class="col-12">
                                 <label for="oldPassword" class="form-label">Mật khẩu hiện tại</label>
-                                <input id="oldPassword" type="password" class="form-control" name="oldPassword"
-                                    placeholder="Nhập mật khẩu hiện tại" />
+                                <input [(ngModel)]="oldPassword" type="password" class="form-control" name="oldPassword"
+                                    placeholder="Nhập mật khẩu hiện tại" required minlength="6"
+                                    pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$" />
                             </div>
                             <div class="col-12 col-md-6">
                                 <label for="newPassword" class="form-label">Mật khẩu mới</label>
-                                <input id="newPassword" type="password" class="form-control" name="newPassword"
-                                    placeholder="Nhập mật khẩu mới" />
+                                <input [(ngModel)]="newPassword" type="password" class="form-control" name="newPassword"
+                                    placeholder="Nhập mật khẩu mới" required minlength="6"
+                                    pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$" />
                             </div>
                             <div class="col-12 col-md-6">
                                 <label for="confirmNewPassword" class="form-label">Xác nhận mật khẩu mới</label>
-                                <input id="confirmNewPassword" type="password" class="form-control"
-                                    name="confirmNewPassword" placeholder="Nhập lại mật khẩu mới" />
+                                <input [(ngModel)]="confirmNewPassword" type="password" class="form-control"
+                                    name="confirmNewPassword" placeholder="Nhập lại mật khẩu mới" required minlength="6"
+                                    pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$" />
                             </div>
 
-                            <div class="col-12">
-                                <div class="alert alert-danger d-none" role="alert">Đã có lỗi xảy ra khi đổi mật khẩu.
-                                </div>
-                            </div>
 
                             <div class="col-12 d-flex justify-content-end">
                                 <button type="submit" class="btn btn-primary-gradient">Đổi mật khẩu</button>
                             </div>
                         </form>
+
+
+
                     </div>
                 </div>
             </div>
