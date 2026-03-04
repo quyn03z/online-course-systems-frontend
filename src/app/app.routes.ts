@@ -8,6 +8,8 @@ import { ResetPasswordComponent } from './modules/account/reset-password/reset-p
 import { CourseComponent } from './pages/course/course.component';
 import { CourseDetailsComponent } from './pages/course-details/course-details.component';
 import { AdminComponent } from './modules/admin/admin.component';
+import { AdminDashboardComponent } from './modules/admin/pages/admin-dashboard/admin-dashboard.component';
+import { ManageUserComponent } from './modules/admin/pages/manage-user/manage-user.component';
 import { ProfileComponent } from './modules/profile/profile.component';
 
 export const routes: Routes = [
@@ -16,7 +18,16 @@ export const routes: Routes = [
     { path: 'login', component: LoginComponent },
     { path: 'forgot-password', component: ForgotPasswordComponent },
     { path: 'reset-password', component: ResetPasswordComponent },
-    { path: 'admin', component: AdminComponent },
+    {
+        path: 'admin',
+        component: AdminComponent,
+        children: [
+            { path: '', component: AdminDashboardComponent },
+            { path: 'manage-users', component: ManageUserComponent },
+            // Thêm trang admin mới ở đây, ví dụ:
+            // { path: 'manage-courses', component: ManageCourseComponent },
+        ]
+    },
     // Các trang CÓ header/footer (bọc trong MainLayout)
     {
         path: '',
