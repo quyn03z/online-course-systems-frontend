@@ -20,11 +20,15 @@ export class UserService {
   private apiService = inject(ApiService);
 
   changePassword(model: ChangePasswordModel): Observable<any> {
-    return this.apiService.post<any>(`User/change-password`, model);
+    return this.apiService.put<any>(`User/change-password`, model);
   }
 
   getUserById(): Observable<any> {
     return this.apiService.get<any>(`User/user-profile`);
+  }
+
+  updateProfile(model: any): Observable<any> {
+    return this.apiService.put<any>(`User/update-profile`, model);
   }
 
 }
