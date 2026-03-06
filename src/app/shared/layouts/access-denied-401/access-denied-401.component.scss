@@ -1,0 +1,377 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #333;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Thêm background pattern */
+body::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" opacity="0.1"><circle cx="50" cy="50" r="40" fill="white"/></svg>');
+    background-size: 50px 50px;
+    pointer-events: none;
+}
+
+.container {
+    max-width: 800px;
+    padding: 20px;
+    position: relative;
+    z-index: 1;
+}
+
+.content {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 60px 40px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    animation: slideUp 0.6s ease-out;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Icon 404 */
+.icon-404 {
+    font-size: 80px;
+    color: #667eea;
+    margin-bottom: 20px;
+    position: relative;
+    display: inline-block;
+    animation: bounce 2s ease infinite;
+}
+
+.icon-404 .emoji {
+    position: absolute;
+    font-size: 30px;
+    top: -10px;
+    right: -20px;
+    animation: rotate 3s linear infinite;
+}
+
+.number {
+    font-size: 180px;
+    font-weight: 800;
+    line-height: 1;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 20px;
+    text-shadow: 0 10px 20px rgba(102, 126, 234, 0.2);
+    animation: float 3s ease-in-out infinite;
+    position: relative;
+}
+
+/* Thêm icon nhỏ xung quanh số 404 */
+.number::before,
+.number::after {
+    content: '⚡';
+    position: absolute;
+    font-size: 40px;
+    opacity: 0.5;
+    -webkit-text-fill-color: initial;
+    color: #667eea;
+}
+
+.number::before {
+    left: -30px;
+    top: 50%;
+    transform: translateY(-50%);
+    animation: flash 1s ease infinite;
+}
+
+.number::after {
+    right: -30px;
+    top: 50%;
+    transform: translateY(-50%);
+    animation: flash 1s ease infinite 0.5s;
+}
+
+.text h1 {
+    font-size: 36px;
+    margin-bottom: 15px;
+    color: #2d3748;
+}
+
+.text h1 i {
+    color: #fbbf24;
+    margin-right: 10px;
+    animation: shake 0.5s ease infinite;
+}
+
+.text p {
+    font-size: 18px;
+    color: #718096;
+    margin-bottom: 20px;
+    line-height: 1.6;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.text p i {
+    color: #667eea;
+    margin-right: 8px;
+}
+
+/* Suggestion icons */
+.suggestion-icons {
+    margin: 30px 0;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.suggestion-icons i {
+    font-size: 24px;
+    color: #a0aec0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 10px;
+    border-radius: 50%;
+    background: #f7fafc;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.suggestion-icons i:hover {
+    color: #667eea;
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+    background: white;
+}
+
+/* Home button */
+.home-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 15px 40px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    text-decoration: none;
+    border-radius: 50px;
+    font-size: 18px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+    border: 2px solid transparent;
+    margin-top: 20px;
+}
+
+.home-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 30px rgba(102, 126, 234, 0.4);
+    background: white;
+    color: #667eea;
+    border-color: #667eea;
+}
+
+.home-btn i {
+    transition: transform 0.3s ease;
+}
+
+.home-btn:hover i:first-child {
+    transform: translateX(-5px);
+}
+
+.home-btn:hover i:last-child {
+    transform: translateX(5px);
+}
+
+/* Social icons */
+.social-icons {
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    padding-top: 20px;
+    border-top: 1px solid #e2e8f0;
+}
+
+.social-icons a {
+    color: #a0aec0;
+    font-size: 20px;
+    transition: all 0.3s ease;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #f7fafc;
+}
+
+.social-icons a:hover {
+    color: white;
+    background: #667eea;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+/* Animations */
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+@keyframes bounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-15px);
+    }
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes shake {
+
+    0%,
+    100% {
+        transform: rotate(0deg);
+    }
+
+    25% {
+        transform: rotate(10deg);
+    }
+
+    75% {
+        transform: rotate(-10deg);
+    }
+}
+
+@keyframes flash {
+
+    0%,
+    100% {
+        opacity: 0.5;
+    }
+
+    50% {
+        opacity: 1;
+        transform: translateY(-50%) scale(1.2);
+    }
+}
+
+/* Floating shapes */
+.content::before {
+    content: '🔍';
+    position: absolute;
+    font-size: 60px;
+    opacity: 0.1;
+    left: -20px;
+    bottom: -20px;
+    transform: rotate(-15deg);
+}
+
+.content::after {
+    content: '❓';
+    position: absolute;
+    font-size: 80px;
+    opacity: 0.1;
+    right: -20px;
+    top: -20px;
+    transform: rotate(15deg);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .content {
+        padding: 40px 20px;
+    }
+
+    .number {
+        font-size: 120px;
+    }
+
+    .icon-404 {
+        font-size: 60px;
+    }
+
+    .text h1 {
+        font-size: 28px;
+    }
+
+    .text p {
+        font-size: 16px;
+        padding: 0 20px;
+    }
+
+    .home-btn {
+        padding: 12px 30px;
+        font-size: 16px;
+    }
+
+    .suggestion-icons {
+        flex-wrap: wrap;
+    }
+}
+
+@media (max-width: 480px) {
+    .number {
+        font-size: 100px;
+    }
+
+    .text h1 {
+        font-size: 24px;
+    }
+
+    .suggestion-icons i {
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+    }
+}

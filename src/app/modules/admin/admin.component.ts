@@ -1,6 +1,7 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-admin',
@@ -12,6 +13,8 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 })
 export class AdminComponent {
   sidebarToggled = false;
+
+  constructor(public authService: AuthService) { }
 
   toggleSidebar() {
     this.sidebarToggled = !this.sidebarToggled;
