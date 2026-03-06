@@ -1,0 +1,75 @@
+<div class="payment-callback-container section">
+    <div class="container" data-aos="fade-up">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <!-- Loading State -->
+                <div *ngIf="status === 'loading'" class="card status-card loading text-center p-5 shadow-lg border-0">
+                    <div class="spinner-grow text-primary mb-4" role="status" style="width: 3rem; height: 3rem;">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <h2 class="fw-bold mb-3">Đang xác thực giao dịch</h2>
+                    <p class="text-muted mb-0">Vui lòng không đóng trình duyệt hoặc tải lại trang...</p>
+                </div>
+
+                <!-- Success State -->
+                <div *ngIf="status === 'success'"
+                    class="card status-card success text-center p-5 shadow-lg border-0 animate__animated animate__zoomIn">
+                    <div class="icon-wrapper mb-4">
+                        <i class="bi bi-check-circle-fill text-success" style="font-size: 5rem;"></i>
+                    </div>
+                    <h1 class="fw-bold text-success mb-3">Thanh Toán Thành Công!</h1>
+                    <p class="lead mb-4">{{ message }}</p>
+
+                    <div class="transaction-details text-start bg-light p-4 rounded-3 mb-4">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-muted">Mã đơn hàng:</span>
+                            <span class="fw-bold">{{ paymentData.orderId }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-muted">Số tiền:</span>
+                            <span class="fw-bold text-primary">{{ paymentData.amount | number }}đ</span>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span class="text-muted">Thời gian:</span>
+                            <span>{{ paymentData.responseTime }}</span>
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-3">
+                        <a [routerLink]="['/course-details', courseId]"
+                            class="btn btn-primary btn-lg rounded-pill px-5">
+                            Quay lại khóa học
+                        </a>
+                        <a routerLink="/course" class="btn btn-outline-secondary btn-lg rounded-pill px-5">
+                            Khám phá khóa học khác
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Error State -->
+                <div *ngIf="status === 'error'"
+                    class="card status-card error text-center p-5 shadow-lg border-0 animate__animated animate__shakeX">
+                    <div class="icon-wrapper mb-4">
+                        <i class="bi bi-x-circle-fill text-danger" style="font-size: 5rem;"></i>
+                    </div>
+                    <h1 class="fw-bold text-danger mb-3">Giao Dịch Thất Bại</h1>
+                    <p class="lead mb-4 text-muted">{{ message }}</p>
+
+                    <div class="error-info bg-light p-3 rounded-3 mb-4 text-start">
+                        <p class="mb-1 small"><strong>Mã lỗi:</strong> {{ paymentData.errorCode }}</p>
+                        <p class="mb-0 small"><strong>Thông tin:</strong> {{ paymentData.localMessage }}</p>
+                    </div>
+
+                    <div class="d-grid gap-3">
+                        <a [routerLink]="['/course-details', courseId]" class="btn btn-danger btn-lg rounded-pill px-5">
+                            Thử lại thanh toán
+                        </a>
+                        <a routerLink="/home" class="btn btn-outline-secondary btn-lg rounded-pill px-5">
+                            Về trang chủ
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -11,6 +11,7 @@ import { AdminComponent } from './modules/admin/admin.component';
 import { AdminDashboardComponent } from './modules/admin/pages/admin-dashboard/admin-dashboard.component';
 import { ManageUserComponent } from './modules/admin/pages/manage-user/manage-user.component';
 import { ProfileComponent } from './modules/profile/profile.component';
+import { PaymentCallbackComponent } from './pages/payment-callback/payment-callback.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -37,8 +38,7 @@ export const routes: Routes = [
             { path: 'course', component: CourseComponent },
             { path: 'course-details/:courseId', component: CourseDetailsComponent },
             { path: 'profile', component: ProfileComponent },
-            // Thêm các route khác ở đây, ví dụ:
-            // { path: 'courses', component: CoursesComponent, canActivate: [authGuard] },
+            { path: 'Checkout/PaymentCallBack', component: PaymentCallbackComponent },
         ]
     }
 ];

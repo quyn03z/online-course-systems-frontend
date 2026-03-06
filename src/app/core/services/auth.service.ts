@@ -140,14 +140,43 @@ export class AuthService {
         return localStorage.getItem(this.REFRESH_TOKEN_KEY);
     }
 
+    getUserId() {
+        const token = this.getToken(); // Dùng đúng key access_token
+        let userId = 0;
+        if (token) {
+            try {
+                const payload = JSON.parse(atob(token.split('.')[1]));
+                userId = payload['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier']
+                    || payload['sub']
+                    || payload['userId']
+                    || payload['id']
+                    || 0;
+            } catch (e) {
+                console.error('Không thể parse JWT token', e);
+            }
+        }
+        return userId;
+    }
+
+    getUserName() {
+        const token = this.getToken(); // Dùng đúng key access_token
+        let userName = '';
+        if (token) {
+            try {
+                const payload = JSON.parse(atob(token.split('.')[1]));
+                userName = payload['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name']
+                    || payload['unique_name']
+                    || '';
+            } catch (e) {
+                console.error('Không thể parse JWT token', e);
+            }
+        }
+        return userName;
+    }
+
     logout(): void {
-        // Lưu token TRƯỚC khi xóa session
         const token = this.getToken();
-
-        // Xóa session local ngay lập tức
         this._clearLocalSession();
-
-        // Gọi API revoke refresh token — đính token thủ công vì interceptor sẽ không còn token
         if (token) {
             this.apiService.post<any>('Auth/logout', {}, {
                 Authorization: `Bearer ${token}`

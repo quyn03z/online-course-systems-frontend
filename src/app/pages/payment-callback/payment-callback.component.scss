@@ -1,0 +1,35 @@
+    .payment-callback-container {
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+        background: radial-gradient(circle at top left, #f8f9fa 0%, #e9ecef 100%);
+    }
+
+    .status-card {
+        border-radius: 2rem;
+        transition: transform 0.3s ease;
+    }
+
+    .status-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .icon-wrapper i {
+        display: block;
+        line-height: 1;
+        filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+    }
+
+    .transaction-details,
+    .error-info {
+        border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .btn-lg {
+        font-weight: 600;
+        letter-spacing: 0.5px;
+    }
+
+    .animate__animated {
+        animation-duration: 0.8s;
+    }
