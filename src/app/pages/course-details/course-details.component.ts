@@ -23,14 +23,30 @@ export class CourseDetailsComponent implements OnInit {
   course: CourseResponseModel | null = null;
   isLoading = false;
   errorMessage = '';
+  isEnrolled = false;
 
   ngOnInit(): void {
     const courseId = this.route.snapshot.paramMap.get('courseId');
     if (courseId) {
       this.loadCourseDetails(courseId);
+      this.checkEnrollment(courseId);
     } else {
       this.errorMessage = 'Không tìm thấy khóa học.';
     }
+  }
+
+  checkEnrollment(courseId: string) {
+    this.paymentService.checkEnrollment(courseId).subscribe({
+      next: (response) => {
+        console.log("checkenrollment " + response.result)
+        if (response.result == true) {
+          this.isEnrolled = true;
+        }
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    });
   }
 
   loadCourseDetails(courseId: string): void {

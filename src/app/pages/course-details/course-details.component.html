@@ -43,10 +43,14 @@
                         </div>
 
                         <div class="mt-4">
-                            <button class="btn-register-course" type="submit" [disabled]="isLoading">
+                            <button *ngIf="!isEnrolled" class="btn-register-course" type="submit"
+                                [disabled]="isLoading">
                                 <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-1"
                                     role="status"></span>
                                 {{ isLoading ? 'Đang xử lý...' : 'Đăng Ký Học' }}
+                            </button>
+                            <button *ngIf="isEnrolled" class="btn-register-course" type="button" [disabled]="isLoading">
+                                Vào Lớp Học
                             </button>
                         </div>
                     </form>
