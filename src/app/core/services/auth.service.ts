@@ -58,7 +58,7 @@ export class AuthService {
 
     // Signal reactive — template tự re-render khi login/logout
     readonly isLoggedIn = signal<boolean>(!!localStorage.getItem(this.TOKEN_KEY));
-    readonly currentUser = signal<{ username: string; avatar: string } | null>(
+    readonly currentUser = signal<{ username: string; avatar: string; role: string } | null>(
         JSON.parse(localStorage.getItem(this.USER_KEY) ?? 'null')
     );
 
@@ -126,7 +126,10 @@ export class AuthService {
         const avatar = decoded?.['Avatar']
             ?? DEFAULT_AVATAR;
 
-        const userInfo = { username, avatar };
+        const role = decoded?.['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']
+            ?? decoded?.['role'];
+
+        const userInfo = { username, avatar, role };
         localStorage.setItem(this.USER_KEY, JSON.stringify(userInfo));
         this.currentUser.set(userInfo);
         this.isLoggedIn.set(true);
@@ -163,15 +166,34 @@ export class AuthService {
         let userName = '';
         if (token) {
             try {
-                const payload = JSON.parse(atob(token.split('.')[1]));
-                userName = payload['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name']
-                    || payload['unique_name']
+                const payload = this.decodeToken(token);
+                userName = payload?.['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name']
+                    || payload?.['unique_name']
                     || '';
             } catch (e) {
                 console.error('Không thể parse JWT token', e);
             }
         }
         return userName;
+    }
+
+    getRole(): string {
+        // Ưu tiên lấy từ signal (memory) cho nhanh, nếu reload thì lấy từ localStorage
+        const user = this.currentUser();
+        if (user?.role) return user.role;
+
+        const token = this.getToken();
+        if (token) {
+            const decoded = this.decodeToken(token);
+            return decoded?.['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']
+                || decoded?.['role']
+                || '';
+        }
+        return '';
+    }
+
+    hasRole(expectedRole: string): boolean {
+        return this.getRole() === expectedRole;
     }
 
     logout(): void {

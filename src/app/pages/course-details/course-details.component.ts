@@ -1,7 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CourseService, CourseResponseModel } from '../../core/services/course.service';
 import { PaymentService } from '../../core/services/payment.service';
 import { AuthService } from '../../core/services/auth.service';
@@ -16,6 +16,7 @@ import { AuthService } from '../../core/services/auth.service';
 export class CourseDetailsComponent implements OnInit {
 
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
   private courseService = inject(CourseService);
   private paymentService = inject(PaymentService);
   private authService = inject(AuthService);
@@ -35,10 +36,10 @@ export class CourseDetailsComponent implements OnInit {
     }
   }
 
+
   checkEnrollment(courseId: string) {
     this.paymentService.checkEnrollment(courseId).subscribe({
       next: (response) => {
-        console.log("checkenrollment " + response.result)
         if (response.result == true) {
           this.isEnrolled = true;
         }
@@ -70,6 +71,10 @@ export class CourseDetailsComponent implements OnInit {
 
 
   createPaymentMomo() {
+    if (!this.authService.isLoggedIn()) {
+      this.router.navigate(['/login']);
+      return;
+    }
     const orderInfo = {
       orderId: `ORD-${Date.now()}-${Math.floor(Math.random() * 10000)}`,
       userId: Number(this.authService.getUserId()),
