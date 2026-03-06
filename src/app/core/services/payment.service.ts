@@ -18,5 +18,9 @@ export class PaymentService {
     return this.apiService.get<any>('Checkout/PaymentCallBack', params);
   }
 
+  checkEnrollment(courseId: string) {
+    return this.apiService.get<any>(`Checkout/check-enrollment/${courseId}`);
+  }
+
 
 }
