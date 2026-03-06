@@ -1,12 +1,15 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { CourseService, CourseResponseModel } from '../../core/services/course.service';
+import { PaymentService } from '../../core/services/payment.service';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-course-details',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './course-details.component.html',
   styleUrl: './course-details.component.scss'
 })
@@ -14,6 +17,8 @@ export class CourseDetailsComponent implements OnInit {
 
   private route = inject(ActivatedRoute);
   private courseService = inject(CourseService);
+  private paymentService = inject(PaymentService);
+  private authService = inject(AuthService);
 
   course: CourseResponseModel | null = null;
   isLoading = false;
@@ -46,4 +51,36 @@ export class CourseDetailsComponent implements OnInit {
       }
     });
   }
+
+
+  createPaymentMomo() {
+    const orderInfo = {
+      orderId: `ORD-${Date.now()}-${Math.floor(Math.random() * 10000)}`,
+      userId: Number(this.authService.getUserId()),
+      courseId: this.course?.courseId,
+      fullName: this.authService.getUserName(),
+      orderInfo: 'Thanh toán khóa học: ' + this.course?.courseName,
+      amount: this.course?.price
+    };
+
+    this.isLoading = true;
+    this.paymentService.createPaymentMomo(orderInfo).subscribe({
+      next: (response) => {
+        this.isLoading = false;
+        if (response.succeeded && response.result?.payUrl) {
+          // Redirect sang trang thanh toán MoMo
+          window.location.href = response.result.payUrl;
+        } else {
+          this.errorMessage = response.errors?.join(', ') || 'Không thể tạo thanh toán.';
+        }
+      },
+      error: (err) => {
+        this.isLoading = false;
+        this.errorMessage = 'Lỗi khi tạo thanh toán MoMo.';
+        console.error(err);
+      }
+    });
+  }
+
+
 }

@@ -26,7 +26,7 @@
                         <p>{{ course.description }}</p>
                     </div>
 
-                    <div class="col-lg-4">
+                    <form class="col-lg-4" (ngSubmit)="createPaymentMomo()">
                         <div class="course-info d-flex justify-content-between align-items-center">
                             <h5>Loại khóa học</h5>
                             <p>{{ course.courseTypeName || '—' }}</p>
@@ -41,10 +41,17 @@
                             <h5>Tiêu đề</h5>
                             <p>{{ course.title }}</p>
                         </div>
+
                         <div class="mt-4">
-                            <a class="btn-register-course" style="cursor: pointer;">Đăng Ký Học</a>
+                            <button class="btn-register-course" type="submit" [disabled]="isLoading">
+                                <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-1"
+                                    role="status"></span>
+                                {{ isLoading ? 'Đang xử lý...' : 'Đăng Ký Học' }}
+                            </button>
                         </div>
-                    </div>
+                    </form>
+
+
                 </div>
             </div>
         </section><!-- /Course Details Section -->
