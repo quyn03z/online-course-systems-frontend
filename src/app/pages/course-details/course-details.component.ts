@@ -87,6 +87,7 @@ export class CourseDetailsComponent implements OnInit {
     this.isLoading = true;
     this.paymentService.createPaymentMomo(orderInfo).subscribe({
       next: (response) => {
+        console.log(response)
         this.isLoading = false;
         if (response.succeeded && response.result?.payUrl) {
           // Redirect sang trang thanh toán MoMo

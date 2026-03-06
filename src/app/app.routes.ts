@@ -14,6 +14,7 @@ import { ManageUserComponent } from './modules/admin/pages/manage-user/manage-us
 import { ProfileComponent } from './modules/profile/profile.component';
 import { PaymentCallbackComponent } from './pages/payment-callback/payment-callback.component';
 import { AccessDenied401Component } from './shared/layouts/access-denied-401/access-denied-401.component';
+import { LessonsComponent } from './pages/lessons/lessons.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -40,6 +41,7 @@ export const routes: Routes = [
         children: [
             { path: 'home', component: HomeComponent },
             { path: 'course', component: CourseComponent },
+            { path: 'course-details/:courseId/lessons', component: LessonsComponent },
             { path: 'course-details/:courseId', component: CourseDetailsComponent },
             { path: 'profile', component: ProfileComponent, canActivate: [authGuard] },
             { path: 'Checkout/PaymentCallBack', component: PaymentCallbackComponent, canActivate: [authGuard] },
