@@ -1,7 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CourseService, CourseResponseModel } from '../../core/services/course.service';
 import { PaymentService } from '../../core/services/payment.service';
 import { AuthService } from '../../core/services/auth.service';
@@ -9,7 +9,7 @@ import { AuthService } from '../../core/services/auth.service';
 @Component({
   selector: 'app-course-details',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './course-details.component.html',
   styleUrl: './course-details.component.scss'
 })
@@ -93,6 +93,9 @@ export class CourseDetailsComponent implements OnInit {
           // Redirect sang trang thanh toán MoMo
           window.location.href = response.result.payUrl;
         } else {
+          if (response.message != null) {
+            this.router.navigate([`/course-details/${this.course?.courseId}/lessons`]);
+          }
           this.errorMessage = response.errors?.join(', ') || 'Không thể tạo thanh toán.';
         }
       },
