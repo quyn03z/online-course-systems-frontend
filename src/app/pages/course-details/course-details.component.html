@@ -43,17 +43,25 @@
                         </div>
 
                         <div class="mt-4">
+                            <!-- Trường hợp CHƯA đăng ký -->
+                            <ng-container *ngIf="!isEnrolled">
+                                <button class="btn-register-course" type="submit" [disabled]="isLoading">
+                                    <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-1"
+                                        role="status"></span>
+                                    <ng-container *ngIf="!isLoading">
+                                        {{ course.price === 0 ? 'Vào học miễn phí' : 'Đăng Ký Khóa Học' }}
+                                    </ng-container>
+                                    <ng-container *ngIf="isLoading">Đang xử lý...</ng-container>
+                                </button>
+                            </ng-container>
 
-                            <button *ngIf="!isEnrolled" class="btn-register-course" type="submit"
-                                [disabled]="isLoading">
-                                <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-1"
-                                    role="status"></span>
-                                {{ isLoading ? 'Đang xử lý...' : 'Đăng Ký Học' }}
-                            </button>
-                            <button *ngIf="isEnrolled" class="btn-register-course" type="button" [disabled]="isLoading">
+                            <!-- Trường hợp ĐÃ đăng ký -->
+                            <button *ngIf="isEnrolled" class="btn-register-course" type="button"
+                                [routerLink]="['/course-details', course.courseId, 'lessons']">
                                 Vào Lớp Học
                             </button>
                         </div>
+
                     </form>
 
 
