@@ -1,21 +1,32 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/izitoast/dist/css/iziToast.min.css">
 
 <div class="container mt-5">
-    <h1 class="page-heading text-primary fw-bold">Khóa Học Lập Trình Cơ Bản</h1>
+    <h1 class="page-heading text-primary fw-bold" *ngIf="lessons.length > 0">{{ lessons[0].courseName }}</h1>
 
     <div class="row">
         <div class="col-lg-8">
             <div class="card shadow-sm rounded-lg">
                 <div class="ratio ratio-16x9">
-                    <iframe id="lessonVideo" class="embed-responsive-item"
-                        src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Lesson Video" frameborder="0"
+                    <iframe *ngIf="currentSubLesson" id="lessonVideo" class="embed-responsive-item"
+                        [src]="getSafeUrl(currentSubLesson.videoLink)" title="Lesson Video" frameborder="0"
                         allowfullscreen>
                     </iframe>
+                    <!-- Nếu chưa chọn bài hoặc đang load -->
+                    <div *ngIf="!currentSubLesson"
+                        class="d-flex align-items-center justify-content-center bg-light text-muted">
+                        <div class="text-center">
+                            <i class="bi bi-play-btn fs-1 d-block"></i>
+                            <p>Chọn bài học để bắt đầu xem</p>
+                        </div>
+                    </div>
                 </div>
                 <div class="card-body">
-                    <h4 class="fw-bold text-primary">Bài 1: Giới thiệu khóa học</h4>
-                    <p class="text-secondary">Trong bài học này, chúng ta sẽ tìm hiểu tổng quan về nội dung khóa học và
-                        các công cụ cần thiết để bắt đầu lập trình.</p>
+                    <h4 class="fw-bold text-primary">{{ currentSubLesson?.title || 'Đang tải...' }}</h4>
+                    <p class="text-secondary">{{ currentSubLesson?.description || 'Vui lòng chọn bài học' }}</p>
+                    <div class="mt-3" *ngIf="currentSubLesson?.content">
+                        <hr>
+                        <div [innerHTML]="currentSubLesson?.content"></div>
+                    </div>
                 </div>
             </div>
 
@@ -35,6 +46,8 @@
                         </form>
                     </div>
 
+
+                    <!-- Comment -->
                     <div class="comment-list mt-3">
                         <div class="container mt-4">
                             <div class="comment-list mt-3">
@@ -113,6 +126,8 @@
             </div>
         </div>
 
+
+        <!-- Danh sách bài học -->
         <div class="col-lg-4">
             <div class="card shadow-sm rounded-lg">
                 <div class="card-body">
@@ -120,63 +135,65 @@
 
                     <div class="accordion scrollable-modules" id="moduleAccordion">
 
-                        <div class="accordion-item border-0">
-                            <h2 class="accordion-header" id="heading-module-1">
-                                <button class="accordion-button active-module" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#collapse-module-1" aria-expanded="true"
-                                    aria-controls="collapse-module-1">
-                                    Chương 1: Giới thiệu chung
+                        <!-- Lặp qua danh sách bài học động -->
+                        <!-- Lặp qua danh sách bài học (Chương/Phần) -->
+                        <div class="accordion-item border-0 mb-3" *ngFor="let lesson of lessons; let i = index">
+                            <h2 class="accordion-header" [id]="'heading' + i">
+                                <button class="accordion-button"
+                                    [class.collapsed]="lesson.lessonId.toString() !== lessonId" type="button"
+                                    data-bs-toggle="collapse" [attr.data-bs-target]="'#collapse' + i"
+                                    [attr.aria-expanded]="lesson.lessonId.toString() === lessonId"
+                                    [attr.aria-controls]="'collapse' + i"
+                                    [routerLink]="['/course-details', courseId, 'lessons', lesson.lessonId]">
+                                    <span class="fw-bold me-2">Phần {{ i + 1 }}:</span> {{ lesson.title }}
                                 </button>
                             </h2>
-                            <div id="collapse-module-1" class="accordion-collapse collapse show"
-                                aria-labelledby="heading-module-1" data-bs-parent="#moduleAccordion">
+                            <div [id]="'collapse' + i" class="accordion-collapse collapse"
+                                [class.show]="lesson.lessonId.toString() === lessonId"
+                                [attr.aria-labelledby]="'heading' + i" data-bs-parent="#moduleAccordion">
                                 <div class="accordion-body p-0">
                                     <ul class="list-group list-group-flush">
-                                        <li class="list-group-item bg-light text-primary fw-bold">📖 Lessons</li>
+                                        <!-- Chỉ lặp sub-lessons nếu lesson hiện tại khớp với lessonId trên URL -->
+                                        <ng-container *ngIf="lesson.lessonId.toString() === lessonId">
+                                            <li *ngFor="let subLesson of subLessons; let j = index"
+                                                (click)="selectSubLesson(subLesson)"
+                                                [class.active-sub-lesson]="currentSubLesson?.subLessonId === subLesson.subLessonId"
+                                                class="list-group-item d-flex justify-content-between align-items-center py-3 sub-lesson-item"
+                                                style="cursor: pointer;">
+                                                <div class="d-flex align-items-center">
+                                                    <i class="bi bi-play-circle-fill me-2 fs-5"
+                                                        [class.text-primary]="currentSubLesson?.subLessonId !== subLesson.subLessonId"
+                                                        [class.text-white]="currentSubLesson?.subLessonId === subLesson.subLessonId"></i>
+                                                    <span class="fw-medium"
+                                                        [class.text-dark]="currentSubLesson?.subLessonId !== subLesson.subLessonId"
+                                                        [class.text-white]="currentSubLesson?.subLessonId === subLesson.subLessonId">
+                                                        {{ subLesson.title }}
+                                                    </span>
+                                                </div>
+                                                <i *ngIf="lesson.isLocked" class="bi bi-lock-fill text-muted"></i>
+                                                <i *ngIf="!lesson.isLocked && currentSubLesson?.subLessonId !== subLesson.subLessonId"
+                                                    class="bi bi-check-circle-fill text-success"></i>
+                                                <i *ngIf="!lesson.isLocked && currentSubLesson?.subLessonId === subLesson.subLessonId"
+                                                    class="bi bi-check-circle-fill text-white"></i>
+                                            </li>
 
-                                        <li
-                                            class="list-group-item d-flex justify-content-between align-items-center active-lesson bg-secondary text-white">
-                                            <a href="#" class="text-decoration-none fw-bold text-white">Bài 1: Giới
-                                                thiệu khóa học</a>
-                                            <span class="fa fa-play text-white"></span>
-                                        </li>
-
-                                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                                            <a href="#" class="text-decoration-none text-dark">Bài 2: Cài đặt công
-                                                cụ</a>
-                                            <span class="fa fa-check text-success"></span>
-                                        </li>
-
-                                        <li class="list-group-item bg-light text-danger fw-bold mt-2">📝 Quizzes</li>
-
-                                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                                            <a href="#" class="text-decoration-none text-dark">Trắc nghiệm Chương 1</a>
-                                        </li>
+                                            <li *ngIf="subLessons.length === 0"
+                                                class="list-group-item text-muted italic p-3">
+                                                Đang tải bài học hoặc không có nội dung...
+                                            </li>
+                                        </ng-container>
                                     </ul>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="accordion-item border-0 mt-2">
-                            <h2 class="accordion-header" id="heading-module-2">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#collapse-module-2" aria-expanded="false"
-                                    aria-controls="collapse-module-2">
-                                    Chương 2: Kiến thức cơ bản
-                                </button>
-                            </h2>
-                            <div id="collapse-module-2" class="accordion-collapse collapse"
-                                aria-labelledby="heading-module-2" data-bs-parent="#moduleAccordion">
-                                <div class="accordion-body p-0">
-                                    <ul class="list-group list-group-flush">
-                                        <li class="list-group-item bg-light text-primary fw-bold">📖 Lessons</li>
-                                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                                            <a href="#" class="text-decoration-none text-dark">Bài 3: Cú pháp cơ bản</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
+                        <!-- Thông báo nếu không có dữ liệu -->
+                        <div *ngIf="lessons.length === 0" class="text-center py-5 text-muted">
+                            <i class="bi bi-journal-x fs-1 d-block mb-3"></i>
+                            <p>Chưa có bài học nào cho khóa học này.</p>
                         </div>
+
+
 
                     </div>
                 </div>

@@ -2,6 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { PaymentService } from '../../core/services/payment.service';
+import { LessonsService } from '../../core/services/lessons.service';
 
 @Component({
   selector: 'app-payment-callback',
@@ -14,9 +15,11 @@ export class PaymentCallbackComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private paymentService = inject(PaymentService);
+  private lessonsService = inject(LessonsService);
 
   status: 'loading' | 'success' | 'error' = 'loading';
   message: string = 'Đang xác thực giao dịch...';
+  lessonId: string | null = null;
 
   paymentData: any = {};
 
@@ -34,6 +37,16 @@ export class PaymentCallbackComponent implements OnInit {
         if (res.succeeded) {
           this.status = 'success';
           this.message = res.message || 'Thanh toán thành công!';
+          // Lấy lessonId đầu tiên để chuyển hướng
+          if (this.courseId) {
+            this.lessonsService.getFirstLessonIdByCourseId(this.courseId.toString()).subscribe({
+              next: (lres) => {
+                if (lres.succeeded && lres.result) {
+                  this.lessonId = lres.result.toString();
+                }
+              }
+            });
+          }
         } else {
           this.status = 'error';
           this.message = res.message || 'Thanh toán thất bại.';

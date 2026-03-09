@@ -36,10 +36,13 @@
                     </div>
 
                     <div class="d-grid gap-3">
-                        <a [routerLink]="['/course-details', courseId, 'lessons']"
+                        <a *ngIf="lessonId" [routerLink]="['/course-details', courseId, 'lessons', lessonId]"
                             class="btn btn-primary btn-lg rounded-pill px-5">
                             Tiếp Tục vào Học
                         </a>
+                        <button *ngIf="!lessonId" class="btn btn-primary btn-lg rounded-pill px-5" disabled>
+                            Đang chuẩn bị bài học...
+                        </button>
                         <a routerLink="/course" class="btn btn-outline-secondary btn-lg rounded-pill px-5">
                             Khám phá khóa học khác
                         </a>
