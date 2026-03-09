@@ -15,6 +15,7 @@ import { ProfileComponent } from './modules/profile/profile.component';
 import { PaymentCallbackComponent } from './pages/payment-callback/payment-callback.component';
 import { AccessDenied401Component } from './shared/layouts/access-denied-401/access-denied-401.component';
 import { LessonsComponent } from './pages/lessons/lessons.component';
+import { AuditLogsComponent } from './modules/admin/pages/audit-logs/audit-logs.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -30,6 +31,7 @@ export const routes: Routes = [
         children: [
             { path: '', component: AdminDashboardComponent },
             { path: 'manage-users', component: ManageUserComponent },
+            { path: 'audit-logs', component: AuditLogsComponent },
             // Thêm trang admin mới ở đây, ví dụ:
             // { path: 'manage-courses', component: ManageCourseComponent },
         ]
