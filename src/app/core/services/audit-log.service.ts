@@ -9,6 +9,12 @@ export interface ResultResponse<T> {
     errors: string[];
 }
 
+export interface AuditLogChange {
+    propertyName: string;
+    oldValue: string;
+    newValue: string;
+}
+
 export interface AuditLog {
     auditLogId: number;
     userId: number;
@@ -22,6 +28,7 @@ export interface AuditLog {
         userName: string;
         email: string;
     };
+    changes: AuditLogChange[];
 }
 
 export interface AuditLogResponse {

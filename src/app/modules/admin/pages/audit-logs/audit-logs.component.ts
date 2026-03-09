@@ -45,14 +45,6 @@ export class AuditLogsComponent implements OnInit {
         this.loadLogs();
     }
 
-    parseJson(json: string): any {
-        try {
-            return json ? JSON.parse(json) : null;
-        } catch {
-            return json;
-        }
-    }
-
     getPages(): number[] {
         const totalPages = Math.ceil(this.totalCount / this.pageSize);
         return Array.from({ length: totalPages }, (_, i) => i + 1);
