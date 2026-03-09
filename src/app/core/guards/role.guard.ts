@@ -21,7 +21,7 @@ export const roleGuard: CanActivateFn = (route, state) => {
         return true;
     }
 
-    // 4. Kiểm tra user có role trong danh sách cho phép không
+    // 4. Kiểm tra user có rolng danh sách cho phép không
     if (expectedRoles.includes(userRole)) {
         return true;
     }

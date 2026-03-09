@@ -29,14 +29,30 @@
 }
 
 /* BÀI HỌC ACTIVE */
-.active-lesson {
+.active-lesson,
+.active-sub-lesson {
     background-color: #098f9b !important;
     color: white !important;
     font-weight: bold;
+    border-radius: 8px;
+    margin: 4px 8px;
+    box-shadow: 0 2px 4px rgba(9, 143, 155, 0.3);
 }
 
-.active-lesson a {
+.active-lesson a,
+.active-sub-lesson span {
     color: white !important;
+}
+
+.sub-lesson-item {
+    transition: all 0.2s ease;
+    border-left: 4px solid transparent;
+}
+
+.sub-lesson-item:hover:not(.active-sub-lesson) {
+    background-color: #f0fbfc;
+    border-left: 4px solid #098f9b;
+    padding-left: 1.5rem !important;
 }
 
 /* SHADOW & BO GÓC */

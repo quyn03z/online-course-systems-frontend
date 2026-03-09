@@ -5,6 +5,7 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CourseService, CourseResponseModel } from '../../core/services/course.service';
 import { PaymentService } from '../../core/services/payment.service';
 import { AuthService } from '../../core/services/auth.service';
+import { LessonsService } from '../../core/services/lessons.service';
 
 @Component({
   selector: 'app-course-details',
@@ -20,17 +21,20 @@ export class CourseDetailsComponent implements OnInit {
   private courseService = inject(CourseService);
   private paymentService = inject(PaymentService);
   private authService = inject(AuthService);
+  private lessonService = inject(LessonsService);
 
   course: CourseResponseModel | null = null;
   isLoading = false;
   errorMessage = '';
   isEnrolled = false;
+  lessonId: string | null = null;
 
   ngOnInit(): void {
     const courseId = this.route.snapshot.paramMap.get('courseId');
     if (courseId) {
       this.loadCourseDetails(courseId);
       this.checkEnrollment(courseId);
+      this.getFirstLessonIdByCourseId(courseId);
     } else {
       this.errorMessage = 'Không tìm thấy khóa học.';
     }
@@ -42,6 +46,21 @@ export class CourseDetailsComponent implements OnInit {
       next: (response) => {
         if (response.result == true) {
           this.isEnrolled = true;
+        }
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    });
+  }
+
+
+  getFirstLessonIdByCourseId(courseId: string) {
+    this.lessonService.getFirstLessonIdByCourseId(courseId).subscribe({
+      next: (response) => {
+        if (response.succeeded && response.result) {
+          this.lessonId = response.result.toString();
+          console.log('First lesson ID:', this.lessonId);
         }
       },
       error: (err) => {
@@ -93,8 +112,11 @@ export class CourseDetailsComponent implements OnInit {
           // Redirect sang trang thanh toán MoMo
           window.location.href = response.result.payUrl;
         } else {
-          if (response.message != null) {
-            this.router.navigate([`/course-details/${this.course?.courseId}/lessons`]);
+          if (response.message != null && this.lessonId) {
+            this.router.navigate([`/course-details/${this.course?.courseId}/lessons/${this.lessonId}`]);
+          } else {
+            // Fallback nếu chưa có lessonId (ví dụ navigat tới trang details)
+            this.router.navigate([`/course-details/${this.course?.courseId}`]);
           }
           this.errorMessage = response.errors?.join(', ') || 'Không thể tạo thanh toán.';
         }

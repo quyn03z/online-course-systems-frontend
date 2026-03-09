@@ -41,8 +41,8 @@ export const routes: Routes = [
         children: [
             { path: 'home', component: HomeComponent },
             { path: 'course', component: CourseComponent },
-            { path: 'course-details/:courseId/lessons', component: LessonsComponent },
             { path: 'course-details/:courseId', component: CourseDetailsComponent },
+            { path: 'course-details/:courseId/lessons/:lessonId', component: LessonsComponent },
             { path: 'profile', component: ProfileComponent, canActivate: [authGuard] },
             { path: 'Checkout/PaymentCallBack', component: PaymentCallbackComponent, canActivate: [authGuard] },
             { path: 'access-denied', component: AccessDenied401Component },
