@@ -16,8 +16,7 @@
                     <th>User</th>
                     <th>Action</th>
                     <th>Entity</th>
-                    <th>Old Values</th>
-                    <th>New Values</th>
+                    <th>Changes</th>
                     <th>Timestamp</th>
                 </tr>
             </thead>
@@ -36,13 +35,20 @@
                         </span>
                     </td>
                     <td>{{ log.entity }}</td>
-                    <td class="json-cell">
-                        <pre *ngIf="log.oldValues">{{ parseJson(log.oldValues) | json }}</pre>
-                        <span *ngIf="!log.oldValues">-</span>
-                    </td>
-                    <td class="json-cell">
-                        <pre *ngIf="log.newValues">{{ parseJson(log.newValues) | json }}</pre>
-                        <span *ngIf="!log.newValues">-</span>
+                    <td class="changes-cell">
+                        <div class="change-item" *ngFor="let change of log.changes">
+                            <span class="prop">{{ change.propertyName }}:</span>
+                            <span class="old" *ngIf="log.action === 'Update' || log.action === 'Delete'">{{
+                                change.oldValue }}</span>
+                            <span class="arrow" *ngIf="log.action === 'Update'">&rarr;</span>
+                            <span class="new"
+                                *ngIf="log.action === 'Update' || log.action === 'Insert' || log.action === 'Added'">{{
+                                change.newValue }}</span>
+                        </div>
+                        <div *ngIf="!log.changes || log.changes.length === 0" class="no-changes">
+                            <span *ngIf="log.action === 'Login' || log.action === 'Logout'">System Access</span>
+                            <span *ngIf="log.action !== 'Login' && log.action !== 'Logout'">No detailed changes</span>
+                        </div>
                     </td>
                     <td>{{ log.createdAt | date:'short' }}</td>
                 </tr>
