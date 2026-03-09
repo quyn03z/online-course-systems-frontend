@@ -1,0 +1,59 @@
+<div class="audit-logs-container">
+    <div class="header">
+        <h1>Audit Logs</h1>
+        <p>Track administrator and system actions (LINQ Operations)</p>
+    </div>
+
+    <div class="table-card">
+        <div class="loading-overlay" *ngIf="loading">
+            <div class="spinner"></div>
+        </div>
+
+        <table class="audit-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>User</th>
+                    <th>Action</th>
+                    <th>Entity</th>
+                    <th>Old Values</th>
+                    <th>New Values</th>
+                    <th>Timestamp</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let log of logs">
+                    <td>#{{ log.auditLogId }}</td>
+                    <td>
+                        <div class="user-info">
+                            <span class="username">{{ log.user?.userName || 'System' }}</span>
+                            <span class="email">{{ log.user?.email || 'N/A' }}</span>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="badge" [ngClass]="log.action.toLowerCase()">
+                            {{ log.action }}
+                        </span>
+                    </td>
+                    <td>{{ log.entity }}</td>
+                    <td class="json-cell">
+                        <pre *ngIf="log.oldValues">{{ parseJson(log.oldValues) | json }}</pre>
+                        <span *ngIf="!log.oldValues">-</span>
+                    </td>
+                    <td class="json-cell">
+                        <pre *ngIf="log.newValues">{{ parseJson(log.newValues) | json }}</pre>
+                        <span *ngIf="!log.newValues">-</span>
+                    </td>
+                    <td>{{ log.createdAt | date:'short' }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="pagination" *ngIf="totalCount > pageSize">
+            <button (click)="onPageChange(currentPage - 1)" [disabled]="currentPage === 1">Previous</button>
+            <span class="page-count">Page {{ currentPage }} / {{ Math.ceil(totalCount / pageSize) }}</span>
+            <button (click)="onPageChange(currentPage + 1)"
+                [disabled]="currentPage * pageSize >= totalCount">Next</button>
+        </div>
+    </div>
+</div>
