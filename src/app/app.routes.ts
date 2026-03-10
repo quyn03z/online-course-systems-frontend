@@ -16,10 +16,11 @@ import { PaymentCallbackComponent } from './pages/payment-callback/payment-callb
 import { AccessDenied401Component } from './shared/layouts/access-denied-401/access-denied-401.component';
 import { LessonsComponent } from './pages/lessons/lessons.component';
 import { AuditLogsComponent } from './modules/admin/pages/audit-logs/audit-logs.component';
+import { ManaCoursesComponent } from './modules/teacher/mana-courses/mana-courses.component';
+import { TeacherComponent } from './modules/teacher/teacher/teacher.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
-    // Trang login - KHÔNG có header/footer
     { path: 'login', component: LoginComponent },
     { path: 'forgot-password', component: ForgotPasswordComponent },
     { path: 'reset-password', component: ResetPasswordComponent },
@@ -34,6 +35,15 @@ export const routes: Routes = [
             { path: 'audit-logs', component: AuditLogsComponent },
             // Thêm trang admin mới ở đây, ví dụ:
             // { path: 'manage-courses', component: ManageCourseComponent },
+        ]
+    },
+    {
+        path: 'teacher',
+        component: TeacherComponent,
+        canActivate: [roleGuard],
+        data: { roles: ['Teacher'] },
+        children: [
+            { path: '', component: ManaCoursesComponent },
         ]
     },
     // Các trang CÓ header/footer (bọc trong MainLayout)

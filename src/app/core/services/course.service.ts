@@ -19,6 +19,21 @@ export interface CourseResponseModel {
   courseTypeName: string;
 }
 
+export interface CourseManaResponseModel {
+  courseId: string;
+  courseName: string;
+  title: string;
+  description?: string;
+  image?: string;
+  avatar?: string;
+  price: number;
+  isLocked: boolean;
+  isDelete: boolean;
+  courseTypeId: number;
+  courseTypeName: string;
+}
+
+
 @Injectable({
   providedIn: 'root'
 })
@@ -33,8 +48,37 @@ export class CourseService {
     return this.apiService.get<ResultResponse<CourseResponseModel[]>>('course/get-alls-course', params);
   }
 
+  getAllManaCourses(page: number = 1, pageSize: number = 10, searchTerm: string = '') {
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('pageSize', pageSize.toString());
+
+    if (searchTerm) {
+      params = params.set('search', searchTerm);
+    }
+    return this.apiService.get<ResultResponse<CourseManaResponseModel[]>>('ManaCourse/get-alls-mana-course', params);
+  }
+
   getCourseDetailsById(courseId: number | string) {
     return this.apiService.get<ResultResponse<CourseResponseModel>>(`Course/get-course-details/${courseId}`);
   }
+
+
+  deleteCourse(courseId: number | string) {
+    return this.apiService.delete<ResultResponse<any>>(`ManaCourse/remove-course/${courseId}`);
+  }
+
+  createCourse(course: any) {
+    return this.apiService.post<ResultResponse<any>>('ManaCourse/add-course', course);
+  }
+
+  getAllsCourseType() {
+    return this.apiService.get<any>('CourseType/alls-courseType');
+  }
+
+  updateCourse(courseId: number, course: any) {
+    return this.apiService.put<ResultResponse<any>>(`ManaCourse/update-course/${courseId}`, course);
+  }
+
 
 }
