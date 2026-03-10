@@ -2,7 +2,7 @@
 
     <!-- Top Navbar -->
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-        <h1 class="navbar-brand ps-3" style="font-weight: bold;">OCMS Admin</h1>
+        <h1 class="navbar-brand ps-3" style="font-weight: bold;">OCMS Teacher</h1>
         <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" (click)="toggleSidebar()">
             <i class="fas fa-bars"></i>
         </button>
@@ -32,22 +32,10 @@
                 <div class="sb-sidenav-menu">
                     <div class="nav">
 
-                        <a class="nav-link" routerLink="/admin" routerLinkActive="active"
-                            [routerLinkActiveOptions]="{exact:true}">
-                            <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                            Dashboard
+                        <a class="nav-link" routerLink="/teacher/manage-courses" routerLinkActive="active">
+                            <div class="sb-nav-link-icon"><i class="fas fa-book"></i></div>
+                            Manage Courses
                         </a>
-
-                        <a class="nav-link" routerLink="/admin/manage-users" routerLinkActive="active">
-                            <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
-                            Manage Users
-                        </a>
-
-                        <a class="nav-link" routerLink="/admin/audit-logs" routerLinkActive="active">
-                            <div class="sb-nav-link-icon"><i class="fas fa-history"></i></div>
-                            Audit Logs
-                        </a>
-
                     </div>
                 </div>
             </nav>
