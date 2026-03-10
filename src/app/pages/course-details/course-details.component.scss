@@ -141,3 +141,19 @@
         transform: translateY(0);
     }
 }
+
+.old-price {
+    text-decoration: line-through;
+    color: #999;
+    margin-right: 6px;
+}
+
+.discount-price {
+    color: red;
+    font-weight: bold;
+}
+
+.free {
+    color: green;
+    font-weight: bold;
+}

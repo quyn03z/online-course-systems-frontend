@@ -19,8 +19,13 @@
                 </div>
 
                 <div class="d-flex align-items-center gap-2">
-                    <input class="form-control form-control-sm" style="width:200px;" type="text"
-                        placeholder="Tìm kiếm..." [(ngModel)]="searchTerm" (input)="onSearch()" />
+                    <div class="input-group input-group-sm" style="width:250px;">
+                        <input class="form-control" type="text" placeholder="Tìm kiếm..." [(ngModel)]="searchTerm"
+                            [ngModelOptions]="{standalone: true}" (keyup.enter)="onSearch()" />
+                        <button class="btn btn-primary" type="button" (click)="onSearch()">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
 
                     <button class="btn btn-sm btn-custom-add" (click)="openModalAdd()">
                         <i class="fas fa-plus me-1"></i> Thêm Khóa Học
@@ -56,12 +61,16 @@
                                 {{ course.isDelete ? 'Đã Xóa' : 'Bình thường' }}
                             </span>
                         </td>
-                        <td>{{ course.price | currency:'VND':'symbol':'1.0-0' }}</td>
+                        <td>{{ course.price | number:'1.0-0' }} ₫</td>
                         <td>{{ course.courseTypeName }}</td>
                         <td class="text-center">
                             <button type="button" class="btn btn-sm btn-primary me-2" title="Chỉnh sửa"
-                                (click)="onEditCourse(course)">
+                                (click)="onEditCourse(course.courseId)">
                                 <i class="fas fa-edit"></i>
+                            </button>
+                            <button type="button" class="btn btn-sm btn-danger me-2" title="Xóa"
+                                (click)="onDeleteCourse(course.courseId)">
+                                <i class="fas fa-trash"></i>
                             </button>
                         </td>
                     </tr>
@@ -82,6 +91,8 @@
                         (click)="goToNextPage()">Next</button>
                 </div>
             </div>
+
+
         </div>
     </div>
 </div>
@@ -108,8 +119,13 @@
                 <div class="col-12">
                     <label class="form-label fw-semibold">Mô tả</label>
                     <textarea class="form-control" [(ngModel)]="selectedCourse.description" name="description"
-                        rows="3"></textarea>
+                        rows="5"></textarea>
                 </div>
+                <div class="col-12">
+                    <label class="form-label fw-semibold">Hình ảnh</label>
+                    <input type="text" class="form-control" [(ngModel)]="selectedCourse.avatar" name="avatar" />
+                </div>
+
                 <div class="col-md-6">
                     <label class="form-label fw-semibold">Giá</label>
                     <input type="number" class="form-control" [(ngModel)]="selectedCourse.price" name="price" />
@@ -119,6 +135,13 @@
                     <select class="form-select" [(ngModel)]="selectedCourse.isLocked" name="isLocked">
                         <option [ngValue]="false">Hoạt động</option>
                         <option [ngValue]="true">Khóa</option>
+                    </select>
+                </div>
+                <div class="col-md-12">
+                    <label class="form-label fw-semibold">Loại khóa học</label>
+                    <select class="form-select" [(ngModel)]="selectedCourse.courseTypeId" name="courseTypeId">
+                        <option *ngFor="let courseType of courseTypes" [ngValue]="courseType.courseTypeId">
+                            {{courseType.name }}</option>
                     </select>
                 </div>
             </form>
@@ -156,15 +179,26 @@
                     <textarea class="form-control" [(ngModel)]="newCourse.description" name="newDescription"
                         rows="3"></textarea>
                 </div>
+                <div class="col-12">
+                    <label class="form-label fw-semibold">Url Images</label>
+                    <input type="text" class="form-control" [(ngModel)]="newCourse.avatar" name="newAvatar" />
+                </div>
                 <div class="col-md-6">
                     <label class="form-label fw-semibold">Giá</label>
                     <input type="number" class="form-control" [(ngModel)]="newCourse.price" name="newPrice" />
                 </div>
                 <div class="col-md-6">
+                    <label class="form-label fw-semibold">Trạng thái</label>
+                    <select class="form-select" name="newIsLocked" [(ngModel)]="newCourse.isLocked">
+                        <option [ngValue]="false">Hoạt động</option>
+                        <option [ngValue]="true">Khoá</option>
+                    </select>
+                </div>
+                <div class="col-md-12">
                     <label class="form-label fw-semibold">Loại khóa học</label>
                     <select class="form-select" [(ngModel)]="newCourse.courseTypeId" name="newCourseTypeId">
-                        <option [ngValue]="1">Cơ bản</option>
-                        <option [ngValue]="2">Nâng cao</option>
+                        <option *ngFor="let courseType of courseTypes" [ngValue]="courseType.courseTypeId">
+                            {{courseType.name }}</option>
                     </select>
                 </div>
             </form>

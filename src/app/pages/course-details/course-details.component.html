@@ -34,7 +34,21 @@
 
                         <div class="course-info d-flex justify-content-between align-items-center">
                             <h5>Học phí</h5>
-                            <p>{{ course.price }}$</p>
+                            <p class="price">
+                                <ng-container *ngIf="course.price > 0; else freeCourse">
+                                    <span class="old-price">
+                                        {{ course.price | number:'1.0-0' }} ₫
+                                    </span>
+
+                                    <span class="discount-price">
+                                        {{ course.price - (course.price * 20 / 100) | number:'1.0-0' }} ₫
+                                    </span>
+                                </ng-container>
+
+                                <ng-template #freeCourse>
+                                    <span class="free">Miễn Phí</span>
+                                </ng-template>
+                            </p>
                         </div>
 
                         <div class="course-info d-flex justify-content-between align-items-center">
@@ -59,10 +73,6 @@
                             <button *ngIf="isEnrolled && lessonId" class="btn-register-course" type="button"
                                 [routerLink]="['/course-details', course.courseId, 'lessons', lessonId]">
                                 Vào Lớp Học
-                            </button>
-                            <!-- Disable nếu đang load lessonId -->
-                            <button *ngIf="isEnrolled && !lessonId" class="btn-register-course" type="button" disabled>
-                                Đang chuẩn bị bài học...
                             </button>
                         </div>
 
