@@ -18,6 +18,7 @@ import { LessonsComponent } from './pages/lessons/lessons.component';
 import { AuditLogsComponent } from './modules/admin/pages/audit-logs/audit-logs.component';
 import { ManaCoursesComponent } from './modules/teacher/mana-courses/mana-courses.component';
 import { TeacherComponent } from './modules/teacher/teacher/teacher.component';
+import { ManaLessonsComponent } from './modules/teacher/mana-lessons/mana-lessons.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -34,7 +35,6 @@ export const routes: Routes = [
             { path: 'manage-users', component: ManageUserComponent },
             { path: 'audit-logs', component: AuditLogsComponent },
             // Thêm trang admin mới ở đây, ví dụ:
-            // { path: 'manage-courses', component: ManageCourseComponent },
         ]
     },
     {
@@ -44,6 +44,7 @@ export const routes: Routes = [
         data: { roles: ['Teacher'] },
         children: [
             { path: '', component: ManaCoursesComponent },
+            { path: 'mana-lessons/:courseId', component: ManaLessonsComponent }
         ]
     },
     // Các trang CÓ header/footer (bọc trong MainLayout)

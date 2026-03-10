@@ -49,7 +49,11 @@
                 <tbody>
                     <tr *ngFor="let course of courses">
                         <td>{{ course.courseId }}</td>
-                        <td>{{ course.courseName }}</td>
+                        <td> <a [routerLink]="['/teacher/mana-lessons', course.courseId]" routerLinkActive="active"
+                                class="text-decoration-none">
+                                {{ course.courseName}}
+                            </a>
+                        </td>
                         <td>{{ course.title }}</td>
                         <td>
                             <span class="badge" [ngClass]="course.isLocked ? 'text-bg-danger' : 'text-bg-success'">
