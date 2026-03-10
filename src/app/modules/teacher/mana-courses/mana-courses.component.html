@@ -49,7 +49,11 @@
                 <tbody>
                     <tr *ngFor="let course of courses">
                         <td>{{ course.courseId }}</td>
-                        <td>{{ course.courseName }}</td>
+                        <td> <a [routerLink]="['/teacher/mana-lessons', course.courseId]" routerLinkActive="active"
+                                class="text-decoration-none">
+                                {{ course.courseName}}
+                            </a>
+                        </td>
                         <td>{{ course.title }}</td>
                         <td>
                             <span class="badge" [ngClass]="course.isLocked ? 'text-bg-danger' : 'text-bg-success'">
@@ -125,7 +129,6 @@
                     <label class="form-label fw-semibold">Hình ảnh</label>
                     <input type="text" class="form-control" [(ngModel)]="selectedCourse.avatar" name="avatar" />
                 </div>
-
                 <div class="col-md-6">
                     <label class="form-label fw-semibold">Giá</label>
                     <input type="number" class="form-control" [(ngModel)]="selectedCourse.price" name="price" />
