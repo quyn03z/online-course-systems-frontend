@@ -2,6 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { ApiService } from './api.service';
 import { HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { ResultResponse } from './course.service';
 
 @Injectable({
   providedIn: 'root'
@@ -22,11 +23,11 @@ export class AdminService {
   }
 
   updateUser(user: any) {
-    return this.apiService.put<any>('Admin/edit-user-admin', user);
+    return this.apiService.put<ResultResponse<any>>('Admin/edit-user-admin', user);
   }
 
   createUser(user: any) {
-    return this.apiService.post<any>('Admin/create-user-admin', user);
+    return this.apiService.post<ResultResponse<any>>('Admin/create-user-admin', user);
   }
 
 }

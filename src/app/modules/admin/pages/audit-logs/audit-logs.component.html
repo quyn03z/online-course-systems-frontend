@@ -1,7 +1,6 @@
 <div class="audit-logs-container">
     <div class="header">
         <h1>Audit Logs</h1>
-        <p>Track administrator and system actions (LINQ Operations)</p>
     </div>
 
     <div class="table-card">
@@ -16,13 +15,14 @@
                     <th>User</th>
                     <th>Action</th>
                     <th>Entity</th>
-                    <th>Changes</th>
-                    <th>Timestamp</th>
+                    <th>Old Values</th>
+                    <th>New Values</th>
+                    <th>Created At</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let log of logs">
-                    <td>#{{ log.auditLogId }}</td>
+                    <td>{{ log.auditLogId }}</td>
                     <td>
                         <div class="user-info">
                             <span class="username">{{ log.user?.userName || 'System' }}</span>
@@ -30,27 +30,42 @@
                         </div>
                     </td>
                     <td>
-                        <span class="badge" [ngClass]="log.action.toLowerCase()">
-                            {{ log.action }}
+                        <span class="badge" [ngClass]="log.action?.toLowerCase() || 'unchanged'">
+                            {{ log.action || 'System' }}
                         </span>
                     </td>
                     <td>{{ log.entity }}</td>
-                    <td class="changes-cell">
+                    <td class="old-values-cell">
                         <div class="change-item" *ngFor="let change of log.changes">
                             <span class="prop">{{ change.propertyName }}:</span>
-                            <span class="old" *ngIf="log.action === 'Update' || log.action === 'Delete'">{{
+                            <span class="old"
+                                *ngIf="log.action?.toLowerCase() === 'update' || log.action?.toLowerCase() === 'delete' || log.action?.toLowerCase() === 'modified'">{{
                                 change.oldValue }}</span>
-                            <span class="arrow" *ngIf="log.action === 'Update'">&rarr;</span>
+                        </div>
+                        <div *ngIf="!log.changes || log.changes.length === 0" class="no-changes">
+                            <span
+                                *ngIf="log.action?.toLowerCase() === 'login' || log.action?.toLowerCase() === 'logout'">System
+                                Access</span>
+                            <span
+                                *ngIf="log.action?.toLowerCase() !== 'login' && log.action?.toLowerCase() !== 'logout'">N/A</span>
+                        </div>
+                    </td>
+                    <td class="new-values-cell">
+                        <div class="change-item" *ngFor="let change of log.changes">
+                            <span class="prop">{{ change.propertyName }}:</span>
                             <span class="new"
-                                *ngIf="log.action === 'Update' || log.action === 'Insert' || log.action === 'Added'">{{
+                                *ngIf="log.action?.toLowerCase() === 'update' || log.action?.toLowerCase() === 'insert' || log.action?.toLowerCase() === 'added' || log.action?.toLowerCase() === 'modified'">{{
                                 change.newValue }}</span>
                         </div>
                         <div *ngIf="!log.changes || log.changes.length === 0" class="no-changes">
-                            <span *ngIf="log.action === 'Login' || log.action === 'Logout'">System Access</span>
-                            <span *ngIf="log.action !== 'Login' && log.action !== 'Logout'">No detailed changes</span>
+                            <span
+                                *ngIf="log.action?.toLowerCase() === 'login' || log.action?.toLowerCase() === 'logout'">System
+                                Access</span>
+                            <span
+                                *ngIf="log.action?.toLowerCase() !== 'login' && log.action?.toLowerCase() !== 'logout'">N/A</span>
                         </div>
                     </td>
-                    <td>{{ log.createdAt | date:'short' }}</td>
+                    <td>{{ log.createdAt | date:'dd/MM/yyyy HH:mm' }}</td>
                 </tr>
             </tbody>
         </table>
