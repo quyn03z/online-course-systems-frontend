@@ -26,12 +26,13 @@ export class AuditLogsComponent implements OnInit {
     loadLogs(): void {
         this.loading = true;
         this.auditLogService.getAuditLogs(this.currentPage, this.pageSize).subscribe({
-            next: (response: ResultResponse<AuditLogResponse>) => {
+            next: (response) => {
                 if (response.succeeded) {
                     this.logs = response.result.logs;
                     this.totalCount = response.result.totalCount;
                 }
                 this.loading = false;
+                console.log(this.logs);
             },
             error: (err: any) => {
                 console.error('Error loading audit logs', err);

@@ -101,12 +101,27 @@
                 background: #f8d7da;
                 color: #721c24;
             }
+
+            &.login,
+            &.logout {
+                background: #e7f5ff;
+                color: #1971c2;
+            }
+
+            &.system,
+            &.unchanged {
+                background: #f1f3f5;
+                color: #495057;
+            }
         }
 
+
+        .old-values-cell,
+        .new-values-cell,
         .changes-cell {
             font-family: 'Consolas', 'Monaco', monospace;
             font-size: 0.85rem;
-            max-width: 400px;
+            max-width: 300px;
 
             .change-item {
                 margin-bottom: 0.25rem;

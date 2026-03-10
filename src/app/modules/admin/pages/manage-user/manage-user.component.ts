@@ -47,7 +47,7 @@ export class ManageUserComponent implements OnInit {
         this.totalPages = res.result.totalPages;
       },
       error: (err) => {
-        console.log(err);
+        console.log(err.error.message);
       }
     })
   }
@@ -95,7 +95,7 @@ export class ManageUserComponent implements OnInit {
       },
       error: (err: any) => {
         console.log(err);
-        NotifyError('Thêm người dùng thất bại!');
+        NotifyError(err.error.message);
       }
     });
   }
@@ -117,7 +117,7 @@ export class ManageUserComponent implements OnInit {
       },
       error: (err) => {
         console.log(err);
-        NotifyError('Cập nhật thông tin người dùng thất bại!');
+        NotifyError(err.error.message);
       }
     })
     this.closeModal();

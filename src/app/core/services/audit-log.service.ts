@@ -18,7 +18,7 @@ export interface AuditLogChange {
 export interface AuditLog {
     auditLogId: number;
     userId: number;
-    action: string;
+    action?: string;
     entity: string;
     oldValues: string;
     newValues: string;
