@@ -58,7 +58,7 @@ export class CourseDetailsComponent implements OnInit {
   getFirstLessonIdByCourseId(courseId: string) {
     this.lessonService.getFirstLessonIdByCourseId(courseId).subscribe({
       next: (response) => {
-        if (response.succeeded && response.result) {
+        if (response.succeeded) {
           this.lessonId = response.result.toString();
           console.log('First lesson ID:', this.lessonId);
         }
@@ -106,24 +106,26 @@ export class CourseDetailsComponent implements OnInit {
     this.isLoading = true;
     this.paymentService.createPaymentMomo(orderInfo).subscribe({
       next: (response) => {
-        console.log(response)
         this.isLoading = false;
-        if (response.succeeded && response.result?.payUrl) {
-          // Redirect sang trang thanh toán MoMo
-          window.location.href = response.result.payUrl;
-        } else {
-          if (response.message != null && this.lessonId) {
-            this.router.navigate([`/course-details/${this.course?.courseId}/lessons/${this.lessonId}`]);
+        if (response.succeeded) {
+          if (response.result?.payUrl) {
+            // Redirect sang trang thanh toán MoMo (Khóa có phí)
+            window.location.href = response.result.payUrl;
           } else {
-            // Fallback nếu chưa có lessonId (ví dụ navigat tới trang details)
-            this.router.navigate([`/course-details/${this.course?.courseId}`]);
+            // Khóa học miễn phí hoặc đã được xử lý đăng ký thành công
+            if (this.lessonId) {
+              this.router.navigate([`/course-details/${this.course?.courseId}/lessons/${this.lessonId}`]);
+            } else {
+              window.location.reload();
+            }
           }
-          this.errorMessage = response.errors?.join(', ') || 'Không thể tạo thanh toán.';
+        } else {
+          this.errorMessage = response.errors?.join(', ') || 'Không thể đăng ký khóa học.';
         }
       },
       error: (err) => {
         this.isLoading = false;
-        this.errorMessage = 'Lỗi khi tạo thanh toán MoMo.';
+        this.errorMessage = 'Lỗi kết nối khi đăng ký khóa học.';
         console.error(err);
       }
     });

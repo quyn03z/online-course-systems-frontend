@@ -145,7 +145,7 @@ export class ManaCoursesComponent implements OnInit {
           this.getAllCourses();
         },
         error: (err: any) => {
-          NotifyError(this.getErrorMessage(err) || 'Xóa khóa học thất bại');
+          NotifyError(err.error.message || 'Xóa khóa học thất bại');
         }
       });
     }

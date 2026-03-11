@@ -37,7 +37,7 @@ export class ResetPasswordComponent implements OnInit {
         this.successMessage = 'Bạn đã reset password thành công!';
       },
       error: (err) => {
-        this.errorMessage = err.error?.message || 'Reset password thất bại. Vui lòng thử lại.';
+        this.errorMessage = err.error.errors.join('\n');
       }
     })
   }
