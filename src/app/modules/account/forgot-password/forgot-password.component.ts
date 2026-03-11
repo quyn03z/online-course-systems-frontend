@@ -33,7 +33,7 @@ export class ForgotPasswordComponent {
         this.isLoading = false;
       },
       error: (err) => {
-        this.errorMessage = err.error.message;
+        this.errorMessage = err.error.errors.join('\n');
         this.isLoading = false;
       }
     });

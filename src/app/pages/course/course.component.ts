@@ -72,4 +72,6 @@ export class CourseComponent implements OnInit {
       this.loadCourses();
     }
   }
+
+
 }

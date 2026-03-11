@@ -52,7 +52,9 @@ export class LoginComponent {
       },
       error: (err) => {
         this.isLoading = false;
-        this.errorMessageLogin = err.error?.message || 'Đăng nhập thất bại. Vui lòng thử lại.';
+        if (err.error && err.error.errors && err.error.errors.length > 0) {
+          this.errorMessageLogin = err.error.errors.join('\n');
+        }
       }
     });
   }
@@ -74,13 +76,8 @@ export class LoginComponent {
       },
       error: (err) => {
         this.isLoading = false;
-        // Kiểm tra xem API có trả về mảng 'errors' hợp lệ hay không
         if (err.error && err.error.errors && err.error.errors.length > 0) {
-          // Nối các câu lỗi lại thành một chuỗi duy nhất, cách nhau bằng khoảng trắng
           this.errorMessageSignUp = err.error.errors.join('\n');
-        } else {
-          // Thông báo dự phòng cho các trường hợp rớt mạng, lỗi 500 Server...
-          this.errorMessageSignUp = 'Đăng ký thất bại. Vui lòng thử lại.';
         }
       }
     })
