@@ -144,11 +144,13 @@ export class AuthService {
     }
 
     getUserId() {
-        const token = this.getToken(); // Dùng đúng key access_token
+        const token = this.getToken();
         let userId = 0;
         if (token) {
             try {
-                const payload = JSON.parse(atob(token.split('.')[1]));
+                const base64 = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+                const padded = base64 + '=='.slice(0, (4 - base64.length % 4) % 4);
+                const payload = JSON.parse(atob(padded));
                 userId = payload['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier']
                     || payload['sub']
                     || payload['userId']
@@ -230,9 +232,14 @@ export class AuthService {
             refreshToken
         } as TokenRequest).pipe(
             tap(response => {
-                if (response?.result) {
-                    this.saveTokens(response.result.token, response.result.refreshToken);
-                    this.refreshTokenSubject.next(response.result.token);
+                // Handle both camelCase and PascalCase from the backend
+                const result: any = response?.result ?? (response as any)?.Result;
+                const newToken = result?.token ?? result?.Token;
+                const newRefreshToken = result?.refreshToken ?? result?.RefreshToken;
+                if (newToken) {
+                    console.log(newToken);
+                    this.saveTokens(newToken, newRefreshToken ?? '');
+                    this.refreshTokenSubject.next(newToken);
                 }
             }),
             catchError(err => {

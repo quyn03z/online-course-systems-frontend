@@ -1,0 +1,156 @@
+/* Variables & Theme Colors */
+$primary-gradient: linear-gradient(135deg, #0d8fe0 0%, #056294 100%);
+$primary-color: #0d8fe0;
+$dark-blue: #124265;
+$light-bg: #f8fbff;
+$border-color: #e9ecef;
+$shadow-sm: 0 2px 12px rgba(0, 0, 0, 0.08);
+
+.course-content-container {
+    max-width: 1300px;
+    padding-bottom: 3rem;
+}
+
+/* Card Styling */
+.card {
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-header {
+    background: #fff;
+    border-bottom: 1px solid $border-color;
+
+    h5 {
+        color: $dark-blue;
+        letter-spacing: -0.5px;
+    }
+}
+
+/* --- LEFT COLUMN: LESSONS --- */
+.lesson-list {
+    max-height: calc(100vh - 250px);
+    overflow-y: auto;
+
+    .list-group-item {
+        border: none;
+        border-left: 4px solid transparent;
+        margin-bottom: 2px;
+        transition: all 0.2s ease;
+
+        &:hover {
+            background-color: $light-bg;
+            border-left-color: $primary-color;
+            transform: translateX(4px);
+        }
+
+        &.active-lesson {
+            background: $primary-gradient !important;
+            color: #fff !important;
+            border-left-color: darken(#056294, 10%) !important;
+            box-shadow: 0 4px 15px rgba(13, 143, 224, 0.2);
+
+            .text-dark,
+            .text-muted {
+                color: #fff !important;
+                opacity: 0.9;
+            }
+
+            .lesson-actions i {
+                color: rgba(255, 255, 255, 0.8) !important;
+
+                &:hover {
+                    color: #fff !important;
+                }
+            }
+        }
+    }
+}
+
+.lesson-actions {
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.list-group-item:hover .lesson-actions,
+.active-lesson .lesson-actions {
+    opacity: 1;
+}
+
+/* --- RIGHT COLUMN: SUBLESSONS --- */
+.sublesson-list {
+    max-height: calc(100vh - 250px);
+    overflow-y: auto;
+    padding: 1rem;
+
+    .list-group-item {
+        border: 1px solid $border-color;
+        border-radius: 10px !important;
+        margin-bottom: 12px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02);
+        transition: all 0.2s ease;
+
+        &:hover {
+            background-color: #fff;
+            border-color: $primary-color;
+            box-shadow: $shadow-sm;
+            transform: translateY(-2px);
+        }
+
+        .badge {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            background-color: $light-bg !important;
+            color: $primary-color;
+            font-weight: 700;
+        }
+
+        h6 {
+            color: $dark-blue;
+        }
+    }
+}
+
+/* Buttons */
+.btn-primary {
+    background: $primary-gradient;
+    border: none;
+    padding: 0.5rem 1.25rem;
+    font-weight: 500;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(13, 143, 224, 0.25);
+
+    &:hover {
+        opacity: 0.9;
+        transform: translateY(-1px);
+        box-shadow: 0 6px 15px rgba(13, 143, 224, 0.35);
+    }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 10px;
+
+    &:hover {
+        background: #aaa;
+    }
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
