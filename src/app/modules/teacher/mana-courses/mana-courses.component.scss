@@ -102,3 +102,132 @@
         opacity: 1;
     }
 }
+
+/* Premium Table Action Buttons */
+.action-btn {
+    width: 34px;
+    height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    border: 1px solid #edf2f9;
+    background: #fff;
+    color: #6e84a3;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    padding: 0;
+    margin: 0 3px;
+    outline: none;
+
+    i {
+        font-size: 0.9rem;
+    }
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    &.edit-btn {
+        color: #0d8fe0;
+        border-color: #d0e8ff;
+    }
+
+    &.delete-btn {
+        color: #dc3545;
+        border-color: #ffe0e0;
+    }
+
+    &.edit-btn:hover {
+        background-color: #eef7ff;
+        transform: translateY(-2px);
+    }
+
+    &.delete-btn:hover {
+        background-color: #fff5f5;
+        transform: translateY(-2px);
+    }
+
+    &:active {
+        transform: translateY(0);
+    }
+}
+
+/* Premium Table Refinements */
+.table {
+    thead th {
+        background-color: #f8fbff;
+        color: #124265;
+        font-weight: 700;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 0.5px;
+        padding: 1.25rem 1rem;
+        border-bottom: 2px solid #edf2f9;
+    }
+
+    tbody td {
+        padding: 1.25rem 1rem;
+        color: #4e5d78;
+        border-bottom: 1px solid #f1f4f8;
+    }
+
+    tbody tr {
+        transition: background-color 0.2s ease;
+
+        &:hover {
+            background-color: #f8fbff !important;
+        }
+    }
+}
+
+/* Custom Status Badges */
+.status-badge {
+    padding: 6px 12px;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    &::before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+    }
+
+    &.status-active {
+        background-color: #e6fffa;
+        color: #047857;
+
+        &::before {
+            background-color: #10b981;
+        }
+    }
+
+    &.status-locked {
+        background-color: #fff5f5;
+        color: #b91c1c;
+
+        &::before {
+            background-color: #ef4444;
+        }
+    }
+}
+
+.course-name-link {
+    color: #124265;
+    font-weight: 600;
+    transition: color 0.2s;
+
+    &:hover {
+        color: #0d8fe0;
+    }
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}

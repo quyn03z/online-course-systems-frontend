@@ -37,11 +37,12 @@
                             <p class="price">
                                 <ng-container *ngIf="course.price > 0; else freeCourse">
                                     <span class="old-price">
-                                        {{ course.price | number:'1.0-0' }} ₫
+                                        {{ course.price + (course.price * 20 / 100) | number:'1.0-0' }} ₫
+
                                     </span>
 
                                     <span class="discount-price">
-                                        {{ course.price - (course.price * 20 / 100) | number:'1.0-0' }} ₫
+                                        {{ course.price | number:'1.0-0' }} ₫
                                     </span>
                                 </ng-container>
 

@@ -49,11 +49,9 @@
                 <tbody>
                     <tr *ngFor="let course of courses">
                         <td>{{ course.courseId }}</td>
-                        <td> <a [routerLink]="['/teacher/mana-lessons', course.courseId]" routerLinkActive="active"
-                                class="text-decoration-none">
-                                {{ course.courseName}}
-                            </a>
-                        </td>
+                        <td> <a routerLink="/teacher/mana-lessons/{{ course.courseId }}"
+                                class="text-decoration-none course-name-link"> {{ course.courseName
+                                }}</a></td>
                         <td>{{ course.title }}</td>
                         <td>
                             <span class="badge" [ngClass]="course.isLocked ? 'text-bg-danger' : 'text-bg-success'">
@@ -68,14 +66,16 @@
                         <td>{{ course.price | number:'1.0-0' }} ₫</td>
                         <td>{{ course.courseTypeName }}</td>
                         <td class="text-center">
-                            <button type="button" class="btn btn-sm btn-primary me-2" title="Chỉnh sửa"
-                                (click)="onEditCourse(course.courseId)">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <button type="button" class="btn btn-sm btn-danger me-2" title="Xóa"
-                                (click)="onDeleteCourse(course.courseId)">
-                                <i class="fas fa-trash"></i>
-                            </button>
+                            <div class="d-flex justify-content-center gap-2">
+                                <button type="button" class="action-btn edit-btn" title="Chỉnh sửa"
+                                    (click)="onEditCourse(course.courseId)">
+                                    <i class="fas fa-pen text-primary"></i>
+                                </button>
+                                <button type="button" class="action-btn delete-btn" title="Xóa"
+                                    (click)="onDeleteCourse(course.courseId)">
+                                    <i class="fas fa-trash-alt text-danger"></i>
+                                </button>
+                            </div>
                         </td>
                     </tr>
                     <tr *ngIf="courses.length === 0">
@@ -95,8 +95,6 @@
                         (click)="goToNextPage()">Next</button>
                 </div>
             </div>
-
-
         </div>
     </div>
 </div>
