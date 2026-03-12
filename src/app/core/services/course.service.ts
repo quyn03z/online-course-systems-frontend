@@ -7,6 +7,7 @@ export interface ResultResponse<T> {
   succeeded: boolean;
   result: T;
   errors: string[];
+  message?: string;
 }
 
 export interface CourseResponseModel {

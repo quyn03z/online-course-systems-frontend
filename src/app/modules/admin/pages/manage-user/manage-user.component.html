@@ -114,9 +114,7 @@
                     <label class="form-label fw-semibold">Vai trò</label>
                     <select class="form-select" [(ngModel)]="selectedUser.roleId" name="roleId">
                         <option value="" disabled>-- Chọn vai trò --</option>
-                        <option [value]="1">Admin</option>
-                        <option [value]="2">Teacher</option>
-                        <option [value]="3">Student</option>
+                        <option *ngFor="let role of roleList" [value]="role.id">{{ role.roleName }}</option>
                     </select>
                 </div>
                 <div class="col-md-6">
@@ -171,9 +169,7 @@
                     <label class="form-label fw-semibold">Vai trò</label>
                     <select class="form-select" name="newRoleId" [(ngModel)]="newUser.roleId">
                         <option value="" disabled>-- Chọn vai trò --</option>
-                        <option [ngValue]="1">Admin</option>
-                        <option [ngValue]="2">Teacher</option>
-                        <option [ngValue]="3">Student</option>
+                        <option *ngFor="let role of roleList" [ngValue]="role.id">{{ role.roleName }}</option>
                     </select>
                 </div>
                 <div class="col-md-6">

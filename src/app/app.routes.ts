@@ -19,6 +19,7 @@ import { AuditLogsComponent } from './modules/admin/pages/audit-logs/audit-logs.
 import { ManaCoursesComponent } from './modules/teacher/mana-courses/mana-courses.component';
 import { TeacherComponent } from './modules/teacher/teacher/teacher.component';
 import { ManaLessonsComponent } from './modules/teacher/mana-lessons/mana-lessons.component';
+import { ManaRoleComponent } from './modules/admin/pages/mana-role/mana-role.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -34,6 +35,7 @@ export const routes: Routes = [
             { path: '', component: AdminDashboardComponent },
             { path: 'manage-users', component: ManageUserComponent },
             { path: 'audit-logs', component: AuditLogsComponent },
+            { path: 'mana-role', component: ManaRoleComponent },
             // Thêm trang admin mới ở đây, ví dụ:
         ]
     },
