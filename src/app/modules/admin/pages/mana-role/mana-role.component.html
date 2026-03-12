@@ -1,0 +1,115 @@
+<div class="role-container" data-aos="fade-up">
+    <div class="role-header">
+        <div class="header-content">
+            <h1 class="title">Role Management</h1>
+            <p class="subtitle">Manage user roles and permissions in the system</p>
+        </div>
+        <button class="btn-create" data-bs-toggle="modal" data-bs-target="#roleModal" (click)="openCreateModal()">
+            <i class="bi bi-plus-lg"></i>
+            <span>Create Role</span>
+        </button>
+    </div>
+
+    <div class="role-card-wrapper">
+        <div class="card-glass">
+            <div *ngIf="loading" class="loader-container">
+                <div class="spinner"></div>
+                <p>Loading roles...</p>
+            </div>
+
+            <div *ngIf="error" class="error-container">
+                <i class="bi bi-exclamation-triangle"></i>
+                <p>{{ error }}</p>
+                <button (click)="loadRoles()" class="btn-retry">Retry</button>
+            </div>
+
+            <div *ngIf="!loading && !error" class="table-responsive">
+                <table class="table-custom">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Role Name</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let role of roles">
+                            <td>
+                                <span class="badge-id">{{ role.id }}</span>
+                            </td>
+                            <td>
+                                <div class="role-info">
+                                    <div class="role-icon">
+                                        <i class="bi bi-shield-check"></i>
+                                    </div>
+                                    <span class="role-name">{{ role.roleName }}</span>
+                                </div>
+                            </td>
+                            <td class="text-end">
+                                <div class="action-buttons">
+                                    <button class="btn-action btn-edit" title="Edit Role" data-bs-toggle="modal"
+                                        data-bs-target="#roleModal" (click)="openEditModal(role)">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </button>
+                                    <button class="btn-action btn-delete" title="Delete Role"
+                                        (click)="deleteRole(role.id)">
+                                        <i class="bi bi-trash3"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr *ngIf="roles.length === 0">
+                            <td colspan="3" class="text-center py-5">
+                                <div class="empty-state">
+                                    <i class="bi bi-inbox"></i>
+                                    <p>No roles found</p>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- Premium Modal -->
+    <div class="modal fade" id="roleModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content premium-modal">
+                <div class="modal-header">
+                    <div class="header-title-group">
+
+                        <div>
+                            <h5 class="modal-title">{{ isEditMode ? 'Edit' : 'Create' }}</h5>
+                            <p class="modal-subtitle">Define user roles and permissions</p>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-close-custom" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="bi bi-x"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form #roleForm="ngForm">
+                        <div class="custom-form-group">
+                            <label for="roleName" class="custom-label">Role Name</label>
+                            <div class="input-wrapper">
+                                <i class="bi bi-shield-lock-fill input-icon"></i>
+                                <input type="text" class="custom-input" id="roleName" [(ngModel)]="newRole.roleName"
+                                    name="roleName" required placeholder="e.g. Instructor" #roleNameInput="ngModel">
+                            </div>
+                            <div *ngIf="roleNameInput.invalid && (roleNameInput.dirty || roleNameInput.touched)"
+                                class="validation-msg">
+                                Vui lòng nhập Role Name
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-cancel" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn-submit" [disabled]="roleForm.invalid" (click)="submitRole()">
+                        {{ isEditMode ? 'Update' : 'Create' }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
