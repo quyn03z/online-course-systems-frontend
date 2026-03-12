@@ -14,6 +14,7 @@ import { NotifySuccess, NotifyError, NotifyApiError } from '../../../../core/uti
 })
 export class ManageUserComponent implements OnInit {
   users: any[] = [];
+  roleList: any[] = [];
 
   private adminService = inject(AdminService);
 
@@ -37,6 +38,16 @@ export class ManageUserComponent implements OnInit {
 
   ngOnInit(): void {
     this.getAllUsers();
+    this.getRoles();
+  }
+
+  getRoles() {
+    this.adminService.getAllRoles().subscribe({
+      next: (res) => {
+        this.roleList = res.result;
+      },
+      error: (err) => NotifyApiError(err)
+    });
   }
 
   getAllUsers() {
@@ -54,12 +65,10 @@ export class ManageUserComponent implements OnInit {
 
   onEditUser(user: any) {
     this.selectedUser = { ...user };
-    if (this.selectedUser.roleName === 'Admin') {
-      this.selectedUser.roleId = 1;
-    } else if (this.selectedUser.roleName === 'Teacher') {
-      this.selectedUser.roleId = 2;
-    } else if (this.selectedUser.roleName === 'Student') {
-      this.selectedUser.roleId = 3;
+    // Map role name to ID if needed, though roleId should already be in user object
+    if (!this.selectedUser.roleId && this.selectedUser.roleName) {
+      const role = this.roleList.find(r => r.roleName === this.selectedUser.roleName);
+      if (role) this.selectedUser.roleId = role.id;
     }
     this.showModal = true;
   }

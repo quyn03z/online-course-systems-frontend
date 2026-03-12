@@ -30,4 +30,19 @@ export class AdminService {
     return this.apiService.post<ResultResponse<any>>('Admin/create-user-admin', user);
   }
 
+  getAllRoles() {
+    return this.apiService.get<ResultResponse<any>>('Role/get-alls-role');
+  }
+
+  updateRole(role: any, roleId: number) {
+    return this.apiService.put<ResultResponse<any>>(`Role/update-role/${roleId}`, role);
+  }
+
+  createRole(role: any) {
+    return this.apiService.post<ResultResponse<any>>('Role/create-role', role);
+  }
+
+  deleteRole(roleId: number) {
+    return this.apiService.delete<ResultResponse<any>>(`Role/delete-role/${roleId}`);
+  }
 }
