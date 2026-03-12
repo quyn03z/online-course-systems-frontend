@@ -4,11 +4,13 @@ import { LessonsResponseModel, LessonsService, SubLessonsResponseModel } from '.
 import { DocumentsResponseModel, DocumentsService } from '../../../core/services/documents.service';
 import { CourseResponseModel, CourseService, ResultResponse } from '../../../core/services/course.service';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { NotifyError, NotifySuccess } from '../../../core/utils/notification.util';
 
 @Component({
   selector: 'app-mana-lessons',
   standalone: true,
-  imports: [RouterLink, CommonModule],
+  imports: [RouterLink, CommonModule, FormsModule],
   templateUrl: './mana-lessons.component.html',
   styleUrl: './mana-lessons.component.scss'
 })
@@ -28,6 +30,11 @@ export class ManaLessonsComponent implements OnInit {
   private documentService = inject(DocumentsService);
   private courseService = inject(CourseService);
 
+  newLesson: any = {
+    title: '',
+    isLocked: false,
+  }
+
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
@@ -39,6 +46,54 @@ export class ManaLessonsComponent implements OnInit {
         this.loadCourse(this.courseId);
       }
     });
+  }
+
+  onCreateLesson() {
+    this.lessonsService.createLesson(this.newLesson, this.courseId || '').subscribe({
+      next: (response: ResultResponse<LessonsResponseModel>) => {
+        this.lessons.push(response.result);
+        this.newLesson = {
+          title: '',
+          isLocked: false,
+        }
+        // Đóng modal sau khi tạo thành công
+        document.getElementById('closeLessonModal')?.click();
+        NotifySuccess('Tạo bài học thành công!');
+      },
+      error: (err: any) => {
+        NotifyError(err.error.message || 'Không thể tạo bài học');
+
+      }
+    });
+  }
+
+  onUpdateLesson() {
+    this.lessonsService.updateLesson(this.selectedLesson?.lessonId || '', this.selectedLesson!).subscribe({
+      next: (response: ResultResponse<LessonsResponseModel>) => {
+        this.selectedLesson = response.result;
+        // Đóng modal sau khi cập nhật thành công
+        document.getElementById('closeEditLessonModal')?.click();
+        NotifySuccess('Cập nhật bài học thành công!');
+      },
+      error: (err: any) => {
+        NotifyError(err.error.errors || 'Không thể cập nhật bài học');
+      }
+    });
+  }
+
+  onDeleteLesson(lessonId: string) {
+    if (confirm('Bạn có chắc chắn muốn xóa bài học này không?')) {
+      this.lessonsService.deleteLesson(lessonId).subscribe({
+        next: (res) => {
+          this.lessons = this.lessons.filter(lesson => lesson.lessonId !== lessonId);
+          this.lessonId = null;
+          NotifySuccess('Xóa bài học thành công!');
+        },
+        error: (err: any) => {
+          NotifyError(err.error.errors || 'Không thể xóa bài học');
+        }
+      });
+    }
   }
 
 
@@ -56,7 +111,7 @@ export class ManaLessonsComponent implements OnInit {
   }
 
   loadLessons(courseId: string): void {
-    this.lessonsService.getLessonsByCourseId(courseId).subscribe({
+    this.lessonsService.getManaLessonsByCourseId(courseId).subscribe({
       next: (response: ResultResponse<LessonsResponseModel[]>) => {
         this.lessons = response.result;
         // Tự động chọn bài học đầu tiên khi load xong
@@ -99,5 +154,8 @@ export class ManaLessonsComponent implements OnInit {
       }
     });
   }
+
+
+
 
 }
