@@ -4,73 +4,158 @@
 
         <div class="container">
 
-            <!-- Loading -->
-            <div *ngIf="isLoading" class="text-center py-5">
-                <div class="spinner-border text-success" role="status">
-                    <span class="visually-hidden">Đang tải...</span>
-                </div>
-                <p class="mt-2">Đang tải danh sách khóa học...</p>
-            </div>
-
-            <!-- Error -->
-            <div *ngIf="errorMessage && !isLoading" class="alert alert-danger text-center" role="alert">
-                {{ errorMessage }}
-            </div>
-
-            <!-- Empty -->
-            <div *ngIf="!isLoading && !errorMessage && courses.length === 0" class="text-center py-5">
-                <p class="text-muted">Không có khóa học nào.</p>
-            </div>
-
-            <!-- Course List -->
-            <div class="row" *ngIf="!isLoading && courses.length > 0">
-                <div class="col-lg-4 col-md-6 d-flex align-items-stretch mb-4" *ngFor="let course of courses"
-                    data-aos="zoom-in">
-                    <div class="course-item">
-                        <img routerLink="/course-details/{{ course.courseId }}" routerLinkActive="active"
-                            [src]="course.image || 'assets/img/course-placeholder.jpg'" class="img-fluid"
-                            [alt]="course.courseName">
-                        <div class="course-content">
-                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                <p class="category">{{ course.courseTypeName }}</p>
-                                <p class="price">
-                                    <ng-container *ngIf="course.price > 0; else freeCourse">
-                                        <span class="old-price">
-                                            {{ course.price + (course.price * 20 / 100) | number:'1.0-0' }} ₫
-                                        </span>
-
-                                        <span class="discount-price">
-                                            {{ course.price | number:'1.0-0' }} ₫
-                                        </span>
-                                    </ng-container>
-
-                                    <ng-template #freeCourse>
-                                        <span class="free">Miễn Phí</span>
-                                    </ng-template>
-                                </p>
+            <div class="row pt-4">
+                <!-- Sidebar Filters -->
+                <aside class="col-lg-3 pe-lg-4 mb-4">
+                    <div class="filter-sidebar">
+                        <!-- Search -->
+                        <div class="search-group mb-5">
+                            <div class="input-group search-box rounded-pill border overflow-hidden p-1 bg-white">
+                                <span class="input-group-text border-0 bg-transparent ps-3">
+                                    <i class="bi bi-search text-muted"></i>
+                                </span>
+                                <input type="text" class="form-control border-0 shadow-none ps-1"
+                                    placeholder="Tìm kiếm..." [(ngModel)]="searchTerm"
+                                    (ngModelChange)="onSearchChange()">
                             </div>
-                            <h3><a routerLink="/course-details/{{ course.courseId }}" routerLinkActive="active">{{
-                                    course.courseName }}</a></h3>
-                            <p class="description">{{ course.title }}</p>
+                        </div>
+
+                        <!-- Filter Sections -->
+                        <div class="filter-sections">
+                            <!-- Loại (Dynamic) -->
+                            <div class="filter-item mb-5">
+                                <h5 class="fw-bold mb-3 sidebar-title">Danh mục</h5>
+                                <div class="form-check mb-2" *ngFor="let type of courseTypes">
+                                    <input class="form-check-input custom-checkbox" type="checkbox"
+                                        [id]="'type_' + type.courseTypeId"
+                                        [checked]="selectedTypeId === type.courseTypeId"
+                                        (change)="selectedTypeId = (selectedTypeId === type.courseTypeId ? null : type.courseTypeId); onFilterChange()">
+                                    <label class="form-check-label text-muted ms-2" [for]="'type_' + type.courseTypeId">
+                                        {{ type.name }}
+                                    </label>
+                                </div>
+                            </div>
+
+
+
+                            <!-- Giá -->
+                            <div class="filter-item">
+                                <h5 class="fw-bold mb-3 sidebar-title">Giá</h5>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input custom-checkbox" type="checkbox" id="price_free"
+                                        [checked]="priceOrder === 0"
+                                        (change)="priceOrder = (priceOrder === 0 ? null : 0); onFilterChange()">
+                                    <label class="form-check-label text-muted ms-2" for="price_free">Miễn phí</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input custom-checkbox" type="checkbox" id="price_paid"
+                                        [checked]="priceOrder === 1"
+                                        (change)="priceOrder = (priceOrder === 1 ? null : 1); onFilterChange()">
+                                    <label class="form-check-label text-muted ms-2" for="price_paid">Trả phí</label>
+                                </div>
+                            </div>
+
+
                         </div>
                     </div>
-                </div>
-            </div>
+                </aside>
 
-            <!-- Pagination -->
-            <div class="d-flex justify-content-center align-items-center gap-3 mt-4"
-                *ngIf="!isLoading && courses.length > 0">
 
-                <button class="btn btn-outline-secondary btn-sm" [disabled]="currentPage === 1" (click)="prevPage()">
-                    &laquo; Trước
-                </button>
 
-                <span class="text-muted">Trang {{ currentPage }}</span>
+                <!-- Main Content -->
+                <main class="col-lg-9">
+                    <!-- Header Stats & Sorting -->
+                    <div class="d-flex justify-content-between align-items-center mb-5 pb-2">
+                        <div class="text-dark">
+                            <span class="fw-bold h5">{{ courses.length }}</span> <span class="text-secondary ms-1">Khóa
+                                Học</span>
+                        </div>
+                    </div>
 
-                <button class="btn btn-outline-secondary btn-sm" [disabled]="!hasNextPage" (click)="nextPage()">
-                    Sau &raquo;
-                </button>
+                    <!-- Loading -->
+                    <div *ngIf="isLoading" class="text-center py-5">
+                        <div class="spinner-border text-success" role="status">
+                            <span class="visually-hidden">Đang tải...</span>
+                        </div>
+                        <p class="mt-2">Đang tải danh sách khóa học...</p>
+                    </div>
 
+                    <!-- Error -->
+                    <div *ngIf="errorMessage && !isLoading" class="alert alert-danger text-center rounded-4"
+                        role="alert">
+                        {{ errorMessage }}
+                    </div>
+
+                    <!-- Courses List -->
+                    <div class="row g-4" *ngIf="!isLoading && courses.length > 0">
+                        <div class="col-lg-4 col-md-6" *ngFor="let course of courses" data-aos="fade-up">
+                            <div class="course-item shadow-hover">
+                                <div class="position-relative overflow-hidden">
+                                    <img [routerLink]="['/course-details', course.courseId]"
+                                        [src]="course.image || 'assets/img/course-placeholder.jpg'"
+                                        class="img-fluid course-img" [alt]="course.courseName">
+                                    <span
+                                        class="badge bg-danger position-absolute top-0 start-0 m-3 rounded-pill px-3 py-2"
+                                        *ngIf="course.price > 0">GIẢM GIÁ</span>
+                                </div>
+                                <div class="course-content p-4">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <span class="badge bg-soft-success text-success rounded-pill px-3">{{
+                                            course.courseTypeName }}</span>
+                                    </div>
+
+                                    <h5 class="course-title mb-3">
+                                        <a [routerLink]="['/course-details', course.courseId]"
+                                            class="text-decoration-none text-dark fw-bold">
+                                            {{ course.courseName }}
+                                        </a>
+                                    </h5>
+
+                                    <div class="instructor d-flex align-items-center gap-2 mb-4">
+                                        <div class="rounded-circle bg-light d-flex align-items-center justify-content-center"
+                                            style="width: 35px; height: 35px;">
+                                            <i class="bi bi-person text-secondary"></i>
+                                        </div>
+                                        <span class="text-muted small">Giảng viên {{ course.creator }}</span>
+                                        <div class="price-box ms-auto text-end">
+                                            <ng-container *ngIf="course.price > 0; else freeCourse">
+                                                <div class="text-muted text-decoration-line-through x-small">{{
+                                                    course.price + (course.price * 20 / 100) | number:'1.0-0' }}₫</div>
+                                                <div class="text-danger fw-bold h5 mb-0">{{ course.price |
+                                                    number:'1.0-0' }}₫</div>
+                                            </ng-container>
+                                            <ng-template #freeCourse>
+                                                <span class="text-success fw-bold">Miễn Phí</span>
+                                            </ng-template>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Empty -->
+                    <div *ngIf="!isLoading && !errorMessage && courses.length === 0" class="text-center py-5">
+                        <p class="text-muted h5">Không tìm thấy khóa học nào phù hợp.</p>
+                        <button class="btn btn-outline-primary mt-3 rounded-pill" (click)="resetFilters()">Xem tất
+                            cả</button>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="d-flex justify-content-center align-items-center gap-3 mt-5"
+                        *ngIf="!isLoading && courses.length > 0">
+                        <button class="btn btn-outline-secondary btn-sm px-3 rounded-pill"
+                            [disabled]="currentPage === 1" (click)="prevPage()">
+                            &laquo; Trước
+                        </button>
+                        <span class="px-3 py-1 bg-light rounded-pill text-dark fw-bold border">Trang {{ currentPage
+                            }}</span>
+                        <button class="btn btn-outline-secondary btn-sm px-3 rounded-pill" [disabled]="!hasNextPage"
+                            (click)="nextPage()">
+                            Sau &raquo;
+                        </button>
+                    </div>
+                </main>
             </div>
 
         </div>

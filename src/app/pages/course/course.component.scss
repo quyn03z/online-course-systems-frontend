@@ -1,100 +1,121 @@
-.courses .course-item {
-    border: 1px solid #eef0ef;
-    border-radius: 8px;
+/* SIDEBAR FILTERS */
+.filter-sidebar {
+    background: transparent;
+    
+    .sidebar-title {
+        font-size: 1.1rem;
+        color: #2b343e;
+        position: relative;
+        padding-bottom: 10px;
+        
+        &::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background: #098f9b;
+            border-radius: 3px;
+        }
+    }
+}
+
+.search-box {
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    transition: 0.3s;
+    &:focus-within {
+        border-color: #098f9b !important;
+        box-shadow: 0 4px 15px rgba(9, 143, 155, 0.15);
+    }
+}
+
+.custom-checkbox {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    border: 2px solid #ddd;
+    
+    &:checked {
+        background-color: #098f9b;
+        border-color: #098f9b;
+    }
+    
+    &:focus {
+        box-shadow: 0 0 0 0.25rem rgba(9, 143, 155, 0.1);
+    }
+}
+
+/* COURSE ITEM REFINEMENT */
+.course-item {
+    border: none;
+    border-radius: 12px;
     background: #fff;
-    transition: 0.3s;
-    display: flex;
-    flex-direction: column;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     height: 100%;
-    overflow: hidden;
-}
-
-.courses .course-item:hover {
-    box-shadow: 0px 5px 25px rgba(0, 0, 0, 0.08);
-}
-
-.courses .course-content {
-    padding: 30px;
     display: flex;
     flex-direction: column;
-    flex-grow: 1;
+    overflow: hidden;
+    border: 1px solid #f1f1f1;
+
+    &.shadow-hover:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        border-color: transparent;
+    }
 }
 
-.courses .course-content .category {
-    color: #6c757d;
-    font-size: 14px;
-    font-weight: 600;
-    margin: 0;
-}
-
-.courses .course-content .price {
-    margin: 0;
-    font-weight: 700;
-    font-size: 18px;
-    color: #37423b;
-}
-
-.courses .course-content h3 {
-    font-weight: 700;
-    font-size: 20px;
-    margin-bottom: 15px;
-}
-
-.courses .course-content h3 a {
-    color: #37423b;
-    text-decoration: none;
-    transition: 0.3s;
-}
-
-.courses .course-content h3 a:hover {
-    color: #5fcf80;
-}
-
-.courses .course-content .description {
-    font-size: 14px;
-    color: #777;
-    margin-bottom: 20px;
-}
-
-.courses .trainer {
-    padding-top: 15px;
-    border-top: 1px solid #eef0ef;
-    margin-top: auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.courses .trainer-profile {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.courses .trainer-profile img {
-    max-width: 45px;
-    border-radius: 50%;
+.course-img {
+    height: 200px;
+    width: 100%;
     object-fit: cover;
+    transition: transform 0.5s ease;
+    
+    .course-item:hover & {
+        transform: scale(1.05);
+    }
 }
 
-.courses .trainer-link {
-    color: #37423b;
-    font-weight: 600;
-    text-decoration: none;
-    font-size: 15px;
+.bg-soft-success {
+    background-color: rgba(95, 207, 128, 0.12);
 }
 
-.courses .trainer-rank {
-    font-size: 14px;
-    color: #8a8a8a;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+.course-title a {
+    color: #2b343e !important;
+    font-size: 1.15rem;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    transition: 0.2s;
+    
+    &:hover {
+        color: #098f9b !important;
+    }
 }
 
-.courses .trainer-rank i {
-    font-size: 16px;
-    color: #8a8a8a;
+.save-icon {
+    font-size: 1.25rem;
+    cursor: pointer;
+    transition: 0.2s;
+    &:hover {
+        transform: scale(1.2);
+    }
+}
+
+.price-box {
+    .x-small {
+        font-size: 0.75rem;
+    }
+}
+
+.hover-lift {
+    transition: 0.2s;
+    &:hover {
+        transform: translateY(-2px);
+    }
 }
 
 .old-price {
@@ -109,6 +130,6 @@
 }
 
 .free {
-    color: green;
+    color: #5fcf80;
     font-weight: bold;
-}
+}

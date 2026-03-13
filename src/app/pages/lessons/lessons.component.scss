@@ -144,3 +144,114 @@
 .star-rating label:hover~label {
     color: gold !important;
 }
+
+/* QUIZ PREMIUM STYLES */
+.quiz-icon-wrapper {
+    width: 120px;
+    height: 120px;
+    background: rgba(9, 143, 155, 0.1);
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    animation: pulse-primary 2s infinite;
+}
+
+@keyframes pulse-primary {
+    0% { box-shadow: 0 0 0 0 rgba(9, 143, 155, 0.4); }
+    70% { box-shadow: 0 0 0 20px rgba(9, 143, 155, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(9, 143, 155, 0); }
+}
+
+.bg-soft-primary { background-color: rgba(9, 143, 155, 0.1) !important; }
+.bg-soft-info { background-color: rgba(13, 202, 240, 0.1) !important; }
+
+.hover-scale {
+    transition: transform 0.2s ease;
+    &:hover {
+        transform: scale(1.05);
+    }
+}
+
+.transition-all {
+    transition: all 0.3s ease;
+}
+
+.answer-option {
+    border: 2px solid #eee !important;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    &:hover {
+        background-color: #f8f9ff !important;
+        border-color: #098f9b !important;
+        transform: translateY(-2px);
+    }
+    
+    &.selected {
+        background-color: #e6f7f8 !important;
+        border-color: #098f9b !important;
+        box-shadow: 0 4px 12px rgba(9, 143, 155, 0.15);
+        
+        .form-check-label {
+            color: #098f9b;
+            font-weight: 700;
+        }
+        
+        .form-check-input {
+            background-color: #098f9b;
+            border-color: #098f9b;
+        }
+    }
+}
+
+.question-card {
+    transition: transform 0.3s ease;
+    &:hover {
+        transform: translateX(5px);
+    }
+}
+
+.display-1 {
+    font-size: 5rem;
+    background: linear-gradient(45deg, #098f9b, #00d2ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* TIMER STYLES */
+.timer-display {
+    background: #fff;
+    color: #098f9b;
+    border-color: #098f9b !important;
+    min-width: 140px;
+    justify-content: center;
+    transition: all 0.3s ease;
+    
+    i {
+        animation: rotate-clock 3s linear infinite;
+    }
+}
+
+.timer-low {
+    background: #fff5f5;
+    color: #dc3545 !important;
+    border-color: #dc3545 !important;
+    animation: alert-pulse 1s infinite;
+    
+    i {
+        animation: rotate-clock 1.5s linear infinite;
+    }
+}
+
+@keyframes rotate-clock {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes alert-pulse {
+    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.4); }
+    50% { transform: scale(1.02); box-shadow: 0 0 0 10px rgba(220, 53, 69, 0); }
+    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(220, 53, 69, 0); }
+}
