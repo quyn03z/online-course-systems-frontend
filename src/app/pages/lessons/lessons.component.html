@@ -183,10 +183,10 @@
                                                     </span>
                                                 </div>
                                                 <i *ngIf="lesson.isLocked" class="bi bi-lock-fill text-muted"></i>
-                                                <i *ngIf="!lesson.isLocked && currentSubLesson?.subLessonId !== subLesson.subLessonId"
-                                                    class="bi bi-check-circle-fill text-success"></i>
-                                                <i *ngIf="!lesson.isLocked && currentSubLesson?.subLessonId === subLesson.subLessonId"
-                                                    class="bi bi-check-circle-fill text-white"></i>
+                                                <i
+                                                    *ngIf="!lesson.isLocked && currentSubLesson?.subLessonId !== subLesson.subLessonId"></i>
+                                                <i
+                                                    *ngIf="!lesson.isLocked && currentSubLesson?.subLessonId === subLesson.subLessonId"></i>
                                             </li>
 
 
@@ -203,10 +203,10 @@
                                                     </span>
                                                 </div>
                                                 <i *ngIf="lesson.isLocked" class="bi bi-lock-fill text-muted"></i>
-                                                <i *ngIf="!lesson.isLocked && currentDocument?.documentId !== document.documentId"
-                                                    class="bi bi-check-circle-fill text-success"></i>
-                                                <i *ngIf="!lesson.isLocked && currentDocument?.documentId === document.documentId"
-                                                    class="bi bi-check-circle-fill text-white"></i>
+                                                <i
+                                                    *ngIf="!lesson.isLocked && currentDocument?.documentId !== document.documentId"></i>
+                                                <i
+                                                    *ngIf="!lesson.isLocked && currentDocument?.documentId === document.documentId"></i>
                                             </li>
 
 

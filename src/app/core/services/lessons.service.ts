@@ -18,6 +18,7 @@ export interface SubLessonsResponseModel {
   description: string;
   lessonId: string;
   videoLink: string;
+  isLocked: boolean;
 }
 
 
@@ -43,6 +44,12 @@ export class LessonsService {
     return this.apiService.get<ResultResponse<SubLessonsResponseModel[]>>(`SubLesson/alls-sublesson/${lessonId}`);
   }
 
+  getManaSubLessonByLessonId(lessonId: string) {
+    return this.apiService.get<ResultResponse<SubLessonsResponseModel[]>>(`ManaSubLesson/get-alls-sublesson/${lessonId}`);
+  }
+
+
+
   getFirstLessonIdByCourseId(courseId: string) {
     return this.apiService.get<ResultResponse<number>>(`Lesson/getfirst-lessonId/${courseId}`);
   }
@@ -62,6 +69,20 @@ export class LessonsService {
 
   deleteLesson(lessonId: string) {
     return this.apiService.delete<ResultResponse<LessonsResponseModel>>(`ManaLesson/remove-lesson/${lessonId}`);
+  }
+
+  // --- SubLesson Management ---
+
+  createSubLesson(subLesson: any, lessonId: string) {
+    return this.apiService.post<ResultResponse<SubLessonsResponseModel>>(`ManaSubLesson/add-sublesson?lessonId=${lessonId}`, subLesson);
+  }
+
+  updateSubLesson(subLessonId: string, subLesson: any) {
+    return this.apiService.put<ResultResponse<string>>(`ManaSubLesson/update-sublesson/${subLessonId}`, subLesson);
+  }
+
+  deleteSubLesson(subLessonId: string) {
+    return this.apiService.delete<ResultResponse<string>>(`ManaSubLesson/remove-sublesson/${subLessonId}`);
   }
 
 }

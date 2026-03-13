@@ -52,8 +52,17 @@ export class LoginComponent {
       },
       error: (err) => {
         this.isLoading = false;
-        if (err.error && err.error.errors && err.error.errors.length > 0) {
-          this.errorMessageLogin = err.error.errors.join('\n');
+        const errorData = err.error;
+        if (errorData) {
+          if (errorData.errors && errorData.errors.length > 0) {
+            this.errorMessageLogin = errorData.errors.join('\n');
+          } else if (errorData.message) {
+            this.errorMessageLogin = errorData.message;
+          } else {
+            this.errorMessageLogin = 'Đăng nhập thất bại. Vui lòng thử lại.';
+          }
+        } else {
+          this.errorMessageLogin = 'Lỗi hệ thống. Vui lòng thử lại sau.';
         }
       }
     });
@@ -76,8 +85,17 @@ export class LoginComponent {
       },
       error: (err) => {
         this.isLoading = false;
-        if (err.error && err.error.errors && err.error.errors.length > 0) {
-          this.errorMessageSignUp = err.error.errors.join('\n');
+        const errorData = err.error;
+        if (errorData) {
+          if (errorData.errors && errorData.errors.length > 0) {
+            this.errorMessageSignUp = errorData.errors.join('\n');
+          } else if (errorData.message) {
+            this.errorMessageSignUp = errorData.message;
+          } else {
+            this.errorMessageSignUp = 'Đăng ký thất bại. Vui lòng thử lại.';
+          }
+        } else {
+          this.errorMessageSignUp = 'Lỗi hệ thống. Vui lòng thử lại sau.';
         }
       }
     })

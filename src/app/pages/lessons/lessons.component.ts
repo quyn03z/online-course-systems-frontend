@@ -21,6 +21,9 @@ export class LessonsComponent implements OnInit {
   documents: DocumentsResponseModel[] = [];
   currentDocument: DocumentsResponseModel | null = null;
 
+  // Caching for Safe URLs to prevent iframe flickering/reloading
+  private safeUrlCache = new Map<string, SafeResourceUrl>();
+
 
   private lessonsService = inject(LessonsService);
   private documentsService = inject(DocumentsService);
@@ -46,6 +49,11 @@ export class LessonsComponent implements OnInit {
   }
 
   loadLessons(id: string): void {
+    // If lessons are already loaded for this course, don't re-fetch
+    if (this.lessons.length > 0 && this.courseId === id) {
+      return;
+    }
+
     this.lessonsService.getLessonsByCourseId(id).subscribe({
       next: (response: ResultResponse<LessonsResponseModel[]>) => {
         this.lessons = response.result;
@@ -70,10 +78,11 @@ export class LessonsComponent implements OnInit {
   }
 
   loadSubLessons(lessonId: string): void {
-    this.lessonsService.getSubLessonByLessonId(lessonId).subscribe({
+    this.lessonsService.getManaSubLessonByLessonId(lessonId).subscribe({
       next: (response: ResultResponse<SubLessonsResponseModel[]>) => {
         this.subLessons = response.result;
-        if (this.subLessons.length > 0) {
+        // Only auto-select the first lesson if nothing is currently selected (first load)
+        if (this.subLessons.length > 0 && !this.currentSubLesson && !this.currentDocument) {
           this.currentSubLesson = this.subLessons[0];
         }
         console.log(response.result)
@@ -96,6 +105,10 @@ export class LessonsComponent implements OnInit {
 
   getSafeUrl(url: string | undefined): SafeResourceUrl {
     if (!url) return '';
+    if (this.safeUrlCache.has(url)) {
+      return this.safeUrlCache.get(url)!;
+    }
+
     let videoId = '';
     // Xử lý link youtube (watch?v=ID hoặc youtube.be/ID)
     if (url.includes('v=')) {
@@ -109,11 +122,17 @@ export class LessonsComponent implements OnInit {
     }
 
     const embedUrl = `https://www.youtube.com/embed/${videoId}`;
-    return this.sanitizer.bypassSecurityTrustResourceUrl(embedUrl);
+    const safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(embedUrl);
+    this.safeUrlCache.set(url, safeUrl);
+    return safeUrl;
   }
 
   getSafeDocumentUrl(fileUrl: string | undefined): SafeResourceUrl {
     if (!fileUrl) return '';
+    if (this.safeUrlCache.has(fileUrl)) {
+      return this.safeUrlCache.get(fileUrl)!;
+    }
+
     let embedUrl = fileUrl;
 
     // Chuyển Google Drive share link sang dạng embed
@@ -126,6 +145,8 @@ export class LessonsComponent implements OnInit {
       }
     }
 
-    return this.sanitizer.bypassSecurityTrustResourceUrl(embedUrl);
+    const safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(embedUrl);
+    this.safeUrlCache.set(fileUrl, safeUrl);
+    return safeUrl;
   }
 }

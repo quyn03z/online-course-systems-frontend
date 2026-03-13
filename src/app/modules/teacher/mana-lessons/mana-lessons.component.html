@@ -66,9 +66,21 @@
                         <h5 class="mb-0 fw-bold text-primary mt-1">{{ selectedLesson ? selectedLesson.title : 'Chọn
                             chương mục' }}</h5>
                     </div>
-                    <button class="btn btn-sm btn-primary" [disabled]="!selectedLesson">
-                        <i class="fas fa-plus-circle me-1"></i> Thêm Bài học mới
-                    </button>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-sm btn-primary" [disabled]="!selectedLesson" data-bs-toggle="modal"
+                            data-bs-target="#subLessonModal" (click)="openAddSubLessonModal('video')">
+                            <i class="fas fa-play-circle me-1"></i> Bài học
+                        </button>
+                        <button class="btn btn-sm btn-outline-info" [disabled]="!selectedLesson" data-bs-toggle="modal"
+                            data-bs-target="#subLessonModal" (click)="openAddSubLessonModal('document')">
+                            <i class="fas fa-file-alt me-1"></i> Tài liệu
+                        </button>
+                        <button class="btn btn-sm btn-outline-warning" [disabled]="!selectedLesson"
+                            data-bs-toggle="modal" data-bs-target="#subLessonModal"
+                            (click)="openAddSubLessonModal('quiz')">
+                            <i class="fas fa-question-circle me-1"></i> Quizz
+                        </button>
+                    </div>
                 </div>
 
                 <div class="card-body p-0">
@@ -89,10 +101,14 @@
                                     </div>
                                 </div>
                                 <div class="action-buttons d-flex gap-2">
-                                    <button class="btn btn-sm btn-light text-primary border"><i
-                                            class="fas fa-pen"></i></button>
-                                    <button class="btn btn-sm btn-light text-danger border"><i
-                                            class="fas fa-trash-alt"></i></button>
+                                    <button class="btn btn-sm btn-light text-primary border" data-bs-toggle="modal"
+                                        data-bs-target="#subLessonModal" (click)="openEditSubLessonModal(sub)">
+                                        <i class="fas fa-pen"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-light text-danger border"
+                                        (click)="onDeleteSubLesson(sub.subLessonId)">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
                                 </div>
                             </li>
 
@@ -110,10 +126,12 @@
                                     </div>
                                 </div>
                                 <div class="action-buttons d-flex gap-2">
-                                    <button class="btn btn-sm btn-light text-primary border"><i
-                                            class="fas fa-pen"></i></button>
-                                    <button class="btn btn-sm btn-light text-danger border"><i
-                                            class="fas fa-trash-alt"></i>
+                                    <button class="btn btn-sm btn-light text-primary border" data-bs-toggle="modal"
+                                        data-bs-target="#subLessonModal" (click)="openEditSubLessonModal(doc, 'document')">
+                                        <i class="fas fa-pen"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-light text-danger border" (click)="onDeleteDocument(doc.documentId)">
+                                        <i class="fas fa-trash-alt"></i>
                                     </button>
                                 </div>
                             </li>
@@ -206,6 +224,110 @@
                 </button>
             </div>
 
+        </div>
+    </div>
+</div>
+
+<!-- ===== SubLesson Modal (Add/Edit) ===== -->
+<div class="modal fade" id="subLessonModal" tabindex="-1" aria-labelledby="subLessonModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg rounded-4">
+            <!-- Header -->
+            <div class="modal-header border-0 px-4 pt-4 pb-2">
+                <h5 class="modal-title fw-bold" id="subLessonModalLabel">
+                    <ng-container [ngSwitch]="subLessonFormModel.type">
+                        <span *ngSwitchCase="'document'">{{ isEditSubLesson ? 'Chỉnh sửa Tài liệu' : 'Thêm Tài liệu mới'
+                            }}</span>
+                        <span *ngSwitchCase="'quiz'">{{ isEditSubLesson ? 'Chỉnh sửa Quizz' : 'Thêm Quizz mới' }}</span>
+                        <span *ngSwitchDefault>{{ isEditSubLesson ? 'Chỉnh sửa Bài học' : 'Thêm Bài học mới' }}</span>
+                    </ng-container>
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" id="closeSubLessonModal"
+                    aria-label="Close"></button>
+            </div>
+
+            <!-- Body -->
+            <div class="modal-body px-4 py-3">
+                <form #subLessonForm="ngForm">
+                    <div class="row g-3">
+                        <!-- Tên bài học -->
+                        <div class="col-md-12">
+                            <label class="form-label fw-semibold">Tên bài học <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control rounded-3" name="sTitle"
+                                [(ngModel)]="subLessonFormModel.title" required placeholder="Nhập tên bài học...">
+                        </div>
+
+                        <!-- Link (Video/File/Quiz) -->
+                        <div class="col-md-12">
+                            <label class="form-label fw-semibold">
+                                <span *ngIf="subLessonFormModel.type === 'document'">Đường dẫn tài liệu
+                                    (URL/Drive)</span>
+                                <span *ngIf="subLessonFormModel.type === 'quiz'">Link Quizz (Iframe/URL)</span>
+                                <span *ngIf="subLessonFormModel.type === 'video' || !subLessonFormModel.type">Video
+                                    Link</span>
+                                <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0 rounded-start-3">
+                                    <i class="fas"
+                                        [class.fa-video]="subLessonFormModel.type === 'video' || !subLessonFormModel.type"
+                                        [class.fa-file-pdf]="subLessonFormModel.type === 'document'"
+                                        [class.fa-question-circle]="subLessonFormModel.type === 'quiz'"
+                                        [class.text-primary]="subLessonFormModel.type === 'video' || !subLessonFormModel.type"
+                                        [class.text-info]="subLessonFormModel.type === 'document'"
+                                        [class.text-warning]="subLessonFormModel.type === 'quiz'"></i>
+                                </span>
+                                <input type="text" class="form-control rounded-end-3" name="sVideoLink"
+                                    [(ngModel)]="subLessonFormModel.videoLink" required
+                                    [placeholder]="subLessonFormModel.type === 'document' ? 'Dán link tài liệu...' : (subLessonFormModel.type === 'quiz' ? 'Dán link quizz...' : 'https://www.youtube.com/watch?v=...')">
+                            </div>
+                        </div>
+
+                        <!-- Content -->
+                        <div class="col-md-12" *ngIf="subLessonFormModel.type !== 'document'">
+                            <label class="form-label fw-semibold">Nội dung bài học <span
+                                    class="text-danger">*</span></label>
+                            <textarea class="form-control rounded-3" name="sContent" rows="3"
+                                [(ngModel)]="subLessonFormModel.content" required
+                                placeholder="Mô tả nội dung học..."></textarea>
+                        </div>
+
+                        <!-- Description -->
+                        <div class="col-md-12">
+                            <label class="form-label fw-semibold">Ghi chú / Mô tả thêm</label>
+                            <textarea class="form-control rounded-3" name="sDescription" rows="2"
+                                [(ngModel)]="subLessonFormModel.description"
+                                placeholder="Tóm tắt yêu cầu hoặc nội dung..."></textarea>
+                        </div>
+
+                        <!-- Settings -->
+                        <div class="col-md-12">
+                            <div
+                                class="d-flex align-items-center justify-content-between p-3 border rounded-3 bg-light">
+                                <div>
+                                    <p class="mb-0 fw-bold">Khóa nội dung</p>
+                                    <small class="text-muted">Học viên chỉ có thể xem sau khi mở khóa.</small>
+                                </div>
+                                <div class="form-check form-switch mb-0">
+                                    <input class="form-check-input" type="checkbox" name="sIsLocked"
+                                        [(ngModel)]="subLessonFormModel.isLocked"
+                                        style="width: 2.5em; height: 1.25em; cursor: pointer;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Footer -->
+            <div class="modal-footer border-0 px-4 pb-4 pt-2">
+                <button type="button" class="btn btn-light px-4 fw-semibold rounded-3"
+                    data-bs-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary px-4 fw-semibold rounded-3 shadow-sm"
+                    [disabled]="subLessonForm.invalid" (click)="onSubmitSubLesson()">
+                    {{ isEditSubLesson ? 'Cập nhật' : 'Lưu bài học' }}
+                </button>
+            </div>
         </div>
     </div>
 </div>
