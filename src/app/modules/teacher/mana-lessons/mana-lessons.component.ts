@@ -21,6 +21,7 @@ export class ManaLessonsComponent implements OnInit {
   subLessons: SubLessonsResponseModel[] = [];
   documents: DocumentsResponseModel[] = [];
   selectedLesson: LessonsResponseModel | null = null;
+  selectedDocument: DocumentsResponseModel | null = null;
 
   courseId: string | null = null;
   lessonId: string | null = null;
@@ -34,6 +35,20 @@ export class ManaLessonsComponent implements OnInit {
     title: '',
     isLocked: false,
   }
+
+  newSubLesson: any = {
+    title: '',
+    content: '',
+    description: '',
+    createDate: new Date(),
+    isDelete: false,
+    isLocked: false,
+    videoLink: ''
+  };
+
+  subLessonFormModel: any = { ...this.newSubLesson };
+  selectedSubLesson: SubLessonsResponseModel | null = null;
+  isEditSubLesson: boolean = false;
 
 
   ngOnInit(): void {
@@ -96,6 +111,122 @@ export class ManaLessonsComponent implements OnInit {
     }
   }
 
+  // --- SubLesson Handlers ---
+
+  openAddSubLessonModal(type: string = 'video') {
+    this.isEditSubLesson = false;
+    this.subLessonFormModel = {
+      title: '',
+      content: '',
+      description: '',
+      createDate: new Date(),
+      isDelete: false,
+      isLocked: false,
+      videoLink: '',
+      type: type // track type: video, document, quiz
+    };
+  }
+
+  openEditSubLessonModal(content: any, type: string = 'video') {
+    this.isEditSubLesson = true;
+    if (type === 'video') {
+      this.selectedSubLesson = content;
+      this.subLessonFormModel = { ...content, type: 'video' };
+    } else {
+      this.selectedDocument = content;
+      this.subLessonFormModel = {
+        title: content.title,
+        description: content.description,
+        videoLink: content.fileUrl,
+        isLocked: content.isLocked,
+        type: 'document'
+      };
+    }
+  }
+
+  onSubmitSubLesson() {
+    if (this.subLessonFormModel.type === 'document') {
+      this.submitDocument();
+    } else {
+      this.submitVideoLesson();
+    }
+  }
+
+  private submitVideoLesson() {
+    if (this.isEditSubLesson && this.selectedSubLesson) {
+      this.lessonsService.updateSubLesson(this.selectedSubLesson.subLessonId, this.subLessonFormModel).subscribe({
+        next: (res) => {
+          NotifySuccess('Cập nhật bài học thành công!');
+          this.loadSubLessons(this.selectedLesson?.lessonId || '');
+          document.getElementById('closeSubLessonModal')?.click();
+        },
+        error: (err) => NotifyError(err.error.message || 'Lỗi cập nhật bài học')
+      });
+    } else {
+      this.lessonsService.createSubLesson(this.subLessonFormModel, this.selectedLesson?.lessonId || '').subscribe({
+        next: (res) => {
+          NotifySuccess('Thêm bài học thành công!');
+          this.loadSubLessons(this.selectedLesson?.lessonId || '');
+          document.getElementById('closeSubLessonModal')?.click();
+        },
+        error: (err) => NotifyError(err.error.message || 'Lỗi thêm bài học')
+      });
+    }
+  }
+
+  private submitDocument() {
+    const docData = {
+      title: this.subLessonFormModel.title,
+      description: this.subLessonFormModel.description,
+      fileUrl: this.subLessonFormModel.videoLink,
+      isLocked: this.subLessonFormModel.isLocked
+    };
+
+    if (this.isEditSubLesson && this.selectedDocument) {
+      this.documentService.updateDocument(this.selectedDocument.documentId, docData).subscribe({
+        next: (res) => {
+          NotifySuccess('Cập nhật tài liệu thành công!');
+          this.loadDocuments(this.selectedLesson?.lessonId || '');
+          document.getElementById('closeSubLessonModal')?.click();
+        },
+        error: (err) => NotifyError(err.error.message || 'Lỗi cập nhật tài liệu')
+      });
+    } else {
+      this.documentService.createDocument(docData, this.selectedLesson?.lessonId || '').subscribe({
+        next: (res) => {
+          NotifySuccess('Thêm tài liệu thành công!');
+          this.loadDocuments(this.selectedLesson?.lessonId || '');
+          document.getElementById('closeSubLessonModal')?.click();
+        },
+        error: (err) => NotifyError(err.error.message || 'Lỗi thêm tài liệu')
+      });
+    }
+  }
+
+  onDeleteSubLesson(subLessonId: string) {
+    if (confirm('Bạn có chắc chắn muốn xóa bài học này?')) {
+      this.lessonsService.deleteSubLesson(subLessonId).subscribe({
+        next: (res) => {
+          NotifySuccess('Xóa bài học thành công!');
+          this.loadSubLessons(this.selectedLesson?.lessonId || '');
+        },
+        error: (err) => NotifyError(err.error.message || 'Lỗi xóa bài học')
+      });
+    }
+  }
+
+  onDeleteDocument(documentId: string) {
+    if (confirm('Bạn có chắc chắn muốn xóa tài liệu này?')) {
+      this.documentService.deleteDocument(documentId).subscribe({
+        next: (res) => {
+          NotifySuccess('Xóa tài liệu thành công!');
+          this.loadDocuments(this.selectedLesson?.lessonId || '');
+        },
+        error: (err) => NotifyError(err.error.message || 'Lỗi xóa tài liệu')
+      });
+    }
+  }
+
 
 
 
@@ -134,7 +265,7 @@ export class ManaLessonsComponent implements OnInit {
   }
 
   loadSubLessons(lessonId: string): void {
-    this.lessonsService.getSubLessonByLessonId(lessonId).subscribe({
+    this.lessonsService.getManaSubLessonByLessonId(lessonId).subscribe({
       next: (response: ResultResponse<SubLessonsResponseModel[]>) => {
         this.subLessons = response.result;
       },

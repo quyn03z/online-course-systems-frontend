@@ -154,3 +154,64 @@ $shadow-sm: 0 2px 12px rgba(0, 0, 0, 0.08);
 .cursor-pointer {
     cursor: pointer;
 }
+
+
+
+// Thêm vào file .scss của bạn
+.btn-group {
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+
+    .btn {
+        padding: 0.4rem 1rem;
+        font-weight: 500;
+
+        &:first-child {
+            border-top-left-radius: 8px;
+            border-bottom-left-radius: 8px;
+        }
+
+        &:last-child {
+            border-top-right-radius: 8px;
+            border-bottom-right-radius: 8px;
+        }
+    }
+}
+
+.dropdown-menu {
+    border: none;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    border-radius: 12px;
+    padding: 0.5rem;
+
+    .dropdown-item {
+        border-radius: 8px;
+        padding: 0.6rem 1rem;
+        transition: all 0.2s;
+
+        &:hover {
+            background: #f8f9ff;
+            transform: translateX(5px);
+        }
+
+        i {
+            width: 20px;
+        }
+    }
+}
+
+// Cho icon buttons
+.d-flex.gap-2 {
+
+    .btn-outline-primary,
+    .btn-outline-success,
+    .btn-outline-warning {
+        border-width: 2px;
+        padding: 0.4rem 0.8rem;
+
+        &:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        }
+    }
+}

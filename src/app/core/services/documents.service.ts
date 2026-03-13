@@ -28,8 +28,19 @@ export class DocumentsService {
   private apiService = inject(ApiService);
 
   getDocumentsByLessonId(lessonId: string): Observable<ResultResponse<DocumentsResponseModel[]>> {
-    return this.apiService.get<ResultResponse<DocumentsResponseModel[]>>(`Documents/alls-documents/${lessonId}`);
+    return this.apiService.get<ResultResponse<DocumentsResponseModel[]>>(`ManaDocuments/alls-documents/${lessonId}`);
   }
 
+  createDocument(document: any, lessonId: string): Observable<ResultResponse<DocumentsResponseModel>> {
+    return this.apiService.post<ResultResponse<DocumentsResponseModel>>(`ManaDocuments/add-document/${lessonId}`, document);
+  }
+
+  updateDocument(documentId: string, document: any): Observable<ResultResponse<DocumentsResponseModel>> {
+    return this.apiService.put<ResultResponse<DocumentsResponseModel>>(`ManaDocuments/update-document/${documentId}`, document);
+  }
+
+  deleteDocument(documentId: string): Observable<ResultResponse<boolean>> {
+    return this.apiService.delete<ResultResponse<boolean>>(`ManaDocuments/remove-document/${documentId}`);
+  }
 
 }
