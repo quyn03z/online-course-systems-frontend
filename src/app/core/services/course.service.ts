@@ -17,7 +17,13 @@ export interface CourseResponseModel {
   description: string;
   image: string;
   price: number;
+  creator: string;
   courseTypeName: string;
+}
+
+export interface CourseTypeResponseModel {
+  courseTypeId: number;
+  name: string;
 }
 
 export interface CourseManaResponseModel {
@@ -42,10 +48,15 @@ export class CourseService {
 
   private apiService = inject(ApiService);
 
-  getAllCourses(page: number = 1, pageSize: number = 9) {
-    const params = new HttpParams()
+  getAllCourses(page: number = 1, pageSize: number = 9, search: string = '', courseTypeId: number | null = null, priceOrder: number | null = null) {
+    let params = new HttpParams()
       .set('page', page.toString())
       .set('pageSize', pageSize.toString());
+
+    if (search) params = params.set('search', search);
+    if (courseTypeId !== null && courseTypeId !== undefined) params = params.set('courseTypeId', courseTypeId.toString());
+    if (priceOrder !== null && priceOrder !== undefined) params = params.set('priceOrder', priceOrder.toString());
+
     return this.apiService.get<ResultResponse<CourseResponseModel[]>>('course/get-alls-course', params);
   }
 
@@ -74,7 +85,7 @@ export class CourseService {
   }
 
   getAllsCourseType() {
-    return this.apiService.get<any>('CourseType/alls-courseType');
+    return this.apiService.get<ResultResponse<CourseTypeResponseModel[]>>('Course/alls-courseType');
   }
 
   updateCourse(courseId: number, course: any) {
