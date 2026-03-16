@@ -6,6 +6,7 @@ import { CourseResponseModel, CourseService, ResultResponse } from '../../../cor
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NotifyError, NotifySuccess } from '../../../core/utils/notification.util';
+import { QuizzResponseModel, QuizzService } from '../../../core/services/quizz.service';
 
 @Component({
   selector: 'app-mana-lessons',
@@ -23,6 +24,9 @@ export class ManaLessonsComponent implements OnInit {
   selectedLesson: LessonsResponseModel | null = null;
   selectedDocument: DocumentsResponseModel | null = null;
 
+  quizzes: QuizzResponseModel | null = null;
+  selectedQuizz: QuizzResponseModel | null = null;
+
   courseId: string | null = null;
   lessonId: string | null = null;
 
@@ -30,6 +34,8 @@ export class ManaLessonsComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private documentService = inject(DocumentsService);
   private courseService = inject(CourseService);
+  private quizzService = inject(QuizzService);
+
 
   newLesson: any = {
     title: '',
@@ -71,9 +77,9 @@ export class ManaLessonsComponent implements OnInit {
           title: '',
           isLocked: false,
         }
-        // Đóng modal sau khi tạo thành công
         document.getElementById('closeLessonModal')?.click();
         NotifySuccess('Tạo bài học thành công!');
+        this.selectLesson(response.result);
       },
       error: (err: any) => {
         NotifyError(err.error.message || 'Không thể tạo bài học');
@@ -86,7 +92,6 @@ export class ManaLessonsComponent implements OnInit {
     this.lessonsService.updateLesson(this.selectedLesson?.lessonId || '', this.selectedLesson!).subscribe({
       next: (response: ResultResponse<LessonsResponseModel>) => {
         this.selectedLesson = response.result;
-        // Đóng modal sau khi cập nhật thành công
         document.getElementById('closeEditLessonModal')?.click();
         NotifySuccess('Cập nhật bài học thành công!');
       },
@@ -111,7 +116,6 @@ export class ManaLessonsComponent implements OnInit {
     }
   }
 
-  // --- SubLesson Handlers ---
 
   openAddSubLessonModal(type: string = 'video') {
     this.isEditSubLesson = false;
@@ -123,7 +127,7 @@ export class ManaLessonsComponent implements OnInit {
       isDelete: false,
       isLocked: false,
       videoLink: '',
-      type: type // track type: video, document, quiz
+      type: type
     };
   }
 
@@ -132,7 +136,7 @@ export class ManaLessonsComponent implements OnInit {
     if (type === 'video') {
       this.selectedSubLesson = content;
       this.subLessonFormModel = { ...content, type: 'video' };
-    } else {
+    } else if (type === 'document') {
       this.selectedDocument = content;
       this.subLessonFormModel = {
         title: content.title,
@@ -141,12 +145,22 @@ export class ManaLessonsComponent implements OnInit {
         isLocked: content.isLocked,
         type: 'document'
       };
+    } else if (type === 'quiz') {
+      this.selectedQuizz = content;
+      this.subLessonFormModel = {
+        title: content.title,
+        quizzTime: content.quizzTime,
+        isLocked: content.isLocked,
+        type: 'quiz'
+      };
     }
   }
 
   onSubmitSubLesson() {
     if (this.subLessonFormModel.type === 'document') {
       this.submitDocument();
+    } else if (this.subLessonFormModel.type === 'quiz') {
+      this.submitQuizz();
     } else {
       this.submitVideoLesson();
     }
@@ -227,7 +241,58 @@ export class ManaLessonsComponent implements OnInit {
     }
   }
 
+  onDeleteQuizz(quizzId: string) {
+    if (confirm('Bạn có chắc chắn muốn xóa bài trắc nghiệm này?')) {
+      this.quizzService.deleteQuizz(quizzId).subscribe({
+        next: (res) => {
+          NotifySuccess('Xóa trắc nghiệm thành công!');
+          this.quizzes = null;
+          this.loadQuizz(this.selectedLesson?.lessonId || '');
+        },
+        error: (err) => NotifyError(err.error.message || 'Lỗi xóa trắc nghiệm')
+      });
+    }
+  }
 
+  private submitQuizz() {
+    const quizzData = {
+      title: this.subLessonFormModel.title,
+      quizzTime: this.subLessonFormModel.quizzTime || 15,
+      lessonId: this.selectedLesson?.lessonId,
+      isLocked: this.subLessonFormModel.isLocked
+    };
+
+    if (this.isEditSubLesson && this.selectedQuizz) {
+      this.quizzService.updateQuizz(this.selectedQuizz.quizzId, quizzData).subscribe({
+        next: (res) => {
+          NotifySuccess('Cập nhật trắc nghiệm thành công!');
+          this.loadQuizz(this.selectedLesson?.lessonId || '');
+          document.getElementById('closeQuizzModal')?.click();
+        },
+        error: (err) => NotifyError(err.error.message || 'Lỗi cập nhật trắc nghiệm')
+      });
+    } else {
+      this.quizzService.addQuizz(quizzData, this.selectedLesson?.lessonId || '').subscribe({
+        next: (res) => {
+          NotifySuccess('Thêm trắc nghiệm thành công!');
+          this.loadQuizz(this.selectedLesson?.lessonId || '');
+          document.getElementById('closeQuizzModal')?.click();
+        },
+        error: (err) => NotifyError(err.error.message || 'Lỗi thêm trắc nghiệm')
+      });
+    }
+  }
+
+  loadQuizz(lessonId: string): void {
+    this.quizzService.getQuizzManaByLessonId(lessonId).subscribe({
+      next: (response: ResultResponse<QuizzResponseModel>) => {
+        this.quizzes = response.result;
+      },
+      error: (err: any) => {
+        console.error(err);
+      }
+    });
+  }
 
 
   loadCourse(courseId: string): void {
@@ -260,8 +325,10 @@ export class ManaLessonsComponent implements OnInit {
     this.selectedLesson = lesson;
     this.subLessons = [];
     this.documents = [];
+    this.quizzes = null;
     this.loadSubLessons(lesson.lessonId);
     this.loadDocuments(lesson.lessonId);
+    this.loadQuizz(lesson.lessonId);
   }
 
   loadSubLessons(lessonId: string): void {
