@@ -11,6 +11,12 @@ export interface QuizzResponseModel {
   quizzTime: number;
 }
 
+
+export interface MenteeScoreRequestModel {
+  quizId: string;
+  score: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -39,5 +45,7 @@ export class QuizzService {
     return this.apiService.delete<ResultResponse<any>>(`ManaQuizz/remove-quizz/${quizzId}`);
   }
 
-
+  addMenteeScore(menteeScore: MenteeScoreRequestModel): Observable<ResultResponse<any>> {
+    return this.apiService.post<ResultResponse<any>>(`MenteeScore/add-menteeScore`, menteeScore);
+  }
 }

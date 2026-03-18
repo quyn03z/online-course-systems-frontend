@@ -5,7 +5,7 @@ import { ActivatedRoute, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { DocumentsResponseModel, DocumentsService } from '../../core/services/documents.service';
-import { QuizzResponseModel, QuizzService } from '../../core/services/quizz.service';
+import { MenteeScoreRequestModel, QuizzResponseModel, QuizzService } from '../../core/services/quizz.service';
 import { QuestionsResponseModel, QuestionsService } from '../../core/services/questions.service';
 
 @Component({
@@ -25,7 +25,7 @@ export class LessonsComponent implements OnInit {
   quizzes: QuizzResponseModel | null = null;
   currentQuizz: QuizzResponseModel | null = null;
   questions: QuestionsResponseModel[] = [];
-  
+
   // Quiz State
   isDoingQuizz: boolean = false;
   showResult: boolean = false;
@@ -84,6 +84,24 @@ export class LessonsComponent implements OnInit {
         console.error(err);
       }
     })
+  }
+
+
+  addMenteeScore(): void {
+    if (!this.currentQuizz) return;
+    this.submitQuizz();
+    const menteeScore: MenteeScoreRequestModel = {
+      quizId: this.currentQuizz.quizzId,
+      score: this.score
+    };
+    this.quizzService.addMenteeScore(menteeScore).subscribe({
+      next: (response: ResultResponse<any>) => {
+        console.log("Score added successfully", response);
+      },
+      error: (err: any) => {
+        console.error("Error adding score", err);
+      }
+    });
   }
 
 
