@@ -1,28 +1,84 @@
-import { Component, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, AfterViewInit, ElementRef, ViewChild, OnInit, signal, inject } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
+import { AdminService } from '../../../../core/services/admin.service';
+import { CommonModule } from '@angular/common';
 
 Chart.register(...registerables);
+
+export interface AdminDashboardInfo {
+  totalCourse: number;
+  totalUser: number;
+  totalCost: number;
+}
 
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './admin-dashboard.component.html',
   styleUrl: './admin-dashboard.component.scss'
 })
-export class AdminDashboardComponent implements AfterViewInit {
+export class AdminDashboardComponent implements AfterViewInit, OnInit {
+
+  private adminService = inject(AdminService);
+  public adminDashboardModel = signal<AdminDashboardInfo>({
+    totalCourse: 0,
+    totalUser: 0,
+    totalCost: 0
+  });
+
+  public chartData = signal<any>(null);
+  private areaChartInstance: Chart | null = null;
+  private barChartInstance: Chart | null = null;
 
   @ViewChild('areaChart') areaChartRef!: ElementRef<HTMLCanvasElement>;
   @ViewChild('barChart') barChartRef!: ElementRef<HTMLCanvasElement>;
 
+  ngOnInit(): void {
+    this.getInforDashboard();
+    this.getChartDashboard();
+  }
+
+  getInforDashboard() {
+    this.adminService.getInforDashboard().subscribe((res: any) => {
+      if (res.succeeded) {
+        this.adminDashboardModel.set(res.result);
+      }
+    });
+  }
+
+  getChartDashboard() {
+    this.adminService.getChartDashboard().subscribe((res: any) => {
+      if (res.succeeded) {
+        this.chartData.set(res.result);
+        if (this.areaChartRef && this.barChartRef) {
+          this.renderAreaChart(res.result.labels, res.result.data);
+          this.renderBarChart(res.result.labels, res.result.data);
+        }
+      }
+    });
+  }
+
   ngAfterViewInit(): void {
-    new Chart(this.areaChartRef.nativeElement, {
+    // Không vẽ ngay lập tức nếu chưa có dữ liệu, hoặc vẽ với mảng rỗng
+    if (this.chartData()) {
+      this.renderAreaChart(this.chartData().labels, this.chartData().data);
+      this.renderBarChart(this.chartData().labels, this.chartData().data);
+    }
+  }
+
+  renderAreaChart(labels: string[], data: number[]) {
+    if (this.areaChartInstance) {
+      this.areaChartInstance.destroy();
+    }
+
+    this.areaChartInstance = new Chart(this.areaChartRef.nativeElement, {
       type: 'line',
       data: {
-        labels: ['Mar 1', 'Mar 3', 'Mar 5', 'Mar 7', 'Mar 9', 'Mar 11', 'Mar 13'],
+        labels: labels,
         datasets: [{
           label: 'Revenue',
-          data: [10000, 30000, 20000, 31000, 25000, 32000, 38000],
+          data: data,
           borderColor: '#4e73df',
           backgroundColor: 'rgba(78,115,223,0.15)',
           fill: true,
@@ -33,17 +89,23 @@ export class AdminDashboardComponent implements AfterViewInit {
       options: {
         responsive: true,
         plugins: { legend: { display: false } },
-        scales: { y: { beginAtZero: true, ticks: { callback: (v) => v.toLocaleString() } } }
+        scales: { y: { beginAtZero: true, ticks: { callback: (v: any) => v.toLocaleString() + ' ₫' } } }
       }
     });
+  }
 
-    new Chart(this.barChartRef.nativeElement, {
+  renderBarChart(labels: string[], data: number[]) {
+    if (this.barChartInstance) {
+      this.barChartInstance.destroy();
+    }
+
+    this.barChartInstance = new Chart(this.barChartRef.nativeElement, {
       type: 'bar',
       data: {
-        labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+        labels: labels,
         datasets: [{
           label: 'Revenue',
-          data: [4215, 5312, 6251, 7841, 9821, 14790],
+          data: data,
           backgroundColor: '#4e73df',
           borderRadius: 4,
         }]
@@ -51,7 +113,7 @@ export class AdminDashboardComponent implements AfterViewInit {
       options: {
         responsive: true,
         plugins: { legend: { display: false } },
-        scales: { y: { beginAtZero: true, ticks: { callback: (v) => v.toLocaleString() } } }
+        scales: { y: { beginAtZero: true, ticks: { callback: (v: any) => v.toLocaleString() + ' ₫' } } }
       }
     });
   }
