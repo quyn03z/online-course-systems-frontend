@@ -45,4 +45,15 @@ export class AdminService {
   deleteRole(roleId: number) {
     return this.apiService.delete<ResultResponse<any>>(`Role/delete-role/${roleId}`);
   }
+
+
+  getInforDashboard() {
+    return this.apiService.get<ResultResponse<any>>('Admin/infor-dashboard');
+  }
+
+
+
+  getChartDashboard() {
+    return this.apiService.get<ResultResponse<any>>('Admin/chart-dashboard');
+  }
 }

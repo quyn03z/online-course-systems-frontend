@@ -2,40 +2,55 @@
     <h1 class="mt-4">Dashboard</h1>
 
     <!-- Stat Cards -->
-    <div class="row">
-        <div class="col-xl-3 col-md-6">
-            <div class="card bg-primary text-white mb-4">
-                <div class="card-body">Tổng khoá học</div>
-                <div class="card-footer d-flex align-items-center justify-content-between">
-                    <a class="small text-white stretched-link" href="#">View Details</a>
-                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+    <div class="row g-4 mb-4">
+        <!-- Tổng khóa học -->
+        <div class="col-xl-4 col-md-6">
+            <div class="card stat-card card-primary text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <div class="stat-label">Tổng khóa học</div>
+                            <div class="stat-value">{{adminDashboardModel().totalCourse}}</div>
+                        </div>
+                        <div class="icon-shape shadow-sm">
+                            <i class="fas fa-book-open"></i>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-xl-3 col-md-6">
-            <div class="card bg-warning text-white mb-4">
-                <div class="card-body">Tổng người dùng</div>
-                <div class="card-footer d-flex align-items-center justify-content-between">
-                    <a class="small text-white stretched-link" href="#">View Details</a>
-                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+
+        <!-- Tổng người dùng -->
+        <div class="col-xl-4 col-md-6">
+            <div class="card stat-card card-warning text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <div class="stat-label">Tổng người dùng</div>
+                            <div class="stat-value">{{adminDashboardModel().totalUser}}</div>
+                        </div>
+                        <div class="icon-shape shadow-sm">
+                            <i class="fas fa-users"></i>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-xl-3 col-md-6">
-            <div class="card bg-success text-white mb-4">
-                <div class="card-body">Doanh thu</div>
-                <div class="card-footer d-flex align-items-center justify-content-between">
-                    <a class="small text-white stretched-link" href="#">View Details</a>
-                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-3 col-md-6">
-            <div class="card bg-danger text-white mb-4">
-                <div class="card-body">Báo cáo lỗi</div>
-                <div class="card-footer d-flex align-items-center justify-content-between">
-                    <a class="small text-white stretched-link" href="#">View Details</a>
-                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+
+        <!-- Doanh thu -->
+        <div class="col-xl-4 col-md-6">
+            <div class="card stat-card card-success text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <div class="stat-label">Doanh thu</div>
+                            <div class="stat-value">{{adminDashboardModel().totalCost |
+                                currency:'VND':'symbol':'1.0-0'}}</div>
+                        </div>
+                        <div class="icon-shape shadow-sm">
+                            <i class="fas fa-wallet"></i>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
