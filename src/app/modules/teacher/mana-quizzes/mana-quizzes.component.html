@@ -1,0 +1,180 @@
+<div class="container-fluid px-4 mt-4 course-content-container">
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <a href="javascript:history.back()" class="text-decoration-none text-muted mb-2 d-inline-block">
+                <i class="fas fa-arrow-left me-2"></i> Quay lại
+            </a>
+            <h5 class="fw-bold text-dark mb-0">Quản lý Câu hỏi Trắc nghiệm</h5>
+            <br>
+            <h3 class="fw-bold text-blue mb-0" *ngIf="quizz">{{ quizz.title }}</h3>
+        </div>
+        <button class="btn btn-primary" (click)="openModalAdd()">
+            <i class="fas fa-plus-circle me-2"></i> Thêm Câu hỏi
+        </button>
+    </div>
+
+    <!-- Question List Card -->
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-header bg-white py-3">
+            <h5 class="mb-0 fw-bold">Danh sách Câu hỏi</h5>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th scope="col" class="ps-4" style="width: 5%">STT</th>
+                            <th scope="col" style="width: 45%">Nội dung câu hỏi</th>
+                            <th scope="col" style="width: 35%">Các đáp án</th>
+                            <th scope="col" class="text-end pe-4" style="width: 15%">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Question Row -->
+                        <tr *ngFor="let q of questions; let i = index">
+                            <td class="ps-4 fw-bold text-muted">{{ i + 1 }}</td>
+                            <td>
+                                <p class="mb-2 text-dark fw-semibold">{{ q.questionText }}</p>
+                                <!-- Badge chỉ định loại câu hỏi -->
+                                <span class="badge bg-info text-white me-1" *ngIf="q.typeId === 1">Một đáp
+                                    án</span>
+                                <span class="badge bg-warning text-dark" *ngIf="q.typeId === 2">Nhiều đáp
+                                    án</span>
+                                <span class="badge bg-secondary text-white" *ngIf="q.typeId === 3">Đúng/Sai</span>
+                            </td>
+                            <td>
+                                <ul class="list-unstyled mb-0 small">
+                                    <!-- Loop qua các đáp án -->
+                                    <li *ngFor="let a of q.answers; let ansIndex = index" class="mb-2"
+                                        [class.text-success]="a.isCorrect" [class.fw-bold]="a.isCorrect">
+                                        <i class="fas" [class.fa-check-circle]="a.isCorrect"
+                                            [class.fa-circle]="!a.isCorrect" [class.text-muted]="!a.isCorrect"></i>
+                                        <!-- Tự động sinh A, B, C, D dựa theo index -->
+                                        {{ ['A', 'B', 'C', 'D', 'E', 'F'][ansIndex] }}. {{ a.answerText }}
+                                    </li>
+                                </ul>
+                            </td>
+                            <td class="text-end pe-4">
+                                <button class="btn btn-sm btn-light text-primary me-2 border" title="Sửa"
+                                    (click)="onEditQuestion(q.questionId)">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-sm btn-light text-danger border" title="Xóa"
+                                    (click)="onRemoveQuestion(q.questionId)">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </td>
+                        </tr>
+
+                        <!-- Empty State -->
+                        <tr *ngIf="!questions || questions.length === 0">
+                            <td colspan="4" class="text-center py-5 text-muted">
+                                <i class="fas fa-folder-open fs-1 text-light mb-3"></i>
+                                <p class="mb-0">Chưa có câu hỏi nào trong bài trắc nghiệm này.</p>
+                                <button class="btn btn-sm btn-outline-primary mt-3" (click)="openModalAdd()">
+                                    Thêm câu hỏi đầu tiên
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Thêm/Sửa nhanh (Chỉ HTML minh họa, chưa xử lý bind Form FormArray) -->
+<div class="modal fade" [class.show]="showModalAdd" [style.display]="showModalAdd ? 'block' : 'none'" id="questionModal"
+    tabindex="-1" aria-hidden="true" *ngIf="showModalAdd" (click)="closeModalAdd()">
+    <div class="modal-dialog modal-lg modal-dialog-centered" (click)="$event.stopPropagation()">
+        <div class="modal-content border-0 shadow-lg rounded-4">
+            <div class="modal-header border-0 px-4 pt-4 pb-2">
+                <h5 class="modal-title fw-bold">{{ isEdit ? 'Cập nhật Câu hỏi' : 'Thêm Câu hỏi mới' }}</h5>
+                <button type="button" class="btn-close" (click)="closeModalAdd()" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body px-4 py-3">
+                <form>
+                    <div class="row g-4">
+                        <div class="col-md-12">
+                            <label class="form-label fw-semibold">Loại câu hỏi <span
+                                    class="text-danger">*</span></label>
+                            <select class="form-select rounded-3" name="qType" [(ngModel)]="questionFormModel.typeId"
+                                (change)="onQuestionTypeChange()">
+                                <option value="1">Một đáp án (Radio)</option>
+                                <option value="2">Nhiều đáp án (Checkbox)</option>
+                                <option value="3">Đúng/Sai</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-12">
+                            <label class="form-label fw-semibold">Nội dung câu hỏi <span
+                                    class="text-danger">*</span></label>
+                            <textarea class="form-control rounded-3" name="qText" rows="3"
+                                [(ngModel)]="questionFormModel.questionText" required
+                                placeholder="Nhập nội dung câu hỏi trắc nghiệm..."></textarea>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <label class="form-label fw-semibold mb-0">Các đáp án <span
+                                        class="text-danger">*</span></label>
+                                <small class="text-success fw-semibold"><i class="fas fa-info-circle me-1"></i> Đánh dấu
+                                    tích vào đáp án ĐÚNG</small>
+                            </div>
+
+                            <div class="input-group mb-3 shadow-sm rounded-3"
+                                *ngFor="let ans of questionFormModel.answers; let idx = index">
+                                <div class="input-group-text border-end-0 px-3 cursor-pointer"
+                                    [class.bg-success]="ans.isCorrect" [class.bg-opacity-10]="ans.isCorrect"
+                                    [class.border-success]="ans.isCorrect" [class.bg-light]="!ans.isCorrect"
+                                    title="Đánh dấu là câu trả lời đúng">
+
+                                    <input *ngIf="questionFormModel.typeId == 1 || questionFormModel.typeId == 3"
+                                        class="form-check-input mt-0 cursor-pointer" type="radio"
+                                        [name]="'correctAnswer_' + idx" [checked]="ans.isCorrect"
+                                        (change)="onRadioChange(idx)">
+
+                                    <input *ngIf="questionFormModel.typeId == 2"
+                                        class="form-check-input mt-0 cursor-pointer" type="checkbox"
+                                        [name]="'correctAnswerCb_' + idx" [(ngModel)]="ans.isCorrect">
+                                </div>
+
+                                <span class="input-group-text bg-white border-start-0 border-end-0 fw-bold"
+                                    [class.border-success]="ans.isCorrect" [class.text-success]="ans.isCorrect"
+                                    [class.text-primary]="!ans.isCorrect">
+                                    {{ ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'][idx] }}.
+                                </span>
+
+                                <input type="text" class="form-control border-start-0 py-2" name="ansText_{{idx}}"
+                                    [class.border-success]="ans.isCorrect" [(ngModel)]="ans.answerText" required
+                                    [placeholder]="'Nhập nội dung đáp án ' + ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'][idx] + '...'">
+
+                                <button class="btn btn-outline-danger" type="button" title="Xóa đáp án này"
+                                    *ngIf="questionFormModel.typeId != 3" (click)="removeAnswerOption(idx)">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </div>
+
+                            <button type="button" class="btn btn-sm btn-outline-primary mt-1 border-dashed w-100 py-2"
+                                *ngIf="questionFormModel.typeId != 3" (click)="addAnswerOption()">
+                                <i class="fas fa-plus me-1"></i> Thêm đáp án mới
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer border-0 px-4 pb-4 pt-2">
+                <button type="button" class="btn btn-light px-4 fw-semibold rounded-3" (click)="closeModalAdd()">Hủy
+                    bỏ</button>
+                <button type="button" class="btn btn-primary px-4 fw-semibold rounded-3 shadow-sm"
+                    (click)="onSaveQuestion()">Lưu Câu Hỏi</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-backdrop fade show" *ngIf="showModalAdd"></div>
