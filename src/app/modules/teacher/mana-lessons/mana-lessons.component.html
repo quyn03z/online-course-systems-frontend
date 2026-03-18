@@ -158,8 +158,13 @@
                                     </div>
                                 </div>
                                 <div class="action-buttons d-flex gap-2">
+                                    <button class="btn btn-sm btn-outline-info border"
+                                        [routerLink]="['/teacher/mana-quizzes', quiz.quizzId]" title="Quản lý câu hỏi">
+                                        <i class="fas fa-list-ol"></i>
+                                    </button>
                                     <button class="btn btn-sm btn-light text-primary border" data-bs-toggle="modal"
-                                        data-bs-target="#quizzModal" (click)="openEditSubLessonModal(quiz, 'quiz')">
+                                        data-bs-target="#quizzModal" (click)="openEditSubLessonModal(quiz, 'quiz')"
+                                        title="Sửa thông tin">
                                         <i class="fas fa-pen"></i>
                                     </button>
                                     <button class="btn btn-sm btn-light text-danger border"
