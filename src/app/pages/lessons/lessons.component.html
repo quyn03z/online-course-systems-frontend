@@ -69,8 +69,9 @@
                                         questions.length }} câu</small>
                                 </div>
                             </div>
-                            <button class="btn btn-success px-5 rounded-pill shadow hover-scale"
-                                [disabled]="userAnswers.size < questions.length" (click)="submitQuizz()">
+                            <button (click)="addMenteeScore()"
+                                class="btn btn-success px-5 rounded-pill shadow hover-scale"
+                                [disabled]="userAnswers.size < questions.length">
                                 <i class="bi bi-send-check-fill me-2"></i> Nộp bài
                             </button>
                         </div>
