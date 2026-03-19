@@ -136,21 +136,17 @@
                     <div class="permission-grid">
                         <div *ngFor="let perm of permissionList" class="permission-item">
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox"
-                                    [id]="'perm_' + perm.id"
+                                <input class="form-check-input" type="checkbox" [id]="'perm_' + perm.id"
                                     [checked]="isPermissionChecked(perm.id)"
                                     (change)="togglePermission(perm.id, $any($event.target).checked)">
-                                <label class="form-check-label" [for]="'perm_' + perm.id"
-                                    [title]="perm.name">
+                                <label class="form-check-label" [for]="'perm_' + perm.id" [title]="perm.name">
                                     {{ perm.displayName || perm.name }}
                                 </label>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-12 text-center text-muted py-2" *ngIf="permissionList.length === 0">
-                    <small><i class="fas fa-spinner fa-spin me-1"></i> Đang tải danh sách quyền...</small>
-                </div>
+
             </form>
         </div>
         <div class="modal-footer-box">
@@ -194,17 +190,38 @@
                 </div>
                 <div class="col-md-6">
                     <label class="form-label fw-semibold">Vai trò</label>
-                    <select class="form-select" name="newRoleId" [(ngModel)]="newUser.roleId">
+                    <select class="form-select" [(ngModel)]="newUser.roleId" name="newRoleId"
+                        (ngModelChange)="onRoleChangeAdd()">
                         <option value="" disabled>-- Chọn vai trò --</option>
-                        <option *ngFor="let role of roleList" [ngValue]="role.id">{{ role.roleName }}</option>
+                        <option *ngFor="let role of roleList" [value]="role.id">{{ role.roleName }}</option>
                     </select>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label fw-semibold">Trạng thái</label>
-                    <select class="form-select" name="newIsLocked" [(ngModel)]="newUser.isLocked">
+                    <select class="form-select" [(ngModel)]="newUser.isLocked" name="newIsLocked">
                         <option [ngValue]="false">Hoạt động</option>
                         <option [ngValue]="true">Khoá</option>
                     </select>
+                </div>
+
+                <!-- Permissions Section for Add -->
+                <div class="col-12" *ngIf="permissionList.length > 0">
+                    <hr class="my-1">
+                    <label class="form-label fw-semibold mb-2">
+                        <i class="fas fa-shield-alt me-1 text-primary"></i> Phân quyền
+                    </label>
+                    <div class="permission-grid">
+                        <div *ngFor="let perm of permissionList" class="permission-item">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" [id]="'perm_add_' + perm.id"
+                                    [checked]="isPermissionChecked(perm.id)"
+                                    (change)="togglePermission(perm.id, $any($event.target).checked)">
+                                <label class="form-check-label" [for]="'perm_add_' + perm.id">
+                                    {{ perm.displayName || perm.name }}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </form>
         </div>

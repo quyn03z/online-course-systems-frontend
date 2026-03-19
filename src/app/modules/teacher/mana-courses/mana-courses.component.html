@@ -27,7 +27,7 @@
                         </button>
                     </div>
 
-                    <button class="btn btn-sm btn-custom-add" (click)="openModalAdd()">
+                    <button *appHasPermission="'course.create'" class="btn btn-sm btn-custom-add" (click)="openModalAdd()">
                         <i class="fas fa-plus me-1"></i> Thêm Khóa Học
                     </button>
                 </div>
@@ -67,11 +67,11 @@
                         <td>{{ course.courseTypeName }}</td>
                         <td class="text-center">
                             <div class="d-flex justify-content-center gap-2">
-                                <button type="button" class="action-btn edit-btn" title="Chỉnh sửa"
+                                <button *appHasPermission="'course.edit'" type="button" class="action-btn edit-btn" title="Chỉnh sửa"
                                     (click)="onEditCourse(course.courseId)">
                                     <i class="fas fa-pen text-primary"></i>
                                 </button>
-                                <button type="button" class="action-btn delete-btn" title="Xóa"
+                                <button *appHasPermission="'course.delete'" type="button" class="action-btn delete-btn" title="Xóa"
                                     (click)="onDeleteCourse(course.courseId)">
                                     <i class="fas fa-trash-alt text-danger"></i>
                                 </button>

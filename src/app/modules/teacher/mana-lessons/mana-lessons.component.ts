@@ -7,11 +7,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NotifyError, NotifySuccess } from '../../../core/utils/notification.util';
 import { QuizzResponseModel, QuizzService } from '../../../core/services/quizz.service';
+import { HasPermissionDirective } from '../../../core/directives/has-permission.directive';
 
 @Component({
   selector: 'app-mana-lessons',
   standalone: true,
-  imports: [RouterLink, CommonModule, FormsModule],
+  imports: [RouterLink, CommonModule, FormsModule, HasPermissionDirective],
   templateUrl: './mana-lessons.component.html',
   styleUrl: './mana-lessons.component.scss'
 })

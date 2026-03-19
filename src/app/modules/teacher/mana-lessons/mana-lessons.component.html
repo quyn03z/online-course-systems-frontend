@@ -15,7 +15,7 @@
             <div class="card shadow-sm border-0 h-100">
                 <div class="card-header d-flex justify-content-between align-items-center py-3">
                     <h5 class="mb-0 fw-bold">Chương mục</h5>
-                    <button class="btn btn-sm btn-primary" title="Thêm Chương mới" data-bs-toggle="modal"
+                    <button *appHasPermission="'lesson.create'" class="btn btn-sm btn-primary" title="Thêm Chương mới" data-bs-toggle="modal"
                         data-bs-target="#lessonModal">
                         <i class="fas fa-plus me-1"></i> Thêm
                     </button>
@@ -37,9 +37,9 @@
                                 </small>
                             </div>
                             <div class="lesson-actions d-flex gap-2">
-                                <i class="fas fa-edit cursor-pointer text-secondary" title="Sửa" data-bs-toggle="modal"
+                                <i *appHasPermission="'lesson.edit'" class="fas fa-edit cursor-pointer text-secondary" title="Sửa" data-bs-toggle="modal"
                                     data-bs-target="#lessonEditModal"></i>
-                                <i class="fas fa-trash-alt cursor-pointer text-danger" title="Xóa"
+                                <i *appHasPermission="'lesson.delete'" class="fas fa-trash-alt cursor-pointer text-danger" title="Xóa"
                                     (click)="onDeleteLesson(lesson.lessonId)"></i>
                             </div>
                         </button>
@@ -67,15 +67,15 @@
                             chương mục' }}</h5>
                     </div>
                     <div class="d-flex gap-2">
-                        <button class="btn btn-sm btn-primary" [disabled]="!selectedLesson" data-bs-toggle="modal"
+                        <button *appHasPermission="'lesson.create'" class="btn btn-sm btn-primary" [disabled]="!selectedLesson" data-bs-toggle="modal"
                             data-bs-target="#subLessonModal" (click)="openAddSubLessonModal('video')">
                             <i class="fas fa-play-circle me-1"></i> Bài học
                         </button>
-                        <button class="btn btn-sm btn-outline-info" [disabled]="!selectedLesson" data-bs-toggle="modal"
+                        <button *appHasPermission="'lesson.create'" class="btn btn-sm btn-outline-info" [disabled]="!selectedLesson" data-bs-toggle="modal"
                             data-bs-target="#subLessonModal" (click)="openAddSubLessonModal('document')">
                             <i class="fas fa-file-alt me-1"></i> Tài liệu
                         </button>
-                        <button class="btn btn-sm btn-outline-warning" [disabled]="!selectedLesson"
+                        <button *appHasPermission="'quiz.create'" class="btn btn-sm btn-outline-warning" [disabled]="!selectedLesson"
                             data-bs-toggle="modal" data-bs-target="#quizzModal" (click)="openAddSubLessonModal('quiz')">
                             <i class="fas fa-question-circle me-1"></i> Quizz
                         </button>
@@ -100,11 +100,11 @@
                                     </div>
                                 </div>
                                 <div class="action-buttons d-flex gap-2">
-                                    <button class="btn btn-sm btn-light text-primary border" data-bs-toggle="modal"
+                                    <button *appHasPermission="'lesson.edit'" class="btn btn-sm btn-light text-primary border" data-bs-toggle="modal"
                                         data-bs-target="#subLessonModal" (click)="openEditSubLessonModal(sub)">
                                         <i class="fas fa-pen"></i>
                                     </button>
-                                    <button class="btn btn-sm btn-light text-danger border"
+                                    <button *appHasPermission="'lesson.delete'" class="btn btn-sm btn-light text-danger border"
                                         (click)="onDeleteSubLesson(sub.subLessonId)">
                                         <i class="fas fa-trash-alt"></i>
                                     </button>
@@ -125,12 +125,12 @@
                                     </div>
                                 </div>
                                 <div class="action-buttons d-flex gap-2">
-                                    <button class="btn btn-sm btn-light text-primary border" data-bs-toggle="modal"
+                                    <button *appHasPermission="'lesson.edit'" class="btn btn-sm btn-light text-primary border" data-bs-toggle="modal"
                                         data-bs-target="#subLessonModal"
                                         (click)="openEditSubLessonModal(doc, 'document')">
                                         <i class="fas fa-pen"></i>
                                     </button>
-                                    <button class="btn btn-sm btn-light text-danger border"
+                                    <button *appHasPermission="'lesson.delete'" class="btn btn-sm btn-light text-danger border"
                                         (click)="onDeleteDocument(doc.documentId)">
                                         <i class="fas fa-trash-alt"></i>
                                     </button>
@@ -162,12 +162,12 @@
                                         [routerLink]="['/teacher/mana-quizzes', quiz.quizzId]" title="Quản lý câu hỏi">
                                         <i class="fas fa-list-ol"></i>
                                     </button>
-                                    <button class="btn btn-sm btn-light text-primary border" data-bs-toggle="modal"
+                                    <button *appHasPermission="'quiz.edit'" class="btn btn-sm btn-light text-primary border" data-bs-toggle="modal"
                                         data-bs-target="#quizzModal" (click)="openEditSubLessonModal(quiz, 'quiz')"
                                         title="Sửa thông tin">
                                         <i class="fas fa-pen"></i>
                                     </button>
-                                    <button class="btn btn-sm btn-light text-danger border"
+                                    <button *appHasPermission="'quiz.delete'" class="btn btn-sm btn-light text-danger border"
                                         (click)="onDeleteQuizz(quiz.quizzId)">
                                         <i class="fas fa-trash-alt"></i>
                                     </button>

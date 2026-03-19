@@ -58,7 +58,7 @@ export class AuthService {
 
     // Signal reactive — template tự re-render khi login/logout
     readonly isLoggedIn = signal<boolean>(!!localStorage.getItem(this.TOKEN_KEY));
-    readonly currentUser = signal<{ username: string; avatar: string; role: string } | null>(
+    readonly currentUser = signal<{ username: string; avatar: string; role: string; permissions: string[] } | null>(
         JSON.parse(localStorage.getItem(this.USER_KEY) ?? 'null')
     );
 
@@ -129,7 +129,9 @@ export class AuthService {
         const role = decoded?.['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']
             ?? decoded?.['role'];
 
-        const userInfo = { username, avatar, role };
+        const permissions = decoded?.['permissions'] ? decoded['permissions'].split(',') : [];
+
+        const userInfo = { username, avatar, role, permissions };
         localStorage.setItem(this.USER_KEY, JSON.stringify(userInfo));
         this.currentUser.set(userInfo);
         this.isLoggedIn.set(true);
@@ -196,6 +198,12 @@ export class AuthService {
 
     hasRole(expectedRole: string): boolean {
         return this.getRole() === expectedRole;
+    }
+
+    hasPermission(permission: string): boolean {
+        const user = this.currentUser();
+        if (!user || !user.permissions) return false;
+        return user.permissions.includes(permission);
     }
 
     logout(): void {
