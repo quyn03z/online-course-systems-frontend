@@ -112,7 +112,8 @@
                 </div>
                 <div class="col-md-6">
                     <label class="form-label fw-semibold">Vai trò</label>
-                    <select class="form-select" [(ngModel)]="selectedUser.roleId" name="roleId">
+                    <select class="form-select" [(ngModel)]="selectedUser.roleId" name="roleId"
+                        (ngModelChange)="onRoleChange()">
                         <option value="" disabled>-- Chọn vai trò --</option>
                         <option *ngFor="let role of roleList" [value]="role.id">{{ role.roleName }}</option>
                     </select>
@@ -123,6 +124,32 @@
                         <option [ngValue]="false">Hoạt động</option>
                         <option [ngValue]="true">Khoá</option>
                     </select>
+                </div>
+
+                <!-- Permissions Section -->
+                <div class="col-12" *ngIf="permissionList.length > 0">
+                    <hr class="my-1">
+                    <label class="form-label fw-semibold mb-2">
+                        <i class="fas fa-shield-alt me-1 text-primary"></i> Phân quyền
+                        <small class="text-muted fw-normal ms-2">(Được gán theo vai trò, có thể tùy chỉnh)</small>
+                    </label>
+                    <div class="permission-grid">
+                        <div *ngFor="let perm of permissionList" class="permission-item">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox"
+                                    [id]="'perm_' + perm.id"
+                                    [checked]="isPermissionChecked(perm.id)"
+                                    (change)="togglePermission(perm.id, $any($event.target).checked)">
+                                <label class="form-check-label" [for]="'perm_' + perm.id"
+                                    [title]="perm.name">
+                                    {{ perm.displayName || perm.name }}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 text-center text-muted py-2" *ngIf="permissionList.length === 0">
+                    <small><i class="fas fa-spinner fa-spin me-1"></i> Đang tải danh sách quyền...</small>
                 </div>
             </form>
         </div>

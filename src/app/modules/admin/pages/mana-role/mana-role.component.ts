@@ -9,6 +9,14 @@ export interface Role {
   roleName: string;
 }
 
+
+export interface Permission {
+  id: number;
+  name: string;
+  displayName: string;
+}
+
+
 @Component({
   selector: 'app-mana-role',
   standalone: true,
