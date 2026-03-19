@@ -95,9 +95,12 @@ export class ProfileComponent implements OnInit {
         if (this.user) {
           this.user.avatar = this.avatar;
         }
+        const currentUserJson = JSON.parse(localStorage.getItem('current_user') ?? 'null');
         const userInfor = {
-          username: this.user.username,
-          avatar: this.avatar
+          username: this.user.username ?? currentUserJson?.username,
+          avatar: this.avatar,
+          role: currentUserJson?.role ?? '',
+          permissions: currentUserJson?.permissions ?? []
         }
         localStorage.setItem('current_user', JSON.stringify(userInfor));
         NotifySuccess('Bạn đã cập nhật thông tin thành công!');
