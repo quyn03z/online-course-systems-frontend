@@ -15,6 +15,8 @@ import { NotifySuccess, NotifyError, NotifyApiError } from '../../../../core/uti
 export class ManageUserComponent implements OnInit {
   users: any[] = [];
   roleList: any[] = [];
+  permissionList: any[] = [];       // Danh sách tất cả permissions
+  selectedPermissions: number[] = []; // Danh sách permission id đang chọn
 
   private adminService = inject(AdminService);
 
@@ -70,7 +72,48 @@ export class ManageUserComponent implements OnInit {
       const role = this.roleList.find(r => r.roleName === this.selectedUser.roleName);
       if (role) this.selectedUser.roleId = role.id;
     }
+    this.loadPermissionsByRole(this.selectedUser.roleId);
     this.showModal = true;
+  }
+
+  loadPermissionsByRole(roleId: number) {
+    const userId = this.selectedUser.userId ?? this.selectedUser.id;
+
+    // Bước 1: Lấy permissions của role → làm danh sách hiển thị
+    this.adminService.getAllPermissionsByRole(roleId).subscribe({
+      next: (res) => {
+        this.permissionList = res.result ?? [];
+      }
+    });
+
+    // Bước 2: Lấy permissions của user hiện tại → pre-check
+    if (userId) {
+      this.adminService.getPermissionsByUser(userId).subscribe({
+        next: (res) => {
+          const userPerms: any[] = res.result ?? [];
+          this.selectedPermissions = userPerms.map((p: any) => p.id);
+        },
+        error: () => { this.selectedPermissions = []; }
+      });
+    }
+  }
+
+  isPermissionChecked(permId: number): boolean {
+    return this.selectedPermissions.includes(permId);
+  }
+
+  togglePermission(permId: number, checked: boolean) {
+    if (checked) {
+      this.selectedPermissions = [...this.selectedPermissions, permId];
+    } else {
+      this.selectedPermissions = this.selectedPermissions.filter(id => id !== permId);
+    }
+  }
+
+  onRoleChange() {
+    if (this.selectedUser.roleId) {
+      this.loadPermissionsByRole(this.selectedUser.roleId);
+    }
   }
 
   openModalAdd() {

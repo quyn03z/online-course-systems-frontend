@@ -61,7 +61,6 @@ export class ManaLessonsComponent implements OnInit {
     this.route.paramMap.subscribe(params => {
       this.courseId = params.get('courseId');
       this.lessonId = params.get('lessonId');
-
       if (this.courseId) {
         this.loadLessons(this.courseId);
         this.loadCourse(this.courseId);

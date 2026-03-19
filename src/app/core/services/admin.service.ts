@@ -51,9 +51,22 @@ export class AdminService {
     return this.apiService.get<ResultResponse<any>>('Admin/infor-dashboard');
   }
 
-
+  getAllPermissions() {
+    return this.apiService.get<ResultResponse<any>>('Admin/alls-permissions');
+  }
 
   getChartDashboard() {
     return this.apiService.get<ResultResponse<any>>('Admin/chart-dashboard');
   }
+
+  getAllPermissionsByRole(roleId: number) {
+    const params = new HttpParams().set('roleId', roleId.toString());
+    return this.apiService.get<ResultResponse<any>>('Admin/alls-permissions-byrole', params);
+  }
+
+  getPermissionsByUser(userId: number) {
+    const params = new HttpParams().set('userId', userId.toString());
+    return this.apiService.get<ResultResponse<any>>('Admin/alls-permissions-byuser', params);
+  }
+
 }

@@ -34,8 +34,11 @@
 .modal-box {
     background: #fff;
     border-radius: 12px;
-    width: 100%;
-    max-width: 600px;
+    width: 95%;
+    max-width: 850px;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
     animation: slideUp 0.2s ease;
     overflow: hidden;
@@ -72,6 +75,8 @@
 
 .modal-body-box {
     padding: 1.5rem;
+    flex: 1;
+    overflow-y: auto;
 }
 
 .modal-footer-box {
@@ -102,3 +107,36 @@
         opacity: 1;
     }
 }
+
+// Permission Checkboxes Grid
+.permission-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+    max-height: 200px;
+    overflow-y: auto;
+    padding: 0.75rem;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    background: #f8f9fa;
+
+    .permission-item {
+        padding: 0.35rem 0.5rem;
+        border-radius: 6px;
+        transition: background 0.15s;
+
+        &:hover {
+            background: #e3f2fd;
+        }
+
+        .form-check-label {
+            font-size: 0.85rem;
+            cursor: pointer;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 130px;
+            display: block;
+        }
+    }
+}

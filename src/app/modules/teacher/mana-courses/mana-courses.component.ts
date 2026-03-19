@@ -89,7 +89,6 @@ export class ManaCoursesComponent implements OnInit {
     const found = this.courses.find(c => c.courseId === courseId);
     if (found) {
       this.selectedCourse = { ...found };
-      // Sync image to avatar for modal display
       if (this.selectedCourse.image && !this.selectedCourse.avatar) {
         this.selectedCourse.avatar = this.selectedCourse.image;
       }
@@ -121,9 +120,7 @@ export class ManaCoursesComponent implements OnInit {
   }
 
   onCreateCourse() {
-    // Sync avatar field (from template) to image field (for backend)
     this.newCourse.image = this.newCourse.avatar || '';
-
     this.courseService.createCourse(this.newCourse).subscribe({
       next: (res: any) => {
         NotifySuccess('Thêm khóa học thành công!');
