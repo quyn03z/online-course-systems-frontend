@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { CourseService } from '../../../core/services/course.service';
 import { NotifySuccess, NotifyError } from '../../../core/utils/notification.util';
+import { HasPermissionDirective } from '../../../core/directives/has-permission.directive';
 
 @Component({
   selector: 'app-mana-courses',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, HasPermissionDirective],
   templateUrl: './mana-courses.component.html',
   styleUrl: './mana-courses.component.scss'
 })

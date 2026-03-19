@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { QuestionsResponseModel, QuestionsService } from '../../../core/services/questions.service';
 import { ActivatedRoute } from '@angular/router';
 import { NotifyError, NotifySuccess } from '../../../core/utils/notification.util';
+import { HasPermissionDirective } from '../../../core/directives/has-permission.directive';
 
 @Component({
   selector: 'app-mana-quizzes',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, HasPermissionDirective],
   templateUrl: './mana-quizzes.component.html',
   styleUrl: './mana-quizzes.component.scss'
 })

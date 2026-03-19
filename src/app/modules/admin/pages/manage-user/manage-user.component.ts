@@ -15,8 +15,8 @@ import { NotifySuccess, NotifyError, NotifyApiError } from '../../../../core/uti
 export class ManageUserComponent implements OnInit {
   users: any[] = [];
   roleList: any[] = [];
-  permissionList: any[] = [];       // Danh sách tất cả permissions
-  selectedPermissions: number[] = []; // Danh sách permission id đang chọn
+  permissionList: any[] = [];
+  selectedPermissions: number[] = [];
 
   private adminService = inject(AdminService);
 
@@ -79,14 +79,12 @@ export class ManageUserComponent implements OnInit {
   loadPermissionsByRole(roleId: number) {
     const userId = this.selectedUser.userId ?? this.selectedUser.id;
 
-    // Bước 1: Lấy permissions của role → làm danh sách hiển thị
     this.adminService.getAllPermissionsByRole(roleId).subscribe({
       next: (res) => {
         this.permissionList = res.result ?? [];
       }
     });
 
-    // Bước 2: Lấy permissions của user hiện tại → pre-check
     if (userId) {
       this.adminService.getPermissionsByUser(userId).subscribe({
         next: (res) => {
@@ -118,7 +116,15 @@ export class ManageUserComponent implements OnInit {
 
   openModalAdd() {
     this.newUser = { userName: '', email: '', firstName: '', lastName: '', roleId: 3, isLocked: false };
+    this.selectedPermissions = [];
+    this.loadPermissionsByRole(3);
     this.showModalAdd = true;
+  }
+
+  onRoleChangeAdd() {
+    if (this.newUser.roleId) {
+      this.loadPermissionsByRole(this.newUser.roleId);
+    }
   }
 
   closeModal() {
@@ -136,7 +142,8 @@ export class ManageUserComponent implements OnInit {
       firstName: this.newUser.firstName,
       lastName: this.newUser.lastName,
       roleId: Number(this.newUser.roleId),
-      isLocked: this.newUser.isLocked
+      isLocked: this.newUser.isLocked,
+      permissionIds: this.selectedPermissions
     };
     this.adminService.createUser(payload).subscribe({
       next: (res: any) => {
@@ -159,7 +166,8 @@ export class ManageUserComponent implements OnInit {
       firstName: this.selectedUser.firstname,
       lastName: this.selectedUser.lastname,
       roleId: Number(this.selectedUser.roleId),
-      isLocked: this.selectedUser.isLocked
+      isLocked: this.selectedUser.isLocked,
+      permissionIds: this.selectedPermissions
     };
     this.adminService.updateUser(payload).subscribe({
       next: (res) => {
