@@ -23,6 +23,7 @@ export interface LoginResult {
     refreshToken: string;
     role: string;
     avatar?: string;
+    permissions?: string[];
 }
 
 export interface SignUpResult {
@@ -129,7 +130,19 @@ export class AuthService {
         const role = decoded?.['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']
             ?? decoded?.['role'];
 
-        const permissions = decoded?.['permissions'] ? decoded['permissions'].split(',') : [];
+        // Ưu tiên lấy permissions từ result nếu có, nếu không thì decode từ token
+        let permissions: string[] = [];
+        if (result?.permissions) {
+            permissions = result.permissions;
+        } else if (decoded) {
+            // "permission" claim có thể là String (nếu có 1) hoặc Array (nếu có nhiều)
+            const rawPermissions = decoded['permission'] || decoded['permissions'];
+            if (Array.isArray(rawPermissions)) {
+                permissions = rawPermissions;
+            } else if (typeof rawPermissions === 'string') {
+                permissions = rawPermissions.split(',');
+            }
+        }
 
         const userInfo = { username, avatar, role, permissions };
         localStorage.setItem(this.USER_KEY, JSON.stringify(userInfo));
