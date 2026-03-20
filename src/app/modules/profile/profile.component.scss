@@ -179,3 +179,75 @@ body {
     margin: 8px 0;
     font-weight: bold;
 }
+
+/* PURCHASE HISTORY STYLES */
+.purchase-history-card {
+    overflow: hidden;
+
+    .card-header {
+        border-bottom: 1px solid #f1f1f1;
+    }
+}
+
+.bg-primary-soft {
+    background-color: rgba(0, 164, 228, 0.1);
+}
+
+.course-icon-box {
+    width: 100px;
+    height: 100px;
+    font-size: 32px;
+    flex-shrink: 0;
+}
+
+.table {
+    thead th {
+        font-size: 11px;
+        letter-spacing: 0.05em;
+    }
+
+    tbody tr {
+        transition: background-color 0.2s ease;
+
+        &:hover {
+            background-color: #fcfdfe;
+        }
+    }
+}
+
+.empty-state {
+    .empty-icon-wrapper {
+        width: 80px;
+        height: 80px;
+        background: #f8f9fa;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1rem;
+    }
+
+    .text-light-gray {
+        color: #dee2e6;
+    }
+}
+
+.animate__animated {
+    animation-duration: 0.5s;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate__fadeIn {
+    animation-name: fadeIn;
+}

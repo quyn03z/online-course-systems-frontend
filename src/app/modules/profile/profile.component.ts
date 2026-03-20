@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { inject } from '@angular/core';
+import { RouterModule, RouterLink } from '@angular/router';
 import { UserService } from '../../core/services/user.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -8,7 +9,7 @@ import { NotifySuccess, NotifyError, NotifyApiError } from '../../core/utils/not
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, RouterModule, RouterLink],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss'
 })
@@ -23,6 +24,8 @@ export class ProfileComponent implements OnInit {
   lastName = '';
   avatar = '';
   user: any;
+  activeTab: string = 'info';
+  purchaseHistory: any[] = [];
 
 
 
@@ -111,6 +114,30 @@ export class ProfileComponent implements OnInit {
       error: (err: any) => {
         this.isLoading = false;
         NotifyApiError(err, 'Cập nhật thông tin thất bại. Vui lòng thử lại.');
+      }
+    });
+  }
+
+  setView(tab: string, event?: Event): void {
+    if (event) {
+      event.preventDefault();
+    }
+    this.activeTab = tab;
+    if (tab === 'purchase') {
+      this.getPurchaseHistory();
+    }
+  }
+
+  getPurchaseHistory(): void {
+    this.isLoading = true;
+    this.userService.getPurchaseHistory().subscribe({
+      next: (res) => {
+        this.purchaseHistory = res.result;
+        this.isLoading = false;
+      },
+      error: (err) => {
+        NotifyApiError(err, 'Lấy lịch sử mua hàng thất bại.');
+        this.isLoading = false;
       }
     });
   }

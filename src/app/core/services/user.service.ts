@@ -31,4 +31,8 @@ export class UserService {
     return this.apiService.put<any>(`User/update-profile`, model);
   }
 
+  getPurchaseHistory(): Observable<any> {
+    return this.apiService.get<any>(`User/purchase-history`);
+  }
+
 }
