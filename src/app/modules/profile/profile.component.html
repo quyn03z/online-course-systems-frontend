@@ -22,102 +22,192 @@
             </div>
 
             <div class="col-12 col-xl-8">
-                <div class="card mb-4 account-info-card">
-                    <div class="card-header">
-                        <h5 class="card-title mb-1 fw-bold text-dark">Thông tin tài khoản</h5>
-                        <p class="card-subtitle text-muted mb-0">Thông tin đăng nhập của bạn</p>
-                    </div>
-                    <div class="card-body">
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <div class="info-item">
-                                    <span class="label">Tên đăng nhập</span>
-                                    <span class="value">{{user.username}}</span>
-                                </div>
+                <div *ngIf="activeTab === 'info'">
+                    <div class="card mb-4 account-info-card">
+                        <div class="card-header d-flex align-items-center justify-content-between flex-wrap gap-2">
+                            <div>
+                                <h5 class="card-title mb-1 fw-bold text-dark">Thông tin tài khoản</h5>
+                                <p class="card-subtitle text-muted mb-0">Thông tin đăng nhập của bạn</p>
                             </div>
-                            <div class="col-md-6">
-                                <div class="info-item">
-                                    <span class="label">Email</span>
-                                    <span class="value">{{user.email}}</span>
-                                </div>
+                            <div class="text-end">
+                                <a href="#" (click)="setView('purchase', $event)"
+                                    class="btn btn-link p-0 text-decoration-none small d-inline-block">
+                                    <i class="fas fa-history me-1"></i> Lịch sử mua hàng
+                                </a>
                             </div>
-                            <div class="col-md-6">
-                                <div class="info-item">
-                                    <span class="label">Vai trò</span>
-                                    <span class="value fw-bold text-primary">{{user.roleName}}</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="info-item">
+                                        <span class="label">Tên đăng nhập</span>
+                                        <span class="value">{{user.username}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="info-item">
+                                        <span class="label">Email</span>
+                                        <span class="value">{{user.email}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="info-item">
+                                        <span class="label">Vai trò</span>
+                                        <span class="value fw-bold text-primary">{{user.roleName}}</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="card mb-4">
-                    <div class="card-header d-flex align-items-center justify-content-between">
-                        <div>
-                            <h5 class="card-title mb-1 fw-bold text-dark">Cập nhật thông tin cá nhân</h5>
-                            <p class="card-subtitle text-muted mb-0">Chỉnh sửa tên hiển thị của bạn</p>
+                    <div class="card mb-4">
+                        <div class="card-header d-flex align-items-center justify-content-between">
+                            <div>
+                                <h5 class="card-title mb-1 fw-bold text-dark">Cập nhật thông tin cá nhân</h5>
+                                <p class="card-subtitle text-muted mb-0">Chỉnh sửa tên hiển thị của bạn</p>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <form class="row g-3" (ngSubmit)="onUpdateProfile()">
+                                <div class="col-md-6">
+                                    <label for="firstName" class="form-label">Tên</label>
+                                    <input [(ngModel)]="firstName" type="text" class="form-control" name="firstName"
+                                        placeholder="Nhập tên của bạn" />
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="lastName" class="form-label">Họ</label>
+                                    <input [(ngModel)]="lastName" type="text" class="form-control" name="lastName"
+                                        placeholder="Nhập họ của bạn" />
+                                </div>
+                                <div class="col-md-12">
+                                    <label for="avatar" class="form-label">Ảnh đại diện (URL)</label>
+                                    <input [(ngModel)]="avatar" type="text" class="form-control" name="avatar"
+                                        placeholder="Nhập URL ảnh đại diện" />
+                                </div>
+
+                                <div class="col-12 d-flex justify-content-end">
+                                    <button type="submit" class="btn btn-primary-gradient">Lưu thay đổi</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
-                    <div class="card-body">
-                        <form class="row g-3" (ngSubmit)="onUpdateProfile()">
-                            <div class="col-md-6">
-                                <label for="firstName" class="form-label">Tên</label>
-                                <input [(ngModel)]="firstName" type="text" class="form-control" name="firstName"
-                                    placeholder="Nhập tên của bạn" />
-                            </div>
-                            <div class="col-md-6">
-                                <label for="lastName" class="form-label">Họ</label>
-                                <input [(ngModel)]="lastName" type="text" class="form-control" name="lastName"
-                                    placeholder="Nhập họ của bạn" />
-                            </div>
-                            <div class="col-md-12">
-                                <label for="avatar" class="form-label">Ảnh đại diện (URL)</label>
-                                <input [(ngModel)]="avatar" type="text" class="form-control" name="avatar"
-                                    placeholder="Nhập URL ảnh đại diện" />
-                            </div>
 
-                            <div class="col-12 d-flex justify-content-end">
-                                <button type="submit" class="btn btn-primary-gradient">Lưu thay đổi</button>
-                            </div>
-                        </form>
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5 class="card-title mb-1 fw-bold text-dark">Đổi mật khẩu</h5>
+                            <p class="card-subtitle text-muted mb-0">Bảo mật tài khoản của bạn</p>
+                        </div>
+                        <div class="card-body">
+
+                            <form class="row g-3" (ngSubmit)="onChangePassword()">
+                                <div class="col-12">
+                                    <label for="oldPassword" class="form-label">Mật khẩu hiện tại</label>
+                                    <input [(ngModel)]="oldPassword" type="password" class="form-control"
+                                        name="oldPassword" placeholder="Nhập mật khẩu hiện tại" required minlength="6"
+                                        pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$" />
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <label for="newPassword" class="form-label">Mật khẩu mới</label>
+                                    <input [(ngModel)]="newPassword" type="password" class="form-control"
+                                        name="newPassword" placeholder="Nhập mật khẩu mới" required minlength="6"
+                                        pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$" />
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <label for="confirmNewPassword" class="form-label">Xác nhận mật khẩu mới</label>
+                                    <input [(ngModel)]="confirmNewPassword" type="password" class="form-control"
+                                        name="confirmNewPassword" placeholder="Nhập lại mật khẩu mới" required
+                                        minlength="6" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$" />
+                                </div>
+
+
+                                <div class="col-12 d-flex justify-content-end">
+                                    <button type="submit" class="btn btn-primary-gradient">Đổi mật khẩu</button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
 
-                <div class="card mb-4">
-                    <div class="card-header">
-                        <h5 class="card-title mb-1 fw-bold text-dark">Đổi mật khẩu</h5>
-                        <p class="card-subtitle text-muted mb-0">Bảo mật tài khoản của bạn</p>
-                    </div>
-                    <div class="card-body">
-
-                        <form class="row g-3" (ngSubmit)="onChangePassword()">
-                            <div class="col-12">
-                                <label for="oldPassword" class="form-label">Mật khẩu hiện tại</label>
-                                <input [(ngModel)]="oldPassword" type="password" class="form-control" name="oldPassword"
-                                    placeholder="Nhập mật khẩu hiện tại" required minlength="6"
-                                    pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$" />
+                <div *ngIf="activeTab === 'purchase'">
+                    <div class="card mb-4 purchase-history-card border-0 shadow-sm animate__animated animate__fadeIn">
+                        <div class="card-header bg-white py-3 d-flex align-items-center justify-content-between">
+                            <div>
+                                <h5 class="card-title mb-0 fw-bold text-dark">Lịch sử mua hàng</h5>
+                                <p class="card-subtitle text-muted small mb-0">Danh sách các khóa học bạn đã sở hữu</p>
                             </div>
-                            <div class="col-12 col-md-6">
-                                <label for="newPassword" class="form-label">Mật khẩu mới</label>
-                                <input [(ngModel)]="newPassword" type="password" class="form-control" name="newPassword"
-                                    placeholder="Nhập mật khẩu mới" required minlength="6"
-                                    pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$" />
+                            <button class="btn btn-outline-primary btn-sm rounded-pill px-3" (click)="setView('info')">
+                                <i class="fas fa-arrow-left me-1"></i> Quay lại
+                            </button>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-hover align-middle mb-0">
+                                    <thead class="bg-light">
+                                        <tr>
+                                            <th class="px-4 py-3 border-0 text-muted small text-uppercase fw-bold">Khóa
+                                                học</th>
+                                            <th class="px-4 py-3 border-0 text-muted small text-uppercase fw-bold">Mã
+                                            </th>
+                                            <th
+                                                class="px-4 py-3 border-0 text-muted small text-uppercase fw-bold text-end">
+                                                Thao tác</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="border-top-0">
+                                        <tr *ngFor="let item of purchaseHistory">
+                                            <td class="px-4 py-4">
+                                                <div class="d-flex align-items-center">
+                                                    <div
+                                                        class="course-icon-box me-3 rounded-3 d-flex align-items-center justify-content-center bg-primary-soft overflow-hidden">
+                                                        <img *ngIf="item.image" [src]="item.image" alt="Course Image"
+                                                            class="img-fluid w-100 h-100 object-fit-cover">
+                                                        <i *ngIf="!item.image"
+                                                            class="fas fa-graduation-cap text-primary"></i>
+                                                    </div>
+                                                    <div>
+                                                        <span
+                                                            class="fw-bold d-block text-dark">{{item.courseName}}</span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="px-4 py-4">
+                                                <span
+                                                    class="badge rounded-pill bg-light text-secondary px-3 py-2 border">#{{item.courseId}}</span>
+                                            </td>
+                                            <td class="px-4 py-4 text-end">
+                                                <a [routerLink]="['/course-details', item.courseId]"
+                                                    class="btn btn-primary-gradient btn-sm rounded-pill px-4 shadow-sm">
+                                                    Vào học
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        <tr *ngIf="purchaseHistory.length === 0 && !isLoading">
+                                            <td colspan="3" class="text-center py-5">
+                                                <div class="empty-state py-4">
+                                                    <div class="empty-icon-wrapper mb-3">
+                                                        <i class="fas fa-shopping-bag fa-3x text-light-gray"></i>
+                                                    </div>
+                                                    <h6 class="fw-bold text-dark">Chưa có khóa học nào</h6>
+                                                    <p class="text-muted small mb-4">Bạn chưa thực hiện giao dịch mua
+                                                        khóa học nào trên hệ thống.</p>
+                                                    <a routerLink="/course"
+                                                        class="btn btn-primary-gradient rounded-pill px-4">Khám phá
+                                                        ngay</a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr *ngIf="isLoading">
+                                            <td colspan="3" class="text-center py-5">
+                                                <div class="d-flex flex-column align-items-center">
+                                                    <div class="spinner-grow text-primary mb-3" role="status"></div>
+                                                    <span class="text-muted small">Đang tải dữ liệu...</span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
-                            <div class="col-12 col-md-6">
-                                <label for="confirmNewPassword" class="form-label">Xác nhận mật khẩu mới</label>
-                                <input [(ngModel)]="confirmNewPassword" type="password" class="form-control"
-                                    name="confirmNewPassword" placeholder="Nhập lại mật khẩu mới" required minlength="6"
-                                    pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$" />
-                            </div>
-
-
-                            <div class="col-12 d-flex justify-content-end">
-                                <button type="submit" class="btn btn-primary-gradient">Đổi mật khẩu</button>
-                            </div>
-                        </form>
-
-
-
+                        </div>
                     </div>
                 </div>
             </div>
