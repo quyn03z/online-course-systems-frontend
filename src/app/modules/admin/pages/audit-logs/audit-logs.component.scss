@@ -16,30 +16,67 @@
             font-weight: 700;
         }
 
-        .search-box {
-            position: relative;
-            width: 350px;
+        .filters-wrapper {
+            display: flex;
+            align-items: flex-end;
+            gap: 1.5rem;
 
-            i {
-                position: absolute;
-                left: 1rem;
-                top: 50%;
-                transform: translateY(-50%);
-                color: #b2bec3;
+            .date-filters {
+                display: flex;
+                gap: 1rem;
+
+                .date-input {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 0.25rem;
+
+                    label {
+                        font-size: 0.75rem;
+                        color: #636e72;
+                        font-weight: 600;
+                    }
+
+                    input {
+                        padding: 0.6rem;
+                        border: 1px solid #dfe6e9;
+                        border-radius: 8px;
+                        font-size: 0.85rem;
+                        color: #2d3436;
+
+                        &:focus {
+                            outline: none;
+                            border-color: #0984e3;
+                        }
+                    }
+                }
             }
 
-            input {
-                width: 100%;
-                padding: 0.75rem 1rem 0.75rem 2.75rem;
-                border: 1px solid #dfe6e9;
-                border-radius: 8px;
-                font-size: 0.9rem;
-                transition: all 0.2s;
+            .search-box {
+                position: relative;
+                width: 300px;
+                margin-bottom: 0;
 
-                &:focus {
-                    outline: none;
-                    border-color: #0984e3;
-                    box-shadow: 0 0 0 3px rgba(9, 132, 227, 0.1);
+                i {
+                    position: absolute;
+                    left: 1rem;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    color: #b2bec3;
+                }
+
+                input {
+                    width: 100%;
+                    padding: 0.75rem 1rem 0.75rem 2.75rem;
+                    border: 1px solid #dfe6e9;
+                    border-radius: 8px;
+                    font-size: 0.9rem;
+                    transition: all 0.2s;
+
+                    &:focus {
+                        outline: none;
+                        border-color: #0984e3;
+                        box-shadow: 0 0 0 3px rgba(9, 132, 227, 0.1);
+                    }
                 }
             }
         }
