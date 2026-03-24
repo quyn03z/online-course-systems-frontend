@@ -1,6 +1,11 @@
 <div class="audit-logs-container">
     <div class="header">
         <h1>Audit Logs</h1>
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Tìm kiếm theo user, action, hoặc entity..." (input)="onSearch($event)"
+                [value]="searchTerm">
+        </div>
     </div>
 
     <div class="table-card">
@@ -15,9 +20,8 @@
                     <th>User</th>
                     <th>Action</th>
                     <th>Entity</th>
-                    <th>Old Values</th>
-                    <th>New Values</th>
                     <th>Created At</th>
+                    <th class="text-center">Thao tác</th>
                 </tr>
             </thead>
             <tbody>
@@ -35,46 +39,91 @@
                         </span>
                     </td>
                     <td>{{ log.entity }}</td>
-                    <td class="old-values-cell">
-                        <div class="change-item" *ngFor="let change of log.changes">
-                            <span class="prop">{{ change.propertyName }}:</span>
-                            <span class="old"
-                                *ngIf="log.action?.toLowerCase() === 'update' || log.action?.toLowerCase() === 'delete' || log.action?.toLowerCase() === 'modified'">{{
-                                change.oldValue }}</span>
-                        </div>
-                        <div *ngIf="!log.changes || log.changes.length === 0" class="no-changes">
-                            <span
-                                *ngIf="log.action?.toLowerCase() === 'login' || log.action?.toLowerCase() === 'logout'">System
-                                Access</span>
-                            <span
-                                *ngIf="log.action?.toLowerCase() !== 'login' && log.action?.toLowerCase() !== 'logout'">N/A</span>
-                        </div>
-                    </td>
-                    <td class="new-values-cell">
-                        <div class="change-item" *ngFor="let change of log.changes">
-                            <span class="prop">{{ change.propertyName }}:</span>
-                            <span class="new"
-                                *ngIf="log.action?.toLowerCase() === 'update' || log.action?.toLowerCase() === 'insert' || log.action?.toLowerCase() === 'added' || log.action?.toLowerCase() === 'modified'">{{
-                                change.newValue }}</span>
-                        </div>
-                        <div *ngIf="!log.changes || log.changes.length === 0" class="no-changes">
-                            <span
-                                *ngIf="log.action?.toLowerCase() === 'login' || log.action?.toLowerCase() === 'logout'">System
-                                Access</span>
-                            <span
-                                *ngIf="log.action?.toLowerCase() !== 'login' && log.action?.toLowerCase() !== 'logout'">N/A</span>
-                        </div>
-                    </td>
                     <td>{{ log.createdAt | date:'dd/MM/yyyy HH:mm' }}</td>
+                    <td class="actions-cell">
+                        <button class="btn-icon view" (click)="viewDetails(log)" title="Xem chi tiết">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="btn-icon delete" (click)="deleteLog(log.auditLogId)" title="Xóa">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+                <tr *ngIf="logs.length === 0 && !loading">
+                    <td colspan="6" class="text-center no-data">Không tìm thấy dữ liệu.</td>
                 </tr>
             </tbody>
         </table>
 
+        <!-- Pagination -->
         <div class="pagination" *ngIf="totalCount > pageSize">
             <button (click)="onPageChange(currentPage - 1)" [disabled]="currentPage === 1">Previous</button>
             <span class="page-count">Page {{ currentPage }} / {{ Math.ceil(totalCount / pageSize) }}</span>
             <button (click)="onPageChange(currentPage + 1)"
                 [disabled]="currentPage * pageSize >= totalCount">Next</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Chi Tiết -->
+<div class="modal-backdrop" *ngIf="selectedLog" (click)="closeModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+            <h3>Chi tiết Audit Log #{{ selectedLog.auditLogId }}</h3>
+            <button class="close-btn" (click)="closeModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="detail-grid">
+                <div class="detail-item">
+                    <label>Người dùng:</label>
+                    <span>{{ selectedLog.user?.userName || 'System' }} ({{ selectedLog.user?.email || 'N/A' }})</span>
+                </div>
+
+                <div class="detail-item">
+                    <label>Đối tượng:</label>
+                    <span>{{ selectedLog.entity }}</span>
+                </div>
+                <div class="detail-item">
+                    <label>Thời gian:</label>
+                    <span>{{ selectedLog.createdAt | date:'dd/MM/yyyy HH:mm:ss' }}</span>
+                </div>
+                <div class="detail-item">
+                    <label>IP Address:</label>
+                    <span>{{ selectedLog.ipAddress || 'N/A' }}</span>
+                </div>
+                <div class="detail-item">
+                    <label>User Agent:</label>
+                    <span class="ua-text" [title]="selectedLog.userAgent">{{ selectedLog.userAgent || 'N/A' }}</span>
+                </div>
+                <div class="detail-item">
+                    <label>Thời gian xử lý:</label>
+                    <span>{{ selectedLog.durationMs }}ms</span>
+                </div>
+            </div>
+
+            <div class="changes-section">
+                <h4>Thay đổi dữ liệu</h4>
+                <div class="changes-container" *ngIf="selectedLog.changes && selectedLog.changes.length > 0">
+                    <div class="change-header">
+                        <span class="col-prop">Trường</span>
+                        <span class="col-old">Giá trị cũ</span>
+                        <span class="col-arrow"></span>
+                        <span class="col-new">Giá trị mới</span>
+                    </div>
+                    <div class="change-row" *ngFor="let change of selectedLog.changes">
+                        <span class="prop-name">{{ change.propertyName }}</span>
+                        <div class="val-box old-val">{{ change.oldValue || 'null' }}</div>
+                        <span class="arrow"><i class="fas fa-arrow-right"></i></span>
+                        <div class="val-box new-val">{{ change.newValue || 'null' }}</div>
+                    </div>
+                </div>
+                <div *ngIf="!selectedLog.changes || selectedLog.changes.length === 0" class="no-changes-msg">
+                    Không có thay đổi dữ liệu chi tiết (Hành động: {{ selectedLog.action }}).
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-close" (click)="closeModal()">Đóng</button>
         </div>
     </div>
 </div>
