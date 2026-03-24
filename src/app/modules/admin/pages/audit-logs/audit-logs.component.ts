@@ -18,6 +18,8 @@ export class AuditLogsComponent implements OnInit, OnDestroy {
     pageSize: number = 10;
     loading: boolean = false;
     searchTerm: string = '';
+    startDate: string = '';
+    endDate: string = '';
     selectedLog: AuditLog | null = null;
     Math = Math;
 
@@ -47,7 +49,10 @@ export class AuditLogsComponent implements OnInit, OnDestroy {
 
     loadLogs(): void {
         this.loading = true;
-        this.auditLogService.getAuditLogs(this.currentPage, this.pageSize, this.searchTerm).subscribe({
+        const start = this.startDate ? new Date(this.startDate) : null;
+        const end = this.endDate ? new Date(this.endDate) : null;
+
+        this.auditLogService.getAuditLogs(this.currentPage, this.pageSize, this.searchTerm, start, end).subscribe({
             next: (response) => {
                 if (response.succeeded) {
                     console.log(response.result);
@@ -66,6 +71,11 @@ export class AuditLogsComponent implements OnInit, OnDestroy {
     onSearch(event: any): void {
         const term = event.target.value;
         this.searchSubject.next(term);
+    }
+
+    onDateChange(): void {
+        this.currentPage = 1;
+        this.loadLogs();
     }
 
     onPageChange(page: number): void {

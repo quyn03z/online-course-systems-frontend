@@ -45,15 +45,21 @@ export interface AuditLogResponse {
 export class AuditLogService {
     private apiService = inject(ApiService);
 
-    getAuditLogs(page: number = 1, pageSize: number = 10, search: string = ''): Observable<ResultResponse<AuditLogResponse>> {
+    getAuditLogs(page: number = 1, pageSize: number = 10, search: string = '', startDate: Date | null = null, endDate: Date | null = null): Observable<ResultResponse<AuditLogResponse>> {
         let params = new HttpParams()
             .set('page', page.toString())
             .set('pageSize', pageSize.toString());
-        
+
         if (search) {
             params = params.set('search', search);
         }
-        
+        if (startDate) {
+            params = params.set('startDate', startDate.toISOString());
+        }
+        if (endDate) {
+            params = params.set('endDate', endDate.toISOString());
+        }
+
         return this.apiService.get<ResultResponse<AuditLogResponse>>('AuditLogs', params);
     }
 

@@ -1,10 +1,22 @@
 <div class="audit-logs-container">
     <div class="header">
         <h1>Audit Logs</h1>
-        <div class="search-box">
-            <i class="fas fa-search"></i>
-            <input type="text" placeholder="Tìm kiếm theo user, action, hoặc entity..." (input)="onSearch($event)"
-                [value]="searchTerm">
+        <div class="filters-wrapper">
+            <div class="date-filters">
+                <div class="date-input">
+                    <label>Từ ngày:</label>
+                    <input type="date" [(ngModel)]="startDate" (change)="onDateChange()">
+                </div>
+                <div class="date-input">
+                    <label>Đến ngày:</label>
+                    <input type="date" [(ngModel)]="endDate" (change)="onDateChange()">
+                </div>
+            </div>
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Tìm kiếm theo user, action, hoặc entity..." (input)="onSearch($event)"
+                    [value]="searchTerm">
+            </div>
         </div>
     </div>
 
