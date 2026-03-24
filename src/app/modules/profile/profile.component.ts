@@ -134,12 +134,28 @@ export class ProfileComponent implements OnInit {
       next: (res) => {
         this.purchaseHistory = res.result;
         this.isLoading = false;
+
+        // Load progress for each course
+        this.purchaseHistory.forEach(item => {
+          this.userService.getProgress(item.courseId).subscribe({
+            next: (progressRes) => {
+              item.progress = progressRes.result.progress;
+              item.isCompleted = progressRes.result.isCompleted;
+            },
+            error: (err) => console.error('Lỗi lấy tiến độ:', err)
+          });
+        });
       },
       error: (err) => {
         NotifyApiError(err, 'Lấy lịch sử mua hàng thất bại.');
         this.isLoading = false;
       }
     });
+  }
+
+  downloadCertificate(courseId: number): void {
+    alert('Tính năng tải chứng chỉ đang được phát triển!');
+    // Sau này sẽ gọi API: api/Certificate/download/{courseId}
   }
 
 
