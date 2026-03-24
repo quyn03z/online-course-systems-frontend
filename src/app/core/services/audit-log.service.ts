@@ -29,6 +29,9 @@ export interface AuditLog {
         email: string;
     };
     changes: AuditLogChange[];
+    ipAddress?: string;
+    userAgent?: string;
+    durationMs?: number;
 }
 
 export interface AuditLogResponse {
@@ -42,10 +45,19 @@ export interface AuditLogResponse {
 export class AuditLogService {
     private apiService = inject(ApiService);
 
-    getAuditLogs(page: number = 1, pageSize: number = 10): Observable<ResultResponse<AuditLogResponse>> {
-        const params = new HttpParams()
+    getAuditLogs(page: number = 1, pageSize: number = 10, search: string = ''): Observable<ResultResponse<AuditLogResponse>> {
+        let params = new HttpParams()
             .set('page', page.toString())
             .set('pageSize', pageSize.toString());
+        
+        if (search) {
+            params = params.set('search', search);
+        }
+        
         return this.apiService.get<ResultResponse<AuditLogResponse>>('AuditLogs', params);
+    }
+
+    deleteAuditLog(id: number): Observable<ResultResponse<string>> {
+        return this.apiService.delete<ResultResponse<string>>(`AuditLogs/${id}`);
     }
 }
