@@ -28,7 +28,7 @@ export class DocumentsService {
   private apiService = inject(ApiService);
 
   getDocumentsByLessonId(lessonId: string): Observable<ResultResponse<DocumentsResponseModel[]>> {
-    return this.apiService.get<ResultResponse<DocumentsResponseModel[]>>(`ManaDocuments/alls-documents/${lessonId}`);
+    return this.apiService.get<ResultResponse<DocumentsResponseModel[]>>(`Documents/alls-documents/${lessonId}`);
   }
 
   createDocument(document: any, lessonId: string): Observable<ResultResponse<DocumentsResponseModel>> {

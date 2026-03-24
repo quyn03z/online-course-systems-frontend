@@ -35,4 +35,11 @@ export class UserService {
     return this.apiService.get<any>(`User/purchase-history`);
   }
 
+  getProgress(courseId: number): Observable<any> {
+    return this.apiService.get<any>(`MenteeScore/get-progress/${courseId}`);
+  }
+
+
+
+
 }
