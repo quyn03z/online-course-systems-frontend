@@ -48,7 +48,9 @@ export class LessonsService {
     return this.apiService.get<ResultResponse<SubLessonsResponseModel[]>>(`ManaSubLesson/get-alls-sublesson/${lessonId}`);
   }
 
-
+  getUserEnrollmentCourse(courseId: string) {
+    return this.apiService.get<ResultResponse<any[]>>(`ManaCourse/alls-user-course/${courseId}`);
+  }
 
   getFirstLessonIdByCourseId(courseId: string) {
     return this.apiService.get<ResultResponse<number>>(`Lesson/getfirst-lessonId/${courseId}`);
@@ -86,6 +88,8 @@ export class LessonsService {
   }
 
 
-
+  getUserStatisticById(userId: string) {
+    return this.apiService.get<ResultResponse<any>>(`ManaCourse/user-statistic/${userId}`);
+  }
 
 }

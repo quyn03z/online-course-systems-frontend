@@ -4,7 +4,12 @@
         <div>
             <h5 class="fw-bold text-dark mb-0">Quản lý nội dung Khóa học</h5>
             <br>
-            <h3 class="fw-bold text-blue mb-0">{{ course?.courseName }}</h3>
+        <div class="d-flex align-items-center">
+            <h3 class="fw-bold text-blue mb-0 me-3">{{ course?.courseName }}</h3>
+            <button class="btn btn-sm btn-outline-primary" [routerLink]="['mana-user-course']">
+                <i class="fas fa-users me-1"></i> Quản lý học viên
+            </button>
+        </div>
         </div>
     </div>
 
