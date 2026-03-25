@@ -21,6 +21,7 @@ import { TeacherComponent } from './modules/teacher/teacher/teacher.component';
 import { ManaLessonsComponent } from './modules/teacher/mana-lessons/mana-lessons.component';
 import { ManaRoleComponent } from './modules/admin/pages/mana-role/mana-role.component';
 import { ManaQuizzesComponent } from './modules/teacher/mana-quizzes/mana-quizzes.component';
+import { ManaUserCourseComponent } from './modules/teacher/mana-lessons/mana-user-course/mana-user-course.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -48,7 +49,8 @@ export const routes: Routes = [
         children: [
             { path: '', component: ManaCoursesComponent },
             { path: 'mana-lessons/:courseId', component: ManaLessonsComponent },
-            { path: 'mana-quizzes/:quizzId', component: ManaQuizzesComponent }
+            { path: 'mana-lessons/:courseId/mana-user-course', component: ManaUserCourseComponent },
+            { path: 'mana-quizzes/:quizzId', component: ManaQuizzesComponent },
         ]
     },
     // Các trang CÓ header/footer (bọc trong MainLayout)
