@@ -1,4 +1,4 @@
-<body>
+﻿<body>
 
     <div class="profile-page container py-4">
         <div class="row g-4">
@@ -140,16 +140,16 @@
                             </button>
                         </div>
                         <div class="card-body p-0">
-                            <div class="table-responsive">
-                                <table class="table table-hover align-middle mb-0">
+                            <div class="table-responsive" style="overflow-x: auto;">
+                                <table class="table table-hover align-middle mb-0" style="min-width: 600px;">
                                     <thead class="bg-light">
                                         <tr>
                                             <th class="px-4 py-3 border-0 text-muted small text-uppercase fw-bold">Khóa
                                                 học</th>
                                             <th class="px-4 py-3 border-0 text-muted small text-uppercase fw-bold">Tiến
                                                 độ</th>
-                                            <th
-                                                class="px-4 py-3 border-0 text-muted small text-uppercase fw-bold text-end">
+                                            <th class="px-4 py-3 border-0 text-muted small text-uppercase fw-bold text-end"
+                                                style="white-space: nowrap;">
                                                 Thao tác</th>
                                         </tr>
                                     </thead>
@@ -170,30 +170,32 @@
                                                     </div>
                                                 </div>
                                             </td>
-                                            <!-- <td class="px-4 py-4">
-                                                <span
-                                                    class="badge rounded-pill bg-light text-secondary px-3 py-2 border">#{{item.courseId}}</span>
-                                            </td> -->
+
                                             <td class="px-4 py-4">
                                                 <div class="d-flex flex-column" style="min-width: 160px;">
                                                     <div class="d-flex justify-content-between mb-1">
                                                         <span class="small text-muted fw-medium">Tiến độ</span>
-                                                        <span class="small fw-bold text-primary">{{item.progress || '0%'}}</span>
+                                                        <span class="small fw-bold text-primary">{{item.progress ||
+                                                            '0%'}}</span>
                                                     </div>
-                                                    <div class="progress" style="height: 10px; background-color: #f0f2f5; border-radius: 10px;">
-                                                        <div class="progress-bar bg-primary-gradient" role="progressbar" 
-                                                            [style.width]="item.progress || '0%'" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"
+                                                    <div class="progress"
+                                                        style="height: 10px; background-color: #f0f2f5; border-radius: 10px;">
+                                                        <div class="progress-bar bg-primary-gradient" role="progressbar"
+                                                            [style.width]="item.progress || '0%'" aria-valuenow="0"
+                                                            aria-valuemin="0" aria-valuemax="100"
                                                             style="border-radius: 10px; transition: width 0.6s ease;">
                                                         </div>
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td class="px-4 py-4 text-end">
-                                                <div class="d-flex justify-content-end align-items-center gap-3" style="white-space: nowrap;">
-                                                    <button *ngIf="item.isCompleted" 
+                                            <td class="px-4 py-4 text-end"
+                                                style="min-width: 230px; white-space: nowrap;">
+                                                <div class="d-flex justify-content-end align-items-center gap-3"
+                                                    style="white-space: nowrap;">
+                                                    <button *ngIf="item.isCompleted"
                                                         class="btn btn-warning-gradient py-2 px-3 flex-shrink-0"
-                                                        (click)="downloadCertificate(item.courseId)">
-                                                        <i class="fas fa-certificate me-2"></i>Chứng chỉ
+                                                        (click)="openCertificateModal(item.courseId)">
+                                                        <i class="fas fa-eye me-2"></i>Certifi
                                                     </button>
                                                     <a [routerLink]="['/course-details', item.courseId]"
                                                         class="btn btn-primary-gradient py-2 px-3 flex-shrink-0">
@@ -235,6 +237,45 @@
 
 
 
+            </div>
+        </div>
+    </div>
+
+    <!-- Certificate Preview Modal -->
+    <div class="modal fade" id="certificateModal" tabindex="-1" aria-labelledby="certificateModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header text-white"
+                    style="background: linear-gradient(135deg, #1a2a6c, #2c3e7f); border-radius: 12px 12px 0 0;">
+                    <h5 class="modal-title" id="certificateModalLabel">
+                        <i class="fas fa-certificate me-2 text-warning"></i>Xem trước Chứng Chỉ
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-0"
+                    style="background-color: #e0e0e0; min-height: 420px; display:flex; align-items:center; justify-content:center;">
+                    <div *ngIf="isCertificateLoading" class="text-center py-5">
+                        <div class="spinner-border text-primary mb-3" role="status" style="width: 3rem; height: 3rem;">
+                        </div>
+                        <p class="text-muted">Đang tải chứng chỉ...</p>
+                    </div>
+                    <iframe *ngIf="!isCertificateLoading && certificateHtml" id="certificate-iframe"
+                        [srcdoc]="certificateHtml" style="width: 800px; height: 600px; border: none; display: block;"
+                        scrolling="no"></iframe>
+                </div>
+                <div class="modal-footer bg-light justify-content-between" style="border-radius: 0 0 12px 12px;">
+                    <p class="text-muted small mb-0"><i class="fas fa-star text-warning me-1"></i>Bạn đã hoàn thành xuất
+                        sắc khóa học này!</p>
+                    <div class="d-flex gap-2">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Đóng</button>
+                        <button type="button" class="btn btn-primary"
+                            [disabled]="isCertificateLoading || !certificateHtml" (click)="downloadCertificatePdf()">
+                            <i class="fas fa-download me-2"></i>Tải PDF
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
