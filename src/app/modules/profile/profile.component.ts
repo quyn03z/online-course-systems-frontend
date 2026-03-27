@@ -4,7 +4,11 @@ import { RouterModule, RouterLink } from '@angular/router';
 import { UserService } from '../../core/services/user.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { NotifySuccess, NotifyError, NotifyApiError } from '../../core/utils/notification.util';
+
+declare var html2pdf: any;
+declare var bootstrap: any;
 
 @Component({
   selector: 'app-profile',
@@ -27,9 +31,14 @@ export class ProfileComponent implements OnInit {
   activeTab: string = 'info';
   purchaseHistory: any[] = [];
 
-
+  // Certificate Preview
+  certificateHtml: SafeHtml | null = null;
+  certificateHtmlRaw: string = '';
+  currentCertificateCourseId: number | null = null;
+  isCertificateLoading = false;
 
   userService = inject(UserService);
+  sanitizer = inject(DomSanitizer);
 
   constructor() { }
 
@@ -153,10 +162,57 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  downloadCertificate(courseId: number): void {
-    alert('Tính năng tải chứng chỉ đang được phát triển!');
-    // Sau này sẽ gọi API: api/Certificate/download/{courseId}
+  openCertificateModal(courseId: number): void {
+    this.isCertificateLoading = true;
+    this.currentCertificateCourseId = courseId;
+    this.certificateHtml = null;
+    this.certificateHtmlRaw = '';
+
+    const modalEl = document.getElementById('certificateModal');
+    if (modalEl) {
+      const modal = new bootstrap.Modal(modalEl);
+      modal.show();
+    }
+
+    this.userService.downloadCertificate(courseId).subscribe({
+      next: (res) => {
+        try {
+          const binaryString = atob(res.result);
+          const bytes = new Uint8Array(binaryString.length);
+          for (let i = 0; i < binaryString.length; i++) {
+            bytes[i] = binaryString.charCodeAt(i);
+          }
+          const htmlContent = new TextDecoder().decode(bytes);
+          this.certificateHtmlRaw = htmlContent;
+          // bypassSecurityTrustHtml dùng cho srcdoc của iframe
+          this.certificateHtml = this.sanitizer.bypassSecurityTrustHtml(htmlContent);
+          this.isCertificateLoading = false;
+        } catch (e) {
+          console.error('Lỗi xử lý chứng chỉ:', e);
+          this.isCertificateLoading = false;
+          NotifyError('Có lỗi khi tải chứng chỉ. Vui lòng thử lại.');
+        }
+      },
+      error: (err: any) => {
+        this.isCertificateLoading = false;
+        NotifyApiError(err, 'Tải chứng chỉ thất bại. Vui lòng thử lại.');
+      }
+    });
   }
 
+  downloadCertificatePdf(): void {
+    if (!this.currentCertificateCourseId || !this.certificateHtmlRaw) return;
+    const courseId = this.currentCertificateCourseId;
+    const options = {
+      margin: 0,
+      filename: `Chung_Chi_Hoan_Thanh_${courseId}.pdf`,
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2, useCORS: true, allowTaint: true },
+      jsPDF: { unit: 'px', format: [800, 600], orientation: 'landscape' }
+    };
+    // Dùng raw HTML (có cả <head><style>) để đảm bảo giữ nguyên toàn bộ CSS
+    html2pdf().from(this.certificateHtmlRaw).set(options).save();
+    NotifySuccess('Đang xuất bản PDF, vui lòng chờ...');
+  }
 
 }

@@ -39,6 +39,10 @@ export class UserService {
     return this.apiService.get<any>(`MenteeScore/get-progress/${courseId}`);
   }
 
+  downloadCertificate(courseId: number): Observable<any> {
+    return this.apiService.get<any>(`Certificate/download/${courseId}`);
+  }
+
 
 
 
