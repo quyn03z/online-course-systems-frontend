@@ -13,10 +13,15 @@ import { AuthService } from '../../core/services/auth.service';
 })
 export class AdminComponent {
   sidebarToggled = false;
+  dropdownOpen = false;
 
   constructor(public authService: AuthService) { }
 
   toggleSidebar() {
     this.sidebarToggled = !this.sidebarToggled;
+  }
+
+  toggleDropdown() {
+    this.dropdownOpen = !this.dropdownOpen;
   }
 }

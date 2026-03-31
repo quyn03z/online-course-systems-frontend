@@ -59,6 +59,10 @@ export class AdminService {
     return this.apiService.get<ResultResponse<any>>('Admin/chart-dashboard');
   }
 
+  getChartCourse() {
+    return this.apiService.get<ResultResponse<any>>('Admin/top-course-enrollment');
+  }
+
   getAllPermissionsByRole(roleId: number) {
     const params = new HttpParams().set('roleId', roleId.toString());
     return this.apiService.get<ResultResponse<any>>('Admin/alls-permissions-byrole', params);
