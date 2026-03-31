@@ -12,9 +12,14 @@ import { AuthService } from '../../../core/services/auth.service';
 })
 export class TeacherComponent {
   sidebarToggled = false;
+  dropdownOpen = false;
   authService = inject(AuthService);
 
   toggleSidebar() {
     this.sidebarToggled = !this.sidebarToggled;
+  }
+
+  toggleDropdown() {
+    this.dropdownOpen = !this.dropdownOpen;
   }
 }

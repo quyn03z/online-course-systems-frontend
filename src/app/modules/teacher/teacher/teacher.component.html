@@ -14,11 +14,12 @@
         <!-- User Dropdown -->
         <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                <a class="nav-link dropdown-toggle" role="button" (click)="toggleDropdown()">
                     <i class="fas fa-user fa-fw"></i>
                 </a>
-                <ul class="dropdown-menu dropdown-menu-end">
-                    <li><a class="dropdown-item" (click)="authService.logout()">Logout</a>
+                <ul class="dropdown-menu dropdown-menu-end" [class.show]="dropdownOpen">
+                    <li><a class="dropdown-item" href="javascript:void(0)" style="cursor: pointer"
+                            (click)="authService.logout()">Logout</a>
                     </li>
                 </ul>
             </li>

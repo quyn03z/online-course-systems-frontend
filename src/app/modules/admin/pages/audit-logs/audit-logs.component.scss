@@ -231,9 +231,10 @@
                 span { font-weight: 500; font-size: 0.9rem; }
                 .ua-text {
                     display: block;
-                    white-space: nowrap;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
+                    white-space: normal;
+                    word-break: break-all;
+                    font-size: 0.8rem;
+                    color: #636e72;
                 }
             }
         }

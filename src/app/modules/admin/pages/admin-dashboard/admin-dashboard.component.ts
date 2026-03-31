@@ -37,6 +37,7 @@ export class AdminDashboardComponent implements AfterViewInit, OnInit {
   ngOnInit(): void {
     this.getInforDashboard();
     this.getChartDashboard();
+    this.getChartCourse();
   }
 
   getInforDashboard() {
@@ -51,8 +52,18 @@ export class AdminDashboardComponent implements AfterViewInit, OnInit {
     this.adminService.getChartDashboard().subscribe((res: any) => {
       if (res.succeeded) {
         this.chartData.set(res.result);
-        if (this.areaChartRef && this.barChartRef) {
+        if (this.areaChartRef) {
           this.renderAreaChart(res.result.labels, res.result.data);
+        }
+      }
+    });
+  }
+
+  getChartCourse() {
+    this.adminService.getChartCourse().subscribe((res: any) => {
+      if (res.succeeded) {
+        this.chartData.set(res.result);
+        if (this.barChartRef) {
           this.renderBarChart(res.result.labels, res.result.data);
         }
       }
@@ -113,7 +124,7 @@ export class AdminDashboardComponent implements AfterViewInit, OnInit {
       options: {
         responsive: true,
         plugins: { legend: { display: false } },
-        scales: { y: { beginAtZero: true, ticks: { callback: (v: any) => v.toLocaleString() + ' ₫' } } }
+        scales: { y: { beginAtZero: true, ticks: { precision: 0, callback: (v: any) => v.toLocaleString() } } }
       }
     });
   }
