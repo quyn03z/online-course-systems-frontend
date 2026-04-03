@@ -39,10 +39,6 @@
                     <i class="bi bi-person-circle"></i> View Profile
                 </a>
                 <div class="dropdown-divider"></div>
-                <a [routerLink]="['/purchase-history']" class="dropdown-item">
-                    <i class="bi bi-person-circle"></i> Purchase History
-                </a>
-                <div class="dropdown-divider"></div>
                 <a *ngIf="authService.currentUser()?.role === 'Teacher'" [routerLink]="['/teacher']"
                     class="dropdown-item">
                     <i class="bi bi-speedometer2"></i> Manage Courses
