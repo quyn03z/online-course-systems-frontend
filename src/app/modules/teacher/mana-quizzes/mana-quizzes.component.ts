@@ -13,6 +13,7 @@ import { HasPermissionDirective } from '../../../core/directives/has-permission.
   templateUrl: './mana-quizzes.component.html',
   styleUrl: './mana-quizzes.component.scss'
 })
+
 export class ManaQuizzesComponent implements OnInit {
   quizz: any = null;
   questions: QuestionsResponseModel[] = [];
@@ -56,6 +57,7 @@ export class ManaQuizzesComponent implements OnInit {
 
 
   openModalAdd() {
+    // clear dữ liệu cũ 
     this.isEdit = false;
     this.questionFormModel = {
       questionText: '',

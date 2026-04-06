@@ -65,6 +65,7 @@ export class PaymentCallbackComponent implements OnInit {
   get courseId(): number {
     if (!this.paymentData.extraData) return 0;
     try {
+      // giải mã base64
       const decodedData = atob(this.paymentData.extraData);
       return Number(decodedData) || 0;
     } catch (e) {

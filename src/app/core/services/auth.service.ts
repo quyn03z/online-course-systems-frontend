@@ -130,12 +130,10 @@ export class AuthService {
         const role = decoded?.['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']
             ?? decoded?.['role'];
 
-        // Ưu tiên lấy permissions từ result nếu có, nếu không thì decode từ token
         let permissions: string[] = [];
         if (result?.permissions) {
             permissions = result.permissions;
         } else if (decoded) {
-            // "permission" claim có thể là String (nếu có 1) hoặc Array (nếu có nhiều)
             const rawPermissions = decoded['permission'] || decoded['permissions'];
             if (Array.isArray(rawPermissions)) {
                 permissions = rawPermissions;

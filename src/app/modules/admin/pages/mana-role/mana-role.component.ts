@@ -30,7 +30,8 @@ export class ManaRoleComponent implements OnInit {
   roles: Role[] = [];
   loading = true;
   error: string | null = null;
-
+  permissions: Permission[] = [];
+  
   // Modal properties
   newRole: Role = { id: 0, roleName: '' };
   isEditMode = false;
@@ -63,7 +64,25 @@ export class ManaRoleComponent implements OnInit {
   openEditModal(role: Role): void {
     this.isEditMode = true;
     this.newRole = { ...role };
+    this.loadPermissions();
   }
+
+  loadPermissions(): void {
+    this.loading = true;
+    this.adminService.getAllPermissions().subscribe({
+      next: (response) => {
+        if (response.succeeded) {
+          this.permissions = response.result;
+        }
+        this.loading = false;
+      },
+      error: (err) => {
+        this.error = 'An error occurred while fetching permissions';
+        this.loading = false;
+      }
+    });
+  }
+
 
   submitRole(): void {
     if (!this.newRole.roleName.trim()) return;
