@@ -22,10 +22,10 @@ export class ManaLessonsComponent implements OnInit {
   lessons: LessonsResponseModel[] = [];
   subLessons: SubLessonsResponseModel[] = [];
   documents: DocumentsResponseModel[] = [];
+  quizzes: QuizzResponseModel | null = null;
+
   selectedLesson: LessonsResponseModel | null = null;
   selectedDocument: DocumentsResponseModel | null = null;
-
-  quizzes: QuizzResponseModel | null = null;
   selectedQuizz: QuizzResponseModel | null = null;
 
   courseId: string | null = null;
@@ -53,6 +53,7 @@ export class ManaLessonsComponent implements OnInit {
     videoLink: ''
   };
 
+  
   subLessonFormModel: any = { ...this.newSubLesson };
   selectedSubLesson: SubLessonsResponseModel | null = null;
   isEditSubLesson: boolean = false;
@@ -61,7 +62,7 @@ export class ManaLessonsComponent implements OnInit {
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
       this.courseId = params.get('courseId');
-      this.lessonId = params.get('lessonId');
+      //this.lessonId = params.get('lessonId');
       if (this.courseId) {
         this.loadLessons(this.courseId);
         this.loadCourse(this.courseId);
@@ -83,7 +84,6 @@ export class ManaLessonsComponent implements OnInit {
       },
       error: (err: any) => {
         NotifyError(err.error.message || 'Không thể tạo bài học');
-
       }
     });
   }

@@ -21,6 +21,7 @@ export class HasPermissionDirective {
 
   private updateView() {
     if (this.authService.hasPermission(this.permission)) {
+      // check hiển thị nút
       if (this.viewContainer.length === 0) {
         this.viewContainer.createEmbeddedView(this.templateRef);
       }

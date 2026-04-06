@@ -89,6 +89,7 @@ export class ManageUserComponent implements OnInit {
       this.adminService.getPermissionsByUser(userId).subscribe({
         next: (res) => {
           const userPerms: any[] = res.result ?? [];
+          // trích suất mỗi id per user đó
           this.selectedPermissions = userPerms.map((p: any) => p.id);
         },
         error: () => { this.selectedPermissions = []; }
@@ -97,6 +98,7 @@ export class ManageUserComponent implements OnInit {
   }
 
   isPermissionChecked(permId: number): boolean {
+    // có thì tích
     return this.selectedPermissions.includes(permId);
   }
 
